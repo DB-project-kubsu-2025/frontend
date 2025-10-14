@@ -38,19 +38,17 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
+  const username = inputsData.username?.trim();
+  const password = inputsData.password?.trim();
+  const stateButton = loading || !username || !password;
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const errors: ErrorsData = {};
-    if (!inputsData.username?.trim()) {
-      errors.username = 'Введите логин';
-    }
-    if (!inputsData.password?.trim()) {
-      errors.password = 'Введите пароль';
-    } else if (inputsData.password.length < 8) {
+    if (password != undefined && password.length < 8) {
       errors.password = 'Не менее 8 символов';
     }
-
     setFieldsError(errors);
     if (Object.keys(errors).length != 0) {
       return;
@@ -78,6 +76,10 @@ export default function LoginPage() {
       setLoading(false);
     }
   }
+
+  const onChange = () => {
+    setFieldsError({});
+  };
 
   return (
     <>
@@ -113,7 +115,7 @@ export default function LoginPage() {
                   sectionPaths={['username']}
                   setInputsData={setInputsData}
                   quickSaveValue={true}
-                  onChange={() => setFieldsError({})}
+                  onChange={() => onChange}
                   label="Логин"
                   shrink={true}
                   fieldsError={fieldsError?.username}
@@ -125,7 +127,7 @@ export default function LoginPage() {
                   sectionPaths={['password']}
                   setInputsData={setInputsData}
                   quickSaveValue={true}
-                  onChange={() => setFieldsError({})}
+                  onChange={() => onChange}
                   label="Пароль"
                   shrink={true}
                   fieldsError={fieldsError?.password}
@@ -153,7 +155,7 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   variant="contained"
-                  disabled={loading}
+                  disabled={stateButton}
                   fullWidth
                   size="large"
                 >
