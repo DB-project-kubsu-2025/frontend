@@ -1,31 +1,22 @@
 'use client';
 import { ReactNode } from 'react';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import { SnackbarProvider } from 'notistack';
-import theme from '@/style/theme';
+import { Provider } from 'react-redux';
+import { makeStore } from '@/store';
+import Providers from './Providers';
 import '@/style/global.scss';
+import '@/style/style.scss';
+
+const store = makeStore();
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ru">
       <body>
-        <Providers>{children}</Providers>
+        {/* Redux Provider должен быть самым верхним */}
+        <Provider store={store}>
+          <Providers>{children}</Providers>
+        </Provider>
       </body>
     </html>
-  );
-}
-
-function Providers({ children }: { children: ReactNode }) {
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <SnackbarProvider
-        maxSnack={3}
-        autoHideDuration={3000}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        {children}
-      </SnackbarProvider>
-    </ThemeProvider>
   );
 }
