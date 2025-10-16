@@ -79,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebar_open, DrawerHeader }) => {
         '& .MuiDrawer-paper': {
           flexShrink: 0,
           width: drawerWidth,
-          transition: 'width 0.4s',
+          transition: 'width 0.3s',
           whiteSpace: 'nowrap',
           overflow: 'visible',
         },
@@ -124,7 +124,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebar_open, DrawerHeader }) => {
                           '&:hover': { backgroundColor: 'transparent' },
                         }}
                       >
-                        {item.iconLeft && (
+                        {(item.iconLeft && drawerWidth > 0) && (
                           <ListItemIcon className="sidebar_icon">{item.iconLeft}</ListItemIcon>
                         )}
                         <ListItemText

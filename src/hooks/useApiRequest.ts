@@ -6,7 +6,8 @@ import { useSnackbar } from 'notistack';
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 1000, //7000,
+  timeout: 5000, //7000,
+  withCredentials: true,
   // validateStatus: (status) => status < 403,
 });
 

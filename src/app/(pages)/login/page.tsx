@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Box,
@@ -16,8 +16,9 @@ import {
 } from '@mui/material';
 import { MdOutlineVisibility } from 'react-icons/md';
 import { MdOutlineVisibilityOff } from 'react-icons/md';
-import { useApiRequest } from '@/hooks/apiRequest';
-import { setCookie } from 'cookies-next/client';
+import { useApiRequest } from '@/hooks/useApiRequest';
+import { useAppDispatch } from '@/store/hooks';
+import { login as loginAction } from '@/store/userSlice';
 import Input from '@/components/UI/Input';
 import { safeText } from '@/utils/helper';
 
@@ -32,6 +33,7 @@ interface ErrorsData extends InputsData {
 
 export default function LoginPage() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { request } = useApiRequest();
   const [inputsData, setInputsData] = useState<InputsData>({});
   const [fieldsError, setFieldsError] = useState<ErrorsData>({});
@@ -56,18 +58,21 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      const res = await request('/auth/login', {
+      const res = await request('/api/auth', {
         method: 'POST',
-        data: { inputsData },
+        data: { username, password },
       });
+      const { token, user } = res.data;
+      if (!token || !user) throw new Error('Некорректный ответ сервера');
+      dispatch(
+        loginAction({
+          user_id: user.id,
+          user_name: user.name,
+          user_role: user.role,
+        }),
+      );
 
-      const token = res?.data?.token;
-      if (!token) {
-        throw new Error('Токен не получен. Проверьте серверный ответ.');
-      }
-
-      setCookie('token', token, { path: '/' });
-      router.push('/');
+      router.replace('/');
     } catch (err: any) {
       const msg =
         err?.response?.data?.message || err?.message || 'Ошибка входа';

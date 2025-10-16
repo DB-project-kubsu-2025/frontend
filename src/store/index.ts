@@ -1,7 +1,9 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import userReducer from './userSlice';
 import sidebarOpenReducer from './sidebarOpenSlice';
 
 const rootReducer = combineReducers({
+  userData: userReducer,
   sidebarOpen: sidebarOpenReducer,
 });
 

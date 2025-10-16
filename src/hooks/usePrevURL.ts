@@ -48,7 +48,6 @@ export function usePrevURL(defaultStorageKey = 'prevURL') {
 
   const prevURLClickHandler = useCallback(
     (url: string, opts?: NavigateOptions) => (e?: React.MouseEvent) => {
-      console.log('a');
       e?.preventDefault();
       e?.stopPropagation();
       navigateWithPrev(url, opts);
