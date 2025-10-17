@@ -14,7 +14,14 @@ import {
 } from '@mui/material';
 import { Home } from '@mui/icons-material';
 import PersonIcon from '@mui/icons-material/Person';
-import { MdOutlineLocalHospital } from "react-icons/md";
+import { MdOutlineLocalHospital } from 'react-icons/md';
+import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
+import { IoLocationSharp } from "react-icons/io5";
+import { IoDocumentSharp } from "react-icons/io5";
+import { RiTruckLine } from "react-icons/ri";
+import { IoNewspaperOutline } from "react-icons/io5";
+import { TbReportSearch } from "react-icons/tb";
+import { GiArtificialHive } from "react-icons/gi";
 
 interface NestedItem {
   name: string;
@@ -44,6 +51,70 @@ const sidebarItems: SidebarSection[] = [
         link: '/',
       },
       {
+        name: 'Сотрудники',
+        iconLeft: <PersonIcon />,
+        link: '/employees',
+      },
+      {
+        name: 'Должности',
+        iconLeft: <PersonIcon />,
+        link: '/positions',
+      },
+      {
+        name: 'Поставщики',
+        iconLeft: <PersonIcon />,
+        link: '/suppliers',
+        nested: [
+          {
+            name: 'Контрагенты',
+            iconLeft: <PersonIcon />,
+            link: '/counterparties',
+          },
+        ],
+      },
+      {
+        name: 'Места хранения',
+        iconLeft: <IoLocationSharp />,
+        link: '/storageLocations',
+      },
+      {
+        name: 'Товары',
+        iconLeft: <MdOutlineProductionQuantityLimits />,
+        link: '/products',
+      },
+      {
+        name: 'Договора',
+        iconLeft: <IoDocumentSharp />,
+        link: '/documents',
+        nested: [
+          {
+            name: 'Товары',
+            iconLeft: <IoDocumentSharp />,
+            link: '/productsInDocument',
+          },
+        ],
+      },
+      {
+        name: 'Грузовые компании',
+        iconLeft: <RiTruckLine />,
+        link: '/truckCompenies',
+      },
+      {
+        name: 'Заявки',
+        iconLeft: <IoNewspaperOutline />,
+        link: '/applications',
+      },
+      {
+        name: 'Отчёты',
+        iconLeft: <TbReportSearch />,
+        link: '/reports',
+      },
+      {
+        name: 'Прогнозы',
+        iconLeft: <GiArtificialHive />,
+        link: '/forecasts',
+      },
+      {
         name: 'Больничные',
         iconLeft: <MdOutlineLocalHospital />,
         link: '/sickLeave',
@@ -52,9 +123,9 @@ const sidebarItems: SidebarSection[] = [
             name: 'Отпуска',
             iconLeft: <PersonIcon />,
             link: '/vacation',
-          }
+          },
         ],
-      }
+      },
     ],
   },
 ];
@@ -90,7 +161,11 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebar_open, DrawerHeader }) => {
       <Box>
         {sidebarItems.map((section, index) => (
           <Box key={index}>
-            <Typography variant="h6" className="moreText" sx={{ pl: 2, pt: 1, opacity: 0.6 }}>
+            <Typography
+              variant="h6"
+              className="moreText"
+              sx={{ pl: 2, pt: 1, opacity: 0.6 }}
+            >
               {section.section}
             </Typography>
             <List sx={{ py: 0.5 }}>
@@ -101,7 +176,9 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebar_open, DrawerHeader }) => {
                       px: 0,
                       py: 0.5,
                       background:
-                        item.link === locationBase ? 'rgba(0, 0, 0, 0.04)' : 'transparent',
+                        item.link === locationBase
+                          ? 'rgba(0, 0, 0, 0.04)'
+                          : 'transparent',
                       transition: '.5s',
                       '&:hover': { backgroundColor: 'action.hover' },
                     }}
@@ -124,8 +201,10 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebar_open, DrawerHeader }) => {
                           '&:hover': { backgroundColor: 'transparent' },
                         }}
                       >
-                        {(item.iconLeft && drawerWidth > 0) && (
-                          <ListItemIcon className="sidebar_icon">{item.iconLeft}</ListItemIcon>
+                        {item.iconLeft && drawerWidth > 0 && (
+                          <ListItemIcon className="sidebar_icon">
+                            {item.iconLeft}
+                          </ListItemIcon>
                         )}
                         <ListItemText
                           primary={item.name}
@@ -153,8 +232,15 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebar_open, DrawerHeader }) => {
                         <List disablePadding>
                           {item.nested.map((nestedItem, nestedIdx) => (
                             <ListItem key={nestedIdx} disablePadding>
-                              <Link href={nestedItem.link} passHref style={{ flex: '1' }}>
-                                <ListItemButton title={nestedItem.name} sx={{ py: 0.5, px: 1 }}>
+                              <Link
+                                href={nestedItem.link}
+                                passHref
+                                style={{ flex: '1' }}
+                              >
+                                <ListItemButton
+                                  title={nestedItem.name}
+                                  sx={{ py: 0.5, px: 1 }}
+                                >
                                   {nestedItem.iconLeft && (
                                     <ListItemIcon className="sidebar_icon">
                                       {nestedItem.iconLeft}

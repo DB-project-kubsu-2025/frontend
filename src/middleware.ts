@@ -4,16 +4,6 @@ import { verifyToken } from '@/utils/checkAuth';
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // if (
-  //   pathname.startsWith('/_next') ||
-  //   pathname.startsWith('/favicon') ||
-  //   pathname.startsWith('/static') ||
-  //   pathname.startsWith('/public') ||
-  //   pathname.startsWith('/.well-known')
-  // ) {
-  //   return NextResponse.next();
-  // }
-
   const isPublicPath =
     pathname === '/login' ||
     pathname.startsWith('/_next') ||
@@ -29,7 +19,6 @@ export async function middleware(request: NextRequest) {
   }
 
   const tokenCheck = await verifyToken(request);
-  console.log(tokenCheck.valid, pathname);
   if (tokenCheck.error || !tokenCheck.valid) {
     if (isApiRoute) {
       return NextResponse.json(
