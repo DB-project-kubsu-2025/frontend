@@ -7,7 +7,7 @@ import { toggleSidebar, setSidebar } from '@/store/sidebarOpenSlice';
 import { login as loginAction } from '@/store/userSlice';
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
-import { styled } from '@mui/material';
+import { Box, styled, CssBaseline } from '@mui/material';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
@@ -46,13 +46,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {!hideLayout && (
-        <>
+      {!hideLayout ? (
+        <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
           <Header ToggleDrawer={ToggleDrawer} />
           <Sidebar sidebar_open={sidebarOpen} DrawerHeader={DrawerHeader} />
-        </>
+
+          <Box component="main" sx={{ flexGrow: 1, p: 0 }}>
+            <DrawerHeader />
+            <Box sx={{ p: 2 }}>{children}</Box>
+          </Box>
+        </Box>
+      ) : (
+        children
       )}
-      {children}
     </>
   );
 }

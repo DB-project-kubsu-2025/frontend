@@ -117,12 +117,12 @@ const sidebarItems: SidebarSection[] = [
       {
         name: 'Больничные',
         iconLeft: <MdOutlineLocalHospital />,
-        link: '/sickLeave',
+        link: '/sickLeaves',
         nested: [
           {
             name: 'Отпуска',
             iconLeft: <PersonIcon />,
-            link: '/vacation',
+            link: '/vacations',
           },
         ],
       },
