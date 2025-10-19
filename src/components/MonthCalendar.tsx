@@ -22,8 +22,13 @@ export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
   const theme = useTheme();
   const days = monthMatrix(year, monthIndex0, 1);
 
+  // Разбиваем дни на недели по 7
+  const weeks: Date[][] = [];
+  for (let i = 0; i < days.length; i += 7) {
+    weeks.push(days.slice(i, i + 7));
+  }
   return (
-    <Card variant="outlined" sx={{ height: '100%' }}>
+    <Card variant="outlined" sx={{ height: '100%', background: '#f5f6fa' }}>
       <CardHeader
         title={format(new Date(year, monthIndex0, 1), 'LLLL')}
         titleTypographyProps={{
@@ -34,75 +39,73 @@ export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
         sx={{ pb: 0.5 }}
       />
       <CardContent sx={{ pt: 1 }}>
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(7, 1fr)',
-            mb: 0.5,
+        <table
+          style={{
+            borderCollapse: 'collapse',
+            tableLayout: 'fixed',
           }}
         >
-          {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((d) => (
-            <Typography
-              key={d}
-              variant="caption"
-              align="center"
-              sx={{ color: 'text.secondary' }}
-            >
-              {d}
-            </Typography>
-          ))}
-        </Box>
+          <thead>
+            <tr>
+              {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((d) => (
+                <td
+                  key={d}
+                  align="center"
+                  style={{ color: '#555', fontWeight: 'bold', fontSize: 13 }}
+                >
+                  {d}
+                </td>
+              ))}
+            </tr>
+          </thead>
+          <tbody
+            style={{
+              background: '#fff',
+            }}
+          >
+            {weeks.map((week, wi) => (
+              <tr key={wi}>
+                {week.map((d, di) => {
+                  const out = !isSameMonth(d, new Date(year, monthIndex0, 1));
+                  const lv = dayInAnyLeave(d, leaves);
 
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(7, 1fr)',
-            gap: 0.5,
-          }}
-        >
-          {days.map((d, i) => {
-            const out = !isSameMonth(d, new Date(year, monthIndex0, 1));
-            const lv = dayInAnyLeave(d, leaves);
-            const bg =
-              lv === 'done'
-                ? alpha(theme.palette.success.main, 0.25)
-                : lv === 'planned'
-                  ? alpha(theme.palette.info.main, 0.25)
-                  : out
-                    ? alpha(theme.palette.action.disabledBackground, 0.35)
-                    : isWeekend(d)
-                      ? alpha(theme.palette.warning.main, 0.18)
-                      : 'transparent';
+                  const color = out // день не в этом месяце
+                    ? 'transparent'
+                    : isWeekend(d) //выходной
+                      ? theme.palette.warning.main
+                      : '#333';
 
-            const bd = lv
-              ? lv === 'done'
-                ? theme.palette.success.main
-                : theme.palette.info.main
-              : 'divider';
+                  const bg =
+                    lv === 'done' //завершенный отпуск
+                      ? '#c1e7a7'
+                      : lv === 'planned' //запланированный отпуск
+                        ? '#bdc4eaff'
+                        : 'transparent';
 
-            return (
-              <Box
-                key={i}
-                sx={{
-                  border: '1px solid',
-                  borderColor: bd,
-                  borderRadius: 1,
-                  height: 34,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  bgcolor: bg,
-                  color: out ? 'text.disabled' : 'text.primary',
-                  fontSize: 13,
-                  fontWeight: 500,
-                }}
-                aria-label={format(d, 'yyyy-MM-dd')}
-              >
-                {d.getDate()}
-              </Box>
-            );
-          })}
-        </Box>
+                  return (
+                    <td
+                      key={di}
+                      style={{
+                        border: `1px solid ${theme.palette.divider}`,
+                        height: 28,
+                        width: 28,
+                        textAlign: 'center',
+                        verticalAlign: 'middle',
+                        fontSize: 13,
+                        fontWeight: 500,
+                        backgroundColor: bg,
+                        color: color,
+                      }}
+                      aria-label={format(d, 'yyyy-MM-dd')}
+                    >
+                      {!out ? d.getDate() : ''}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </CardContent>
     </Card>
   );

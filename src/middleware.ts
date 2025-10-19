@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
     pathname.startsWith('/public') ||
-    pathname.startsWith('/api/auth');
+    pathname.startsWith('/api');
 
   const isApiRoute =
     pathname.startsWith('/api/') && !pathname.startsWith('/api/auth');

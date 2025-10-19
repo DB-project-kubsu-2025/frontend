@@ -88,15 +88,15 @@ export default function VacationsClient() {
             <CardContent>
               <Stack spacing={1}>
                 <Typography variant="body2">
-                  Количество уже использованных дней ежегодного отпуска —{' '}
+                  Количество уже использованных дней ежегодного отпуска -{' '}
                   <b>{leftStats.used}</b>
                 </Typography>
                 <Typography variant="body2">
-                  Остаток дней ежегодного отпуска на текущую дату —{' '}
+                  Остаток дней ежегодного отпуска на текущую дату -{' '}
                   <b>{leftStats.balance}</b>
                 </Typography>
                 <Typography variant="body2">
-                  Запланировано дней ежегодного отпуска на будущие периоды —{' '}
+                  Запланировано дней ежегодного отпуска на будущие периоды -{' '}
                   <b>{leftStats.planned}</b>
                 </Typography>
               </Stack>
@@ -123,7 +123,7 @@ export default function VacationsClient() {
                       secondary={
                         <Stack spacing={0.5}>
                           <span>
-                            {l.start} — {l.end}
+                            {l.start} - {l.end}
                           </span>
                           <Chip
                             size="small"

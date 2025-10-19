@@ -58,7 +58,7 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      const res = await request('/api/auth', {
+      const res = await request('/auth', {
         method: 'POST',
         data: { username, password },
       });
