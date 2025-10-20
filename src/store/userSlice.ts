@@ -13,9 +13,9 @@ const initialState: UserState = {
 };
 
 interface LoginPayload {
-  user_id: number;
-  user_name: string;
-  user_role: string;
+  id: number;
+  name: string;
+  role: string;
 }
 
 const userSlice = createSlice({
@@ -23,9 +23,9 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     login(state, action: PayloadAction<LoginPayload>) {
-      state.user_id = action.payload.user_id;
-      state.user_name = action.payload.user_name;
-      state.user_role = action.payload.user_role;
+      state.user_id = action.payload.id;
+      state.user_name = action.payload.name;
+      state.user_role = action.payload.role;
     },
     logout(state) {
       state.user_id = null;

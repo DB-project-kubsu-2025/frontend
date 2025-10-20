@@ -11,21 +11,17 @@ export async function GET() {
 
   try {
     const { payload } = await jwtVerify(token, secretKey);
-    const user_id = String(
-      (payload as any).user_id ??
-        (payload as any).uid ??
-        (payload as any).id ??
-        payload.sub,
-    );
+
+    const user_id = String(payload.user_id);
     if (!user_id)
       return NextResponse.json({ authenticated: false }, { status: 403 });
 
     return NextResponse.json({
       authenticated: true,
       user: {
-        user_id,
-        user_name: (payload as any).user_name ?? null,
-        user_role: (payload as any).user_role ?? null,
+        id: user_id,
+        name: (payload as any).user_name ?? null,
+        role: (payload as any).user_role ?? null,
       },
     });
   } catch {
