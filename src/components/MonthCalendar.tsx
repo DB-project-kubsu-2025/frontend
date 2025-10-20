@@ -10,19 +10,20 @@ import {
   useTheme,
 } from '@mui/material';
 import { format, isSameMonth, isWeekend } from 'date-fns';
-import { monthMatrix, dayInAnyLeave, Leave } from '@/libs/calendar';
+import { ru } from 'date-fns/locale';
+import { monthMatrix, dayInAnyLeave } from '@/libs/calendar';
+import { calendarLeaves } from '@/types/common';
 
 type Props = {
   year: number;
   monthIndex0: number;
-  leaves: Leave[];
+  leaves: calendarLeaves[];
 };
 
 export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
   const theme = useTheme();
   const days = monthMatrix(year, monthIndex0, 1);
 
-  // Разбиваем дни на недели по 7
   const weeks: Date[][] = [];
   for (let i = 0; i < days.length; i += 7) {
     weeks.push(days.slice(i, i + 7));
@@ -30,11 +31,12 @@ export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
   return (
     <Card variant="outlined" sx={{ height: '100%', background: '#f5f6fa' }}>
       <CardHeader
-        title={format(new Date(year, monthIndex0, 1), 'LLLL')}
+        title={format(new Date(year, monthIndex0, 1), 'LLLL', { locale: ru })}
         titleTypographyProps={{
           textTransform: 'capitalize',
           fontWeight: 600,
           fontSize: 16,
+          align: 'center'
         }}
         sx={{ pb: 0.5 }}
       />
@@ -75,12 +77,13 @@ export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
                       ? theme.palette.warning.main
                       : '#333';
 
-                  const bg =
-                    lv === 'done' //завершенный отпуск
+                  const bg = !out
+                    ? lv === 'done' //завершенный отпуск
                       ? '#c1e7a7'
                       : lv === 'planned' //запланированный отпуск
                         ? '#bdc4eaff'
-                        : 'transparent';
+                        : 'transparent'
+                    : 'transparent';
 
                   return (
                     <td

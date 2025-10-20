@@ -23,7 +23,7 @@ export async function apiFetch(
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
-  console.log(`${BASE_URL}${endpoint}`, method, headers);
+  
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     method,
     headers,

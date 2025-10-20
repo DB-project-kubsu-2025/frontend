@@ -1,3 +1,4 @@
+import { calendarLeaves } from '@/types/common';
 import {
   addDays,
   endOfMonth,
@@ -5,9 +6,6 @@ import {
   startOfMonth,
   startOfWeek,
 } from 'date-fns';
-
-export type LeaveStatus = 'done' | 'planned';
-export type Leave = { start: string; end: string; status: LeaveStatus };
 
 export function monthMatrix(
   year: number,
@@ -25,10 +23,10 @@ export function monthMatrix(
   return days;
 }
 
-export function dayInAnyLeave(day: Date, leaves: Leave[]) {
+export function dayInAnyLeave(day: Date, leaves: calendarLeaves[]) {
   for (const lv of leaves) {
-    const s = new Date(lv.start),
-      e = new Date(lv.end);
+    const s = new Date(lv.start_date),
+      e = new Date(lv.end_date);
     if (day >= s && day <= e) return lv.status;
   }
   return null;

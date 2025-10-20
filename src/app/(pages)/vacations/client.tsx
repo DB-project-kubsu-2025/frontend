@@ -20,41 +20,15 @@ import {
 } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import MonthCalendar from '@/components/MonthCalendar';
-import { Leave } from '@/libs/calendar';
 import { differenceInCalendarDays, parseISO } from 'date-fns';
+import { LeavesCalendarProps } from '@/types/common';
 
-const sampleLeaves: Leave[] = [
-  { start: '2025-07-21', end: '2025-08-10', status: 'done' },
-  { start: '2025-12-29', end: '2025-12-30', status: 'planned' },
-];
-
-export default function VacationsClient() {
+export default function VacationsClient({used_days, balance_days, planned_days, calendarLeaves}: LeavesCalendarProps) {
   const [year, setYear] = useState(2025);
   const years = [2024, 2025];
 
-  const leftStats = useMemo(() => {
-    const used = sampleLeaves
-      .filter((l) => l.status === 'done')
-      .reduce(
-        (acc, l) =>
-          acc +
-          (differenceInCalendarDays(parseISO(l.end), parseISO(l.start)) + 1),
-        0,
-      );
-    const planned = sampleLeaves
-      .filter((l) => l.status === 'planned')
-      .reduce(
-        (acc, l) =>
-          acc +
-          (differenceInCalendarDays(parseISO(l.end), parseISO(l.start)) + 1),
-        0,
-      );
-    const balance = 30 - used; // пример: годовая норма 30
-    return { used, planned, balance };
-  }, []);
-
   return (
-    <Box sx={{background: '#fff', p: 2}}>
+    <Box sx={{ background: '#fff', p: 2 }}>
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -83,28 +57,28 @@ export default function VacationsClient() {
         spacing={2}
         sx={{ flexDirection: 'row', flexWrap: 'nowrap' }}
       >
-        <Grid item xs={12} md={3}>
-          <Card variant="outlined" sx={{ position: 'sticky', top: 16 }}>
+        <Grid item sx={{flex: '0 0 auto'}}>
+          <Card variant="outlined" sx={{ position: 'sticky', top: 16, maxWidth: 250 }}>
             <CardContent>
               <Stack spacing={1}>
                 <Typography variant="body2">
                   Количество уже использованных дней ежегодного отпуска -{' '}
-                  <b>{leftStats.used}</b>
+                  <b>{used_days}</b>
                 </Typography>
                 <Typography variant="body2">
                   Остаток дней ежегодного отпуска на текущую дату -{' '}
-                  <b>{leftStats.balance}</b>
+                  <b>{balance_days}</b>
                 </Typography>
                 <Typography variant="body2">
                   Запланировано дней ежегодного отпуска на будущие периоды -{' '}
-                  <b>{leftStats.planned}</b>
+                  <b>{planned_days}</b>
                 </Typography>
               </Stack>
 
               <Divider sx={{ my: 2 }} />
 
               <List dense>
-                {sampleLeaves.map((l, i) => (
+                {calendarLeaves.map((l, i) => (
                   <ListItem
                     key={i}
                     disableGutters
@@ -116,26 +90,20 @@ export default function VacationsClient() {
                     <ListItemText
                       primary={`Очередной ежегодный отпуск (${
                         differenceInCalendarDays(
-                          parseISO(l.end),
-                          parseISO(l.start),
+                          parseISO(l.end_date),
+                          parseISO(l.start_date),
                         ) + 1
                       } дней)`}
                       secondary={
                         <Stack spacing={0.5}>
                           <span>
-                            {l.start} - {l.end}
+                            {l.start_date} - {l.end_date}
                           </span>
-                          <Chip
-                            size="small"
-                            label={
-                              l.status === 'done'
+                          <Typography variant='body2' color={l.status === 'done' ? '#c1e7a7': '#bdc4eaff'}>
+                            {l.status === 'done'
                                 ? 'ЗАВЕРШЕНА'
-                                : 'ЗАПЛАНИРОВАНО'
-                            }
-                            color={l.status === 'done' ? 'success' : 'info'}
-                            variant="outlined"
-                            sx={{ alignSelf: 'flex-start' }}
-                          />
+                                : 'ЗАПЛАНИРОВАНО'}
+                          </Typography>
                         </Stack>
                       }
                     />
@@ -146,14 +114,14 @@ export default function VacationsClient() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={9}>
+        <Grid item sx={{flex: '1 1 auto'}}>
           <Grid container spacing={2}>
             {Array.from({ length: 12 }).map((_, m) => (
               <Grid key={m} item xs={12} sm={6} md={4}>
                 <MonthCalendar
                   year={year}
                   monthIndex0={m}
-                  leaves={sampleLeaves}
+                  leaves={calendarLeaves}
                 />
               </Grid>
             ))}
