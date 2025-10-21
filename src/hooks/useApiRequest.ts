@@ -58,7 +58,7 @@ export function useApiRequest() {
         ...(method === 'GET' ? { params: data } : { data }),
         signal,
       });
-      return response;
+      return response.data;
     } catch (error: any) {
       if (error.response?.status === 400) {
         if (error.response?.data?.message) {

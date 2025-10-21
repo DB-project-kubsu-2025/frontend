@@ -24,6 +24,7 @@ export function monthMatrix(
 }
 
 export function dayInAnyLeave(day: Date, leaves: calendarLeaves[]) {
+  if(!leaves) return null;
   for (const lv of leaves) {
     const s = new Date(lv.start_date),
       e = new Date(lv.end_date);

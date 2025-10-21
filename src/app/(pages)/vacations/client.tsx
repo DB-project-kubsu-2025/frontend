@@ -20,12 +20,14 @@ import {
 } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import MonthCalendar from '@/components/MonthCalendar';
-import { differenceInCalendarDays, parseISO } from 'date-fns';
-import { LeavesCalendarProps } from '@/types/common';
+import { calendarLeaves, LeavesCalendarProps } from '@/types/common';
+import { differenceDates } from '@/utils/helper';
+import { useVacations } from '@/hooks/useVacations';
 
-export default function VacationsClient({used_days, balance_days, planned_days, calendarLeaves}: LeavesCalendarProps) {
+export default function VacationsClient(initData: LeavesCalendarProps) {
   const [year, setYear] = useState(2025);
   const years = [2024, 2025];
+  const { data } = useVacations(year, initData);
 
   return (
     <Box sx={{ background: '#fff', p: 2 }}>
@@ -57,28 +59,31 @@ export default function VacationsClient({used_days, balance_days, planned_days, 
         spacing={2}
         sx={{ flexDirection: 'row', flexWrap: 'nowrap' }}
       >
-        <Grid item sx={{flex: '0 0 auto'}}>
-          <Card variant="outlined" sx={{ position: 'sticky', top: 16, maxWidth: 250 }}>
+        <Grid sx={{ flex: '0 0 auto' }}>
+          <Card
+            variant="outlined"
+            sx={{ position: 'sticky', top: 16, maxWidth: 250 }}
+          >
             <CardContent>
               <Stack spacing={1}>
                 <Typography variant="body2">
                   Количество уже использованных дней ежегодного отпуска -{' '}
-                  <b>{used_days}</b>
+                  <b>{data?.used_days}</b>
                 </Typography>
                 <Typography variant="body2">
                   Остаток дней ежегодного отпуска на текущую дату -{' '}
-                  <b>{balance_days}</b>
+                  <b>{data?.balance_days}</b>
                 </Typography>
                 <Typography variant="body2">
                   Запланировано дней ежегодного отпуска на будущие периоды -{' '}
-                  <b>{planned_days}</b>
+                  <b>{data?.planned_days}</b>
                 </Typography>
               </Stack>
 
               <Divider sx={{ my: 2 }} />
 
               <List dense>
-                {calendarLeaves.map((l, i) => (
+                {data?.calendarLeaves?.map((l: calendarLeaves, i: number) => (
                   <ListItem
                     key={i}
                     disableGutters
@@ -88,21 +93,24 @@ export default function VacationsClient({used_days, balance_days, planned_days, 
                       <EventAvailableIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText
-                      primary={`Очередной ежегодный отпуск (${
-                        differenceInCalendarDays(
-                          parseISO(l.end_date),
-                          parseISO(l.start_date),
-                        ) + 1
-                      } дней)`}
+                      primary={`Очередной ежегодный отпуск (${differenceDates(
+                        l.start_date,
+                        l.end_date,
+                      )} дней)`}
                       secondary={
                         <Stack spacing={0.5}>
                           <span>
                             {l.start_date} - {l.end_date}
                           </span>
-                          <Typography variant='body2' color={l.status === 'done' ? '#c1e7a7': '#bdc4eaff'}>
+                          <Typography
+                            variant="body2"
+                            color={
+                              l.status === 'done' ? '#c1e7a7' : '#bdc4eaff'
+                            }
+                          >
                             {l.status === 'done'
-                                ? 'ЗАВЕРШЕНА'
-                                : 'ЗАПЛАНИРОВАНО'}
+                              ? 'ЗАВЕРШЕНА'
+                              : 'ЗАПЛАНИРОВАНО'}
                           </Typography>
                         </Stack>
                       }
@@ -114,14 +122,14 @@ export default function VacationsClient({used_days, balance_days, planned_days, 
           </Card>
         </Grid>
 
-        <Grid item sx={{flex: '1 1 auto'}}>
+        <Grid sx={{ flex: '1 1 auto' }}>
           <Grid container spacing={2}>
             {Array.from({ length: 12 }).map((_, m) => (
-              <Grid key={m} item xs={12} sm={6} md={4}>
+              <Grid key={m} size={{ xl: 2, lg: 4, md: 6, xs: 12 }}>
                 <MonthCalendar
                   year={year}
                   monthIndex0={m}
-                  leaves={calendarLeaves}
+                  leaves={data?.calendarLeaves}
                 />
               </Grid>
             ))}

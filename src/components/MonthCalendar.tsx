@@ -45,6 +45,7 @@ export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
           style={{
             borderCollapse: 'collapse',
             tableLayout: 'fixed',
+            width: '100%'
           }}
         >
           <thead>
