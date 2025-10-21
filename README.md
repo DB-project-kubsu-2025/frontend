@@ -71,15 +71,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Данные авторизованного пользователя
 
-**POST** `/api/me`  
+**GET** `/api/me`  
 Получение данных авторизованного пользователя
-
-**Request:**
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
-}
-```
 
 **Response 200:**
 ```json
@@ -102,12 +95,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Отпуска
 
-**POST** `/api/vacations`  
+**GET** `/api/vacations`  
 
 **Request:**
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+  "year": 2025
 }
 ```
 
