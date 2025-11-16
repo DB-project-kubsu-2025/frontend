@@ -62,7 +62,8 @@ export default function LoginPage() {
         method: 'POST',
         data: { username, password },
       });
-      const { token, user } = res.data;
+      
+      const { token, user } = res;
       if (!token || !user) throw new Error('Некорректный ответ сервера');
       dispatch(
         loginAction({

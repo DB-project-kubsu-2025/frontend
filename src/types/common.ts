@@ -11,3 +11,12 @@ export interface LeavesCalendarProps {
   planned_days: number;
   calendarLeaves: calendarLeaves[];
 }
+
+export interface CalendarEvents {
+  id: string;
+  title: string;
+  date?: string;
+  start?: string;
+  end?: string;
+  color?: string;
+}
