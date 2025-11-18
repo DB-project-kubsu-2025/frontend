@@ -1,3 +1,15 @@
+export type employeeNames =
+  | 'Сотрудник ГК'
+  | 'Директор магазина'
+  | 'Товаровед'
+  | 'Кладовщик'
+  | 'Продавец';
+  
+export interface employeesList {
+  id: number;
+  name: employeeNames;
+};
+
 export type calendarLeaves = {
   id: number;
   employee: string;
@@ -14,6 +26,7 @@ export interface LeavesCalendarProps {
 
 export interface CalendarEvents {
   id: string;
+  employee_id: number,
   title: string;
   date?: string;
   start?: string;
