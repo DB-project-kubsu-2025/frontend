@@ -15,7 +15,6 @@ export async function apiFetch(
   const token = cookieStore.get('token')?.value;
   
   const headers: any = {
-    //HeadersInit
     'Content-Type': 'application/json',
     ...options.headers,
   };

@@ -51,7 +51,7 @@ export default function CalendarWidget({
         ref={calendarRef}
         dayMaxEvents={true}
         dayMaxEventRows={3}
-        height={600}
+        height={1000}
         handleWindowResize={false}
         customButtons={{
           addEventBtn: {

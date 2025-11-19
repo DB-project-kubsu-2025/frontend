@@ -12,7 +12,6 @@ export interface employeesList {
 
 export type calendarLeaves = {
   id: number;
-  employee: string;
   start_date: string;
   end_date: string;
   status: 'done' | 'planned';

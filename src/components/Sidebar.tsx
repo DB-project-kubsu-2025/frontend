@@ -16,12 +16,12 @@ import { Home } from '@mui/icons-material';
 import PersonIcon from '@mui/icons-material/Person';
 import { MdOutlineLocalHospital } from 'react-icons/md';
 import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
-import { IoLocationSharp } from "react-icons/io5";
-import { IoDocumentSharp } from "react-icons/io5";
-import { RiTruckLine } from "react-icons/ri";
-import { IoNewspaperOutline } from "react-icons/io5";
-import { TbReportSearch } from "react-icons/tb";
-import { GiArtificialHive } from "react-icons/gi";
+import { IoLocationSharp } from 'react-icons/io5';
+import { IoDocumentSharp } from 'react-icons/io5';
+import { RiTruckLine } from 'react-icons/ri';
+import { IoNewspaperOutline } from 'react-icons/io5';
+import { TbReportSearch } from 'react-icons/tb';
+import { GiArtificialHive } from 'react-icons/gi';
 
 interface NestedItem {
   name: string;
@@ -115,14 +115,19 @@ const sidebarItems: SidebarSection[] = [
         link: '/forecasts',
       },
       {
-        name: 'Больничные',
-        iconLeft: <MdOutlineLocalHospital />,
-        link: '/sickLeaves',
+        name: 'Отпуска',
+        iconLeft: <PersonIcon />,
+        link: '/vacations',
         nested: [
           {
-            name: 'Отпуска',
+            name: 'Мои отпуска',
             iconLeft: <PersonIcon />,
-            link: '/vacations',
+            link: '/vacations/my',
+          },
+          {
+            name: 'Больничные',
+            iconLeft: <MdOutlineLocalHospital />,
+            link: '/sickLeaves',
           },
         ],
       },
