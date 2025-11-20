@@ -3,11 +3,13 @@ import { Dispatch, SetStateAction } from 'react';
 
 export default function MyVacationHead({
   btnText,
+  href,
   years,
   year,
   setYear,
 }: {
   btnText: string,
+  href: string,
   years: number[];
   year: number;
   setYear: Dispatch<SetStateAction<number>>;
@@ -19,7 +21,7 @@ export default function MyVacationHead({
       alignItems="center"
       sx={{ mb: 2 }}
     >
-      <Button variant="contained" color="primary">
+      <Button variant="contained" color="primary" href={href}>
         {btnText}
       </Button>
       <ToggleButtonGroup

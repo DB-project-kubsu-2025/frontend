@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, Grid } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import MonthCalendar from '@/components/MonthCalendar';
 import { LeavesCalendarProps } from '@/types/common';
 import { useCalendarLeaves } from '@/hooks/useCalendarLeaves';
-import CalendarLeftInfo from '@/components/widgets/sickLeave/CalendarLeftInfo';
+import CalendarSubHeadInfo from '@/components/widgets/calendar/CalendarSubHeadInfo';
 import CalendarHead from '@/components/widgets/calendar/CalendarHead';
 
 export default function SickLeavesClient(initData: LeavesCalendarProps) {
@@ -15,37 +15,30 @@ export default function SickLeavesClient(initData: LeavesCalendarProps) {
   const { data } = useCalendarLeaves('sickLeaves', year, initData);
 
   return (
-    <Box sx={{ background: '#fff', p: 2 }}>
+    <Stack sx={{ background: '#fff', p: 2 }} spacing={2}>
       <CalendarHead
         btnText="Изменить график больничных"
+        href="/sickLeaves"
         years={years}
         year={year}
         setYear={setYear}
       />
 
-      <Grid
-        container
-        spacing={2}
-        sx={{ flexDirection: 'row', flexWrap: 'nowrap' }}
-      >
-        <Grid sx={{ flex: '0 0 auto' }}>
-          <CalendarLeftInfo data={data} />
-        </Grid>
+      <CalendarSubHeadInfo data={data} />
 
-        <Grid sx={{ flex: '1 1 auto' }}>
-          <Grid container spacing={2}>
-            {Array.from({ length: 12 }).map((_, m) => (
-              <Grid key={m} size={{ xl: 2, lg: 4, md: 6, xs: 12 }}>
-                <MonthCalendar
-                  year={year}
-                  monthIndex0={m}
-                  leaves={data?.calendarLeaves}
-                />
-              </Grid>
-            ))}
-          </Grid>
+      <Grid sx={{ flex: '1 1 auto' }}>
+        <Grid container spacing={2}>
+          {Array.from({ length: 12 }).map((_, m) => (
+            <Grid key={m} size={{ xl: 2, lg: 3, md: 4, sm: 6, xs: 12 }}>
+              <MonthCalendar
+                year={year}
+                monthIndex0={m}
+                leaves={data?.calendarLeaves}
+              />
+            </Grid>
+          ))}
         </Grid>
       </Grid>
-    </Box>
+    </Stack>
   );
 }

@@ -6,7 +6,7 @@ export function useCalendarLeaves(quKey: string, year: number, initialData?: any
 
   return useQuery({
     queryKey: [quKey, year],
-    queryFn: () => request(`/vacations?year=${year}`),
+    queryFn: () => request(`/${quKey}?year=${year}`),
     staleTime: 1000 * 60 * 5,
     initialData: year === 2025 ? initialData : undefined,
   });
