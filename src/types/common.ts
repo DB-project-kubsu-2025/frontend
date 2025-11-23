@@ -4,6 +4,8 @@ export type employeeNames =
   | 'Товаровед'
   | 'Кладовщик'
   | 'Продавец';
+
+export type statusTypes = 'done' | 'planned';
   
 export interface employeesList {
   id: number;
@@ -14,7 +16,7 @@ export type calendarLeaves = {
   id: number;
   start_date: string;
   end_date: string;
-  status: 'done' | 'planned';
+  status: statusTypes;
 };
 export interface LeavesCalendarProps {
   used_days: number;
@@ -31,4 +33,9 @@ export interface CalendarEvents {
   start?: string;
   end?: string;
   color?: string;
+}
+
+export interface calendarLeavesEdit extends calendarLeaves {
+  number: number;
+  calendar: calendarLeaves;
 }

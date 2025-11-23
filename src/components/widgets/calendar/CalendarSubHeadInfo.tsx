@@ -11,11 +11,25 @@ import {
   Typography,
 } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import { differenceDates, formatDate } from '@/utils/helper';
+import {
+  differenceDates,
+  formatDate,
+  getStatusColor,
+  getStatusRus,
+} from '@/utils/helper';
 import { calendarLeaves } from '@/types/common';
 import Link from 'next/link';
+import StatusSpan from '@/components/UI/StatusSpan';
 
-export default function CalendarSubHeadInfo({ data }: { data: any }) {
+export default function CalendarSubHeadInfo({
+  href,
+  year,
+  data,
+}: {
+  href: string;
+  year: number;
+  data: any;
+}) {
   return (
     <Card variant="outlined" sx={{ width: '100%' }}>
       <Stack direction="row" sx={{ width: '100%' }}>
@@ -55,15 +69,13 @@ export default function CalendarSubHeadInfo({ data }: { data: any }) {
                 {formatDate(l.start_date)} - {formatDate(l.end_date)}
               </Typography>
               <Typography variant="body2">
-                <Link href={`vacations/${l.id}`}>
-                  <span
-                    style={{
-                      color: l.status === 'done' ? '#96ce70' : '#8a94d1',
-                    }}
-                  >
-                    {l.status === 'done' ? 'ЗАВЕРШЕНА' : 'ЗАПЛАНИРОВАНО'}
-                  </span>
-                </Link>
+                {l.status === 'done' ? (
+                  <StatusSpan status={l.status} />
+                ) : (
+                  <Link href={`${href}/${l.id}?year=${year}`}>
+                    <StatusSpan status={l.status} />
+                  </Link>
+                )}
               </Typography>
             </Stack>
           ))}

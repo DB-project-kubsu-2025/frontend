@@ -1,15 +1,12 @@
 import { Button, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import Link from 'next/link';
 import { Dispatch, SetStateAction } from 'react';
 
-export default function MyVacationHead({
-  btnText,
-  href,
+export default function CalendarHead({
   years,
   year,
   setYear,
 }: {
-  btnText: string,
-  href: string,
   years: number[];
   year: number;
   setYear: Dispatch<SetStateAction<number>>;
@@ -17,13 +14,10 @@ export default function MyVacationHead({
   return (
     <Stack
       direction="row"
-      justifyContent="space-between"
+      justifyContent="end"
       alignItems="center"
       sx={{ mb: 2 }}
     >
-      <Button variant="contained" color="primary" href={href}>
-        {btnText}
-      </Button>
       <ToggleButtonGroup
         size="small"
         value={year}

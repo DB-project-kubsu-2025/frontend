@@ -1,24 +1,30 @@
 'use client';
 
 import { useState } from 'react';
-import { Grid, Stack } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import MonthCalendar from '@/components/MonthCalendar';
-import { LeavesCalendarProps } from '@/types/common';
+import { calendarLeavesEdit } from '@/types/common';
 import { useCalendarLeaves } from '@/hooks/useCalendarLeaves';
-import CalendarSubHeadInfo from '@/components/widgets/calendar/CalendarSubHeadInfo';
 import CalendarHead from '@/components/widgets/calendar/CalendarHead';
+import { getStatusColor, getStatusRus } from '@/utils/helper';
+import StatusSpan from '@/components/UI/StatusSpan';
 
-export default function MyVacationsClient(initData: LeavesCalendarProps) {
+export default function MyVacationsClientEdit(initData: calendarLeavesEdit) {
   const currYear = new Date().getFullYear();
   const years = Array.from({ length: currYear - 2023 + 1 }, (_, i) => 2024 + i);
   const [year, setYear] = useState(currYear);
-  const { data } = useCalendarLeaves('vacations/my', year, initData);
+  const [data, setData] = useState(initData);
+  console.log(data);
 
   return (
     <Stack sx={{ background: '#fff', p: 2 }} spacing={2}>
-      <CalendarHead years={years} year={year} setYear={setYear} />
+      <Typography variant="h5">Номер заявки: {data?.number}</Typography>
 
-      <CalendarSubHeadInfo href="/vacations/my" year={year} data={data} />
+      <Typography variant="body1">
+        Статус: <StatusSpan status={data?.calendar?.status} />
+      </Typography>
+
+      <CalendarHead years={years} year={year} setYear={setYear} />
 
       <Grid>
         <Grid container spacing={2}>
@@ -27,7 +33,7 @@ export default function MyVacationsClient(initData: LeavesCalendarProps) {
               <MonthCalendar
                 year={year}
                 monthIndex0={m}
-                leaves={data?.calendarLeaves}
+                leaves={[data.calendar]}
               />
             </Grid>
           ))}

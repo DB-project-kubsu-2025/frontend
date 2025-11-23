@@ -1,3 +1,4 @@
+import { statusTypes } from "@/types/common";
 import { differenceInCalendarDays, parseISO } from "date-fns";
 
 export const safeText = (str: any, replace: string = ''): string => {
@@ -17,4 +18,26 @@ export function differenceDates(date1: string, date2: string): number {
   return (
     differenceInCalendarDays(parseISO(date2), parseISO(date1)) + 1
   );
+}
+
+export function getStatusRus(status: statusTypes) {
+  switch (status) {
+    case 'done':
+      return 'ЗАВЕРШЕНО';
+    case 'planned':
+      return 'ЗАПЛАНИРОВАННО';
+    default:
+      return '';
+  }
+}
+
+export function getStatusColor(status: statusTypes) {
+  switch (status) {
+    case 'done':
+      return '#96ce70';
+    case 'planned':
+      return '#8a94d1';
+    default:
+      return '#000';
+  }
 }
