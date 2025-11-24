@@ -10,9 +10,10 @@ export default async function MyVacationsPageEdit({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
   const [{ id }, sp] = await Promise.all([params, searchParams]);
+  const idNum = Number(id);
 
   const res: calendarLeavesEdit = await apiFetch(
-    `/vacations/my/${id}?year=${String(sp?.year)}`,
+    `/vacations/my/${idNum}?year=${String(sp?.year)}`,
   );
-  return <MyVacationsClientEdit {...res} />;
+  return <MyVacationsClientEdit id={idNum} initData={res} />;
 }

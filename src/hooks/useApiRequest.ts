@@ -34,7 +34,7 @@ export function useApiRequest() {
       headers = {},
       signal,
     }: ApiRequestOptions = {},
-  ): Promise<AxiosResponse | ApiResponse> {
+  ): Promise<ApiResponse> {
     const token = getCookie('token');
     const requestHeaders = new AxiosHeaders();
     requestHeaders.set('Content-Type', 'application/json');
@@ -58,7 +58,16 @@ export function useApiRequest() {
         ...(method === 'GET' ? { params: data } : { data }),
         signal,
       });
-      return response.data;
+
+      if(method === 'GET') {
+        return response.data;
+      } else {
+        return {
+          status: response.status,
+          message: response.data?.message,
+          data: response.data,
+        };
+      }
     } catch (error: any) {
       if (error.response?.status === 400) {
         if (error.response?.data?.message) {
@@ -76,6 +85,7 @@ export function useApiRequest() {
         deleteCookie('token', { path: '/' });
         window.location.replace('/login');
       }
+
       return Promise.reject({
         response: { status, data: { message } },
         message,

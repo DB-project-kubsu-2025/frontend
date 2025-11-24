@@ -63,7 +63,7 @@ export default function LoginPage() {
         data: { username, password },
       });
       
-      const { token, user } = res;
+      const { token, user } = res.data;
       if (!token || !user) throw new Error('Некорректный ответ сервера');
       dispatch(
         loginAction({

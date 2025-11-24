@@ -6,6 +6,7 @@ export type employeeNames =
   | 'Продавец';
 
 export type statusTypes = 'done' | 'planned';
+export type SubjectMode = 'view' | 'edit';
   
 export interface employeesList {
   id: number;

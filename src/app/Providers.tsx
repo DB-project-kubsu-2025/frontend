@@ -5,9 +5,10 @@ import { makeStore } from '@/store';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from '@/utils/queryClient'; 
+import { queryClient } from '@/utils/queryClient';
 import theme from '@/style/theme';
 import AppShell from './AppShell';
+import { ConfirmProvider } from '@/components/ConfirmDialog';
 
 const store = makeStore();
 export default function Providers({ children }: { children: React.ReactNode }) {
@@ -19,9 +20,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           <SnackbarProvider
             maxSnack={3}
             autoHideDuration={3000}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           >
-            <AppShell>{children}</AppShell>
+            <ConfirmProvider>
+              <AppShell>{children}</AppShell>
+            </ConfirmProvider>
           </SnackbarProvider>
         </ThemeProvider>
       </QueryClientProvider>

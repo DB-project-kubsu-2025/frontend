@@ -1,39 +1,164 @@
 'use client';
 
 import { useState } from 'react';
-import { Grid, Stack, Typography } from '@mui/material';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import MonthCalendar from '@/components/MonthCalendar';
-import { calendarLeavesEdit } from '@/types/common';
-import { useCalendarLeaves } from '@/hooks/useCalendarLeaves';
+import { calendarLeavesEdit, SubjectMode } from '@/types/common';
 import CalendarHead from '@/components/widgets/calendar/CalendarHead';
-import { getStatusColor, getStatusRus } from '@/utils/helper';
+import { differenceDates, formatDate } from '@/utils/helper';
 import StatusSpan from '@/components/UI/StatusSpan';
+import { useConfirm } from '@/components/ConfirmDialog';
+import { useApiRequest } from '@/hooks/useApiRequest';
+import { enqueueSnackbar } from 'notistack';
+import { useRouter } from 'next/navigation';
 
-export default function MyVacationsClientEdit(initData: calendarLeavesEdit) {
+export default function MyVacationsClientEdit({
+  id,
+  initData,
+}: {
+  id: number;
+  initData: calendarLeavesEdit;
+}) {
+  const confirm = useConfirm();
+  const router = useRouter();
+  const { request } = useApiRequest();
   const currYear = new Date().getFullYear();
-  const years = Array.from({ length: currYear - 2023 + 1 }, (_, i) => 2024 + i);
+  const years = Array.from({ length: currYear - 2023 }, (_, i) => currYear + i);
   const [year, setYear] = useState(currYear);
   const [data, setData] = useState(initData);
+  const [mode, setMode] = useState<SubjectMode>('view');
   console.log(data);
 
-  return (
-    <Stack sx={{ background: '#fff', p: 2 }} spacing={2}>
-      <Typography variant="h5">Номер заявки: {data?.number}</Typography>
+  function handleClearCalendar() {
+    setData((prev: calendarLeavesEdit) => {
+      return {
+        ...prev,
+        calendar: {
+          id: 0,
+          start_date: '',
+          end_date: '',
+          status: 'planned',
+        },
+      };
+    });
+    setMode('edit');
+  }
 
-      <Typography variant="body1">
-        Статус: <StatusSpan status={data?.calendar?.status} />
-      </Typography>
+  function handleSelectDate(d: Date) {
+    const date_format = formatDate(d, 'ymd');
+    if (!data?.calendar?.start_date) {
+      setData((prev: calendarLeavesEdit) => {
+        return {
+          ...prev,
+          calendar: {
+            ...prev.calendar,
+            start_date: date_format,
+          },
+        };
+      });
+    } else {
+      console.log(differenceDates(data?.calendar?.start_date, data?.calendar?.end_date));
+      setData((prev: calendarLeavesEdit) => {
+        return {
+          ...prev,
+          calendar: {
+            ...prev.calendar,
+            end_date: date_format,
+          },
+        };
+      });
+      setMode('view');
+    }
+  }
+
+  const isSelectCalendar = (): boolean => {
+    const calendar = data?.calendar;
+    return (
+      calendar?.id !== 0 ||
+      calendar?.start_date === '' ||
+      calendar?.end_date === ''
+    );
+  };
+
+  async function handleDeleteLeave() {
+    const ok = await confirm('Удалить запись?');
+    if (!ok) return;
+
+    const res = await request(`/vacations/my/${id}`, {
+      method: 'DELETE',
+    }).catch(() => null);
+
+    if (!res) return;
+
+    enqueueSnackbar(res.message, { variant: 'success' });
+    router.push('/vacations/my');
+    router.refresh();
+  }
+
+  async function handleUpdateLeave() {
+    const res = await request(`/vacations/my/${id}`, {
+      method: 'PUT',
+      data: { calendar: data?.calendar },
+    }).catch(() => null);
+
+    if (!res) return;
+
+    enqueueSnackbar(res.message, { variant: 'success' });
+    router.push('/vacations/my');
+    router.refresh();
+  }
+
+  return (
+    <Stack sx={{ background: '#fff', p: 2 }}>
+      <Stack direction="row" justifyContent="space-between">
+        <Box>
+          <Typography variant="h5">Номер заявки: {data?.number}</Typography>
+
+          <Typography variant="body1" sx={{ mt: 1 }}>
+            Статус: <StatusSpan status={data?.calendar?.status} />
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'start', gap: 1 }}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => handleDeleteLeave()}
+          >
+            Удалить
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            disabled={isSelectCalendar()}
+            onClick={() => handleUpdateLeave()}
+          >
+            Сохранить
+          </Button>
+        </Box>
+      </Stack>
 
       <CalendarHead years={years} year={year} setYear={setYear} />
 
       <Grid>
+        {mode === 'view' ? (
+          <Button variant="text" onClick={() => handleClearCalendar()}>
+            Очистить
+          </Button>
+        ) : (
+          <Typography variant="subtitle1" color="textSecondary">
+            Выберите даты
+          </Typography>
+        )}
         <Grid container spacing={2}>
           {Array.from({ length: 12 }).map((_, m) => (
             <Grid key={m} size={{ xl: 2, lg: 3, md: 4, sm: 6, xs: 12 }}>
               <MonthCalendar
+                mode={mode}
                 year={year}
                 monthIndex0={m}
-                leaves={[data.calendar]}
+                leaves={[data?.calendar]}
+                backOpacity={true}
+                onDateClick={handleSelectDate}
               />
             </Grid>
           ))}

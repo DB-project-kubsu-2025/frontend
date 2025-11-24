@@ -12,17 +12,34 @@ import {
 import { format, isSameMonth, isWeekend } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { monthMatrix, dayInAnyLeave } from '@/libs/calendar';
-import { calendarLeaves } from '@/types/common';
+import { calendarLeaves, SubjectMode } from '@/types/common';
 
 type Props = {
+  mode: SubjectMode;
   year: number;
   monthIndex0: number;
   leaves: calendarLeaves[];
+  backOpacity?: boolean;
+  onDateClick?: (d: Date) => void;
 };
 
-export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
+export default function MonthCalendar({
+  mode = 'view',
+  year,
+  monthIndex0,
+  leaves,
+  backOpacity,
+  onDateClick,
+}: Props) {
   const theme = useTheme();
   const days = monthMatrix(year, monthIndex0, 1);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const current = leaves?.[0];
+  const start = current?.start_date ? new Date(current.start_date) : null;
+  const end = current?.end_date ? new Date(current.end_date) : null;
 
   const weeks: Date[][] = [];
   for (let i = 0; i < days.length; i += 7) {
@@ -36,7 +53,7 @@ export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
           textTransform: 'capitalize',
           fontWeight: 600,
           fontSize: 16,
-          align: 'center'
+          align: 'center',
         }}
         sx={{ pb: 0.5 }}
       />
@@ -45,7 +62,7 @@ export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
           style={{
             borderCollapse: 'collapse',
             tableLayout: 'fixed',
-            width: '100%'
+            width: '100%',
           }}
         >
           <thead>
@@ -71,6 +88,10 @@ export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
                 {week.map((d, di) => {
                   const out = !isSameMonth(d, new Date(year, monthIndex0, 1));
                   const lv = dayInAnyLeave(d, leaves);
+                  const isStart =
+                    start && d.toDateString() === start.toDateString();
+
+                  const isPastDay = d < today;
 
                   const color = out // день не в этом месяце
                     ? 'transparent'
@@ -78,17 +99,24 @@ export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
                       ? theme.palette.warning.main
                       : '#333';
 
-                  const bg = !out
-                    ? lv === 'done' //завершенный отпуск
-                      ? '#c1e7a7'
-                      : lv === 'planned' //запланированный отпуск
-                        ? '#bdc4eaff'
-                        : 'transparent'
-                    : 'transparent';
+                  let bg = 'transparent';
+
+                  if (!out) {
+                    if (start && !end && isStart) {
+                      bg = '#bdc4eaff';
+                    }
+
+                    if (lv === 'done') {
+                      bg = '#c1e7a7';
+                    } else if (lv === 'planned') {
+                      bg = '#bdc4eaff';
+                    }
+                  }
 
                   return (
                     <td
                       key={di}
+                      onClick={() => mode === 'edit' && onDateClick?.(d)}
                       style={{
                         border: `1px solid ${theme.palette.divider}`,
                         height: 28,
@@ -99,6 +127,9 @@ export default function MonthCalendar({ year, monthIndex0, leaves }: Props) {
                         fontWeight: 500,
                         backgroundColor: bg,
                         color: color,
+                        cursor: mode === 'edit' ? 'pointer' : 'default',
+                        opacity: backOpacity && isPastDay ? 0.45 : 1,
+                        pointerEvents: backOpacity && isPastDay ? 'none' : 'auto',
                       }}
                       aria-label={format(d, 'yyyy-MM-dd')}
                     >
