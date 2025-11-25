@@ -27,8 +27,8 @@ export async function GET(req: NextRequest) {
           },
           {
             id: 3,
-            start_date: '2025-09-05',
-            end_date: '2025-09-12',
+            start_date: '2025-12-05',
+            end_date: '2025-12-12',
             status: 'planned',
           },
         ],

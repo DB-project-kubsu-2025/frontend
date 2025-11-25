@@ -11,6 +11,7 @@ import { useConfirm } from '@/components/ConfirmDialog';
 import { useApiRequest } from '@/hooks/useApiRequest';
 import { enqueueSnackbar } from 'notistack';
 import { useRouter } from 'next/navigation';
+import { queryClient } from '@/utils/queryClient';
 
 export default function MyVacationsClientEdit({
   id,
@@ -57,7 +58,11 @@ export default function MyVacationsClientEdit({
         };
       });
     } else {
-      console.log(differenceDates(data?.calendar?.start_date, data?.calendar?.end_date));
+      console.log(differenceDates(data?.calendar?.start_date, date_format));
+      if (differenceDates(data?.calendar?.start_date, date_format) < 2) {
+        return;
+      }
+
       setData((prev: calendarLeavesEdit) => {
         return {
           ...prev,
@@ -81,7 +86,7 @@ export default function MyVacationsClientEdit({
   };
 
   async function handleDeleteLeave() {
-    const ok = await confirm('Удалить запись?');
+    const ok = await confirm('Удалить отпуск?');
     if (!ok) return;
 
     const res = await request(`/vacations/my/${id}`, {
@@ -91,6 +96,7 @@ export default function MyVacationsClientEdit({
     if (!res) return;
 
     enqueueSnackbar(res.message, { variant: 'success' });
+    queryClient.invalidateQueries({ queryKey: ['vacations/my'] });
     router.push('/vacations/my');
     router.refresh();
   }
@@ -104,13 +110,14 @@ export default function MyVacationsClientEdit({
     if (!res) return;
 
     enqueueSnackbar(res.message, { variant: 'success' });
+    queryClient.invalidateQueries({ queryKey: ['vacations/my'] });
     router.push('/vacations/my');
     router.refresh();
   }
 
   return (
     <Stack sx={{ background: '#fff', p: 2 }}>
-      <Stack direction="row" justifyContent="space-between">
+      <Stack sx={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row'}}>
         <Box>
           <Typography variant="h5">Номер заявки: {data?.number}</Typography>
 
@@ -118,37 +125,26 @@ export default function MyVacationsClientEdit({
             Статус: <StatusSpan status={data?.calendar?.status} />
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'start', gap: 1 }}>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => handleDeleteLeave()}
-          >
-            Удалить
-          </Button>
-          <Button
-            variant="contained"
-            color="success"
-            disabled={isSelectCalendar()}
-            onClick={() => handleUpdateLeave()}
-          >
-            Сохранить
-          </Button>
-        </Box>
+      <CalendarHead years={years} year={year} setYear={setYear} />
       </Stack>
 
-      <CalendarHead years={years} year={year} setYear={setYear} />
 
       <Grid>
-        {mode === 'view' ? (
-          <Button variant="text" onClick={() => handleClearCalendar()}>
-            Очистить
-          </Button>
-        ) : (
-          <Typography variant="subtitle1" color="textSecondary">
-            Выберите даты
-          </Typography>
-        )}
+        <Stack sx={{alignItems: 'end'}}>
+          {mode === 'view' ? (
+            <Button variant="text" onClick={() => handleClearCalendar()}>
+              Очистить
+            </Button>
+          ) : (
+            <Typography
+              variant="subtitle1"
+              color="textSecondary"
+              sx={{ mb: 1.1 }}
+            >
+              Выберите даты
+            </Typography>
+          )}
+        </Stack>
         <Grid container spacing={2}>
           {Array.from({ length: 12 }).map((_, m) => (
             <Grid key={m} size={{ xl: 2, lg: 3, md: 4, sm: 6, xs: 12 }}>
@@ -164,6 +160,24 @@ export default function MyVacationsClientEdit({
           ))}
         </Grid>
       </Grid>
+
+        <Stack sx={{ flexDirection: 'row', justifyContent: 'end', gap: 1, mt: 2 }}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => handleDeleteLeave()}
+          >
+            Удалить
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            disabled={isSelectCalendar()}
+            onClick={() => handleUpdateLeave()}
+          >
+            Сохранить
+          </Button>
+        </Stack>
     </Stack>
   );
 }
