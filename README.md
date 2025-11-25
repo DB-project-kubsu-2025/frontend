@@ -35,13 +35,15 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-# Api
-## Авторизация
+# API
+
+## АВТОРИЗАЦИЯ
 
 **POST** `/api/login`  
 Авторизация пользователя по логину и паролю
 
 **Request:**
+
 ```json
 {
   "login": "admin",
@@ -50,6 +52,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ```
 
 **Response 200:**
+
 ```json
 {
   "message": "Авторизация успешна",
@@ -63,18 +66,19 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ```
 
 **Response 400:**
+
 ```json
 {
-  "message": "Неверный логин или пароль",
+  "message": "Неверный логин или пароль"
 }
 ```
 
 ## Данные авторизованного пользователя
 
-**GET** `/api/me`  
-Получение данных авторизованного пользователя
+**GET** `/api/me`
 
 **Response 200:**
+
 ```json
 {
   "authenticated": true,
@@ -87,17 +91,76 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ```
 
 **Response 400:**
+
 ```json
 {
-  "authenticated": false,
+  "authenticated": false
 }
 ```
 
 ## Отпуска
 
-**GET** `/api/vacations`  
+**GET** `/api/vacations`
 
 **Request:**
+
+```json
+{
+  "month": 11,
+  "year": 2025
+}
+```
+
+**Response 200:**
+
+```json
+{
+  "events": [
+    {
+      "id": 1,
+      "employee_id": 1,
+      "title": "отпуск 1 Сотрудник ГК",
+      "date": "2025-11-01",
+      "color": "#aa0000"
+    },
+    {
+      "id": "2",
+      "employee_id": 3,
+      "title": "отпуск 1 Товаровед",
+      "date": "2025-11-02"
+    },
+    {
+      "id": "6",
+      "employee_id": 2,
+      "title": "Директор магазина",
+      "start": "2025-11-01",
+      "end": "2025-11-04" //с 01.11 до 03.11 включительно
+    }
+  ],
+  "employees": [
+    { "id": 1, "name": "Сотрудник ГК" },
+    { "id": 2, "name": "Директор магазина" },
+    { "id": 3, "name": "Товаровед" },
+    { "id": 4, "name": "Кладовщик" },
+    { "id": 5, "name": "Продавец" }
+  ]
+}
+```
+
+**Response 400:**
+
+```json
+{
+  "message": "Отпуска не найдены"
+}
+```
+
+## МОИ ОТПУСКА
+
+**GET** `/api/vacations/my`
+
+**Request:**
+
 ```json
 {
   "year": 2025
@@ -105,6 +168,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ```
 
 **Response 200:**
+
 ```json
 {
   "used_days": 21,
@@ -116,29 +180,67 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
       "employee": "Иванов Иван",
       "start_date": "2025-07-01",
       "end_date": "2025-07-14",
-      "status": "done",
+      "status": "done"
     },
     {
       "id": 2,
       "employee": "Петров Петр",
       "start_date": "2025-08-10",
       "end_date": "2025-08-20",
-      "status": "planned",
+      "status": "planned"
     },
     {
       "id": 3,
       "employee": "Сидоров Сергей",
       "start_date": "2025-09-05",
       "end_date": "2025-09-12",
-      "status": "planned",
-    },
-  ],
+      "status": "planned"
+    }
+  ]
 }
 ```
 
 **Response 400:**
+
 ```json
 {
-  "authenticated": false,
+  "message": "Отпуска не найдены"
+}
+```
+
+### Редактирование
+
+**GET** `/api/vacations/my/<id>`
+
+**Request:**
+
+```json
+{
+  "id": 2,
+  "year": 2025
+}
+```
+
+**Response 200:**
+
+```json
+{
+  "vacations": {
+    "number": 1232432,
+    "calendar": {
+      "id": 2,
+      "start_date": "2025-07-01",
+      "end_date": "2025-07-14",
+      "status": "planned"
+    }
+  }
+}
+```
+
+**Response 400:**
+
+```json
+{
+  "message": "Отпуск не найдены"
 }
 ```
