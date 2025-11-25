@@ -28,7 +28,6 @@ export interface LeavesCalendarProps {
 
 export interface CalendarEvents {
   id: string;
-  employee_id: number,
   title: string;
   date?: string;
   start?: string;

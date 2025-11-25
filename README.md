@@ -35,14 +35,17 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+---
+
 # API
+
+---
 
 ## АВТОРИЗАЦИЯ
 
-**POST** `/api/login`  
-Авторизация пользователя по логину и паролю
+### POST `/api/auth`
 
-**Request:**
+#### Request Body
 
 ```json
 {
@@ -51,7 +54,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 }
 ```
 
-**Response 200:**
+#### Response 200
 
 ```json
 {
@@ -65,7 +68,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 }
 ```
 
-**Response 400:**
+#### Response 400
 
 ```json
 {
@@ -73,11 +76,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 }
 ```
 
+---
+
 ## Данные авторизованного пользователя
 
-**GET** `/api/me`
+### GET `/api/auth/me`
 
-**Response 200:**
+#### Response 200
 
 ```json
 {
@@ -90,7 +95,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 }
 ```
 
-**Response 400:**
+#### Response 400
 
 ```json
 {
@@ -98,20 +103,21 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 }
 ```
 
+---
+
 ## Отпуска
 
-**GET** `/api/vacations`
+### GET `/api/vacations?year={year}`
 
-**Request:**
+Получение информации об отпусках всех сотрудников за выбранный год
 
-```json
-{
-  "month": 11,
-  "year": 2025
-}
-```
+#### Параметры (URL)
 
-**Response 200:**
+| Имя    | Тип | Обязательное | Описание                    |
+| ------ | --- | ------------ | --------------------------- |
+| `year` | int | да           | год, по которому идёт поиск |
+
+#### Response 200
 
 ```json
 {
@@ -151,23 +157,25 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ```json
 {
-  "message": "Отпуска не найдены"
+  "message": "Некорректные данные"
 }
 ```
+
+---
 
 ## МОИ ОТПУСКА
 
-**GET** `/api/vacations/my`
+### GET `/api/vacations/my?year={year}`
 
-**Request:**
+Получение информации о моих отпусках за выбранный год
 
-```json
-{
-  "year": 2025
-}
-```
+#### Параметры (URL)
 
-**Response 200:**
+| Имя    | Тип | Обязательное | Описание                    |
+| ------ | --- | ------------ | --------------------------- |
+| `year` | int | да           | год, по которому идёт поиск |
+
+#### Response 200
 
 ```json
 {
@@ -177,21 +185,18 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
   "calendarLeaves": [
     {
       "id": 1,
-      "employee": "Иванов Иван",
       "start_date": "2025-07-01",
       "end_date": "2025-07-14",
       "status": "done"
     },
     {
       "id": 2,
-      "employee": "Петров Петр",
       "start_date": "2025-08-10",
       "end_date": "2025-08-20",
       "status": "planned"
     },
     {
       "id": 3,
-      "employee": "Сидоров Сергей",
       "start_date": "2025-09-05",
       "end_date": "2025-09-12",
       "status": "planned"
@@ -200,7 +205,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 }
 ```
 
-**Response 400:**
+#### Response 400
 
 ```json
 {
@@ -208,39 +213,140 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 }
 ```
 
-### Редактирование
+---
 
-**GET** `/api/vacations/my/<id>`
+## POST `/api/vacations/my`
 
-**Request:**
+Добавление моего отпуска
 
-```json
-{
-  "id": 2,
-  "year": 2025
-}
-```
-
-**Response 200:**
+#### Request Body
 
 ```json
 {
-  "vacations": {
-    "number": 1232432,
-    "calendar": {
-      "id": 2,
-      "start_date": "2025-07-01",
-      "end_date": "2025-07-14",
-      "status": "planned"
-    }
+  "calendar": {
+    "start_date": "2025-09-05",
+    "end_date": "2025-09-12"
   }
 }
 ```
 
-**Response 400:**
+#### Response 200
 
 ```json
 {
-  "message": "Отпуск не найдены"
+  "message": "Отпуск добавлен"
+}
+```
+
+#### Response 400
+
+```json
+{
+  "message": "Некорректные данные"
+}
+```
+
+---
+
+## МОИ ОТПУСКА (ДЕТАЛЬНАЯ СТРАНИЦА)
+
+### GET `/api/vacations/my/{id}?year={year}`
+
+Получение информации о моём отпуске за выбранный год.
+
+### Параметры
+
+| Имя    | Тип | Обязательное | Описание                    |
+| ------ | --- | ------------ | --------------------------- |
+| `id`   | int | да           | Идентификатор записи        |
+| `year` | int | да           | год, по которому идёт поиск |
+
+#### Response 200
+
+```json
+{
+  "number": 1232432,
+  "calendar": {
+    "id": 1,
+    "start_date": "2025-07-01",
+    "end_date": "2025-07-14",
+    "status": "planned"
+  }
+}
+```
+
+#### Response 400
+
+```json
+{
+  "message": "Отпуска не найдены"
+}
+```
+
+---
+
+## PUT `/api/vacations/my/{id}`
+
+Обновление моего отпуска
+
+### Параметры
+
+| Имя  | Тип | Обязательное | Описание             |
+| ---- | --- | ------------ | -------------------- |
+| `id` | int | да           | Идентификатор записи |
+
+#### Request Body
+
+```json
+{
+  "calendar": {
+    "id": 3,
+    "start_date": "2025-09-05",
+    "end_date": "2025-09-12"
+  }
+}
+```
+
+#### Response 200
+
+```json
+{
+  "message": "Отпуск обновлён"
+}
+```
+
+#### Response 400
+
+```json
+{
+  "message": "Некорректные данные"
+}
+```
+
+---
+
+## DELETE `/api/vacations/my/{id}`
+
+Удаление моего отпуска
+
+### Параметры
+
+| Имя  | Тип | Обязательное | Описание             |
+| ---- | --- | ------------ | -------------------- |
+| `id` | int | да           | Идентификатор записи |
+
+#### Response 200
+
+```json
+{
+  "message": "Отпуск удалён"
+}
+```
+
+#### Response 400
+
+```json
+{
+  "message": "Некорректные данные"
 }
 ```
