@@ -30,7 +30,7 @@ export async function PUT(req: NextRequest) {
   const reqData = await req.json();
   const calendar = reqData.calendar;
   console.log('###', calendar);
-  return NextResponse.json({ message: 'Запись обновлена' }, { status: 200 });
+  return NextResponse.json({ message: 'Отпускной обновлен' }, { status: 200 });
 }
 
 export async function DELETE(
@@ -39,5 +39,5 @@ export async function DELETE(
 ) {
   const aa = await params;
   console.log(aa);
-  return NextResponse.json({ message: 'Запись удалена' }, { status: 200 });
+  return NextResponse.json({ message: 'Отпускной удалён' }, { status: 200 });
 }

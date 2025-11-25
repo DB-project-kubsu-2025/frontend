@@ -15,8 +15,7 @@ export default function CalendarHead({
     <Stack
       direction="row"
       justifyContent="end"
-      alignItems="center"
-      sx={{ mb: 2 }}
+      alignItems="start"
     >
       <ToggleButtonGroup
         size="small"

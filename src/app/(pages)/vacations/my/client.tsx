@@ -1,12 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Grid, Stack } from '@mui/material';
+import { Grid, Stack, Button } from '@mui/material';
 import MonthCalendar from '@/components/MonthCalendar';
 import { LeavesCalendarProps } from '@/types/common';
 import { useCalendarLeaves } from '@/hooks/useCalendarLeaves';
 import CalendarSubHeadInfo from '@/components/widgets/calendar/CalendarSubHeadInfo';
 import CalendarHead from '@/components/widgets/calendar/CalendarHead';
+import Link from 'next/link';
 
 export default function MyVacationsClient(initData: LeavesCalendarProps) {
   const currYear = new Date().getFullYear();
@@ -16,7 +17,12 @@ export default function MyVacationsClient(initData: LeavesCalendarProps) {
 
   return (
     <Stack sx={{ background: '#fff', p: 2 }} spacing={2}>
-      <CalendarHead years={years} year={year} setYear={setYear} />
+      <Stack direction="row" justifyContent="space-between" alignItems="start">
+        <Button variant="contained" component={Link} href="/vacations/my/add">
+          Добавить
+        </Button>
+        <CalendarHead years={years} year={year} setYear={setYear} />
+      </Stack>
 
       <CalendarSubHeadInfo href="/vacations/my" year={year} data={data} />
 

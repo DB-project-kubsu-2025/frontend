@@ -15,7 +15,7 @@ import { monthMatrix, dayInAnyLeave } from '@/libs/calendar';
 import { calendarLeaves, SubjectMode } from '@/types/common';
 
 type Props = {
-  mode: SubjectMode;
+  mode?: SubjectMode;
   year: number;
   monthIndex0: number;
   leaves: calendarLeaves[];
@@ -28,7 +28,7 @@ export default function MonthCalendar({
   year,
   monthIndex0,
   leaves,
-  backOpacity,
+  backOpacity = false,
   onDateClick,
 }: Props) {
   const theme = useTheme();
