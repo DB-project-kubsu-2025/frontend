@@ -61,3 +61,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });
   }
 }
+
+export async function POST(req: NextRequest) {
+  const reqData = await req.json();
+  const calendar = reqData.calendar;
+  console.log('###', calendar);
+  return NextResponse.json({ message: 'Больничный добавлен' }, { status: 200 });
+}

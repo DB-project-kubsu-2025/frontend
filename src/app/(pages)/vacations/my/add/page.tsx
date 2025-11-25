@@ -1,5 +1,5 @@
-import MyVacationsClientEdit from './client';
+import MyVacationsClientAdd from './client';
 
-export default async function MyVacationsPageEdit() {
-  return <MyVacationsClientEdit />;
+export default async function MyVacationsPageAdd() {
+  return <MyVacationsClientAdd />;
 }

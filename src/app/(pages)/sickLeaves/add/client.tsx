@@ -23,7 +23,7 @@ const DEFAULT_CALENDAR_DATA: CalendarLeavesObj = {
   }
 };
 
-export default function MyVacationsClientAdd() {
+export default function SickLeavesClientAdd() {
   const router = useRouter();
   const { request } = useApiRequest();
   const currYear = new Date().getFullYear();

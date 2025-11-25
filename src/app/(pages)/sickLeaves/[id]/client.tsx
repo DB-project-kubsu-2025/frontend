@@ -1,43 +1,45 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Grid, Stack, Typography } from '@mui/material';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import MonthCalendar from '@/components/MonthCalendar';
-import { SubjectMode, calendarLeaves } from '@/types/common';
+import { calendarLeavesEdit, SubjectMode } from '@/types/common';
 import CalendarHead from '@/components/widgets/calendar/CalendarHead';
 import { differenceDates, formatDate } from '@/utils/helper';
+import StatusSpan from '@/components/UI/StatusSpan';
+import { useConfirm } from '@/components/ConfirmDialog';
 import { useApiRequest } from '@/hooks/useApiRequest';
 import { enqueueSnackbar } from 'notistack';
 import { useRouter } from 'next/navigation';
 import { queryClient } from '@/utils/queryClient';
 
-interface CalendarLeavesObj {
-  calendar: calendarLeaves
-}
-const DEFAULT_CALENDAR_DATA: CalendarLeavesObj = {
-  calendar: {
-    id: 0,
-    start_date: '',
-    end_date: '',
-    status: 'planned',
-  }
-};
-
-export default function MyVacationsClientAdd() {
+export default function SickLeavesClientEdit({
+  id,
+  initData,
+}: {
+  id: number;
+  initData: calendarLeavesEdit;
+}) {
+  const confirm = useConfirm();
   const router = useRouter();
   const { request } = useApiRequest();
   const currYear = new Date().getFullYear();
   const years = Array.from({ length: currYear - 2023 }, (_, i) => currYear + i);
   const [year, setYear] = useState(currYear);
-  const [data, setData] = useState(DEFAULT_CALENDAR_DATA);
-  const [mode, setMode] = useState<SubjectMode>('edit');
+  const [data, setData] = useState(initData);
+  const [mode, setMode] = useState<SubjectMode>('view');
   console.log(data);
 
   function handleClearCalendar() {
-    setData((prev: CalendarLeavesObj) => {
+    setData((prev: calendarLeavesEdit) => {
       return {
         ...prev,
-        DEFAULT_CALENDAR_DATA
+        calendar: {
+          id: 0,
+          start_date: '',
+          end_date: '',
+          status: 'planned',
+        },
       };
     });
     setMode('edit');
@@ -46,7 +48,7 @@ export default function MyVacationsClientAdd() {
   function handleSelectDate(d: Date) {
     const date_format = formatDate(d, 'ymd');
     if (!data?.calendar?.start_date) {
-      setData((prev: CalendarLeavesObj) => {
+      setData((prev: calendarLeavesEdit) => {
         return {
           ...prev,
           calendar: {
@@ -61,7 +63,7 @@ export default function MyVacationsClientAdd() {
         return;
       }
 
-      setData((prev: CalendarLeavesObj) => {
+      setData((prev: calendarLeavesEdit) => {
         return {
           ...prev,
           calendar: {
@@ -83,26 +85,52 @@ export default function MyVacationsClientAdd() {
     );
   };
 
+  async function handleDeleteLeave() {
+    const ok = await confirm('Удалить больничный?');
+    if (!ok) return;
+
+    const res = await request(`/sickLeaves/${id}`, {
+      method: 'DELETE',
+    }).catch(() => null);
+
+    if (!res) return;
+
+    enqueueSnackbar(res.message, { variant: 'success' });
+    queryClient.invalidateQueries({ queryKey: ['sickLeaves'] });
+    router.push('/sickLeaves');
+    router.refresh();
+  }
+
   async function handleUpdateLeave() {
-    const res = await request(`/vacations/my`, {
-      method: 'POST',
+    const res = await request(`/sickLeaves/${id}`, {
+      method: 'PUT',
       data: { calendar: data?.calendar },
     }).catch(() => null);
 
     if (!res) return;
 
     enqueueSnackbar(res.message, { variant: 'success' });
-    queryClient.invalidateQueries({ queryKey: ['vacations/my'] });
-    router.push('/vacations/my');
+    queryClient.invalidateQueries({ queryKey: ['sickLeaves'] });
+    router.push('/sickLeaves');
     router.refresh();
   }
 
   return (
     <Stack sx={{ background: '#fff', p: 2 }}>
+      <Stack sx={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row'}}>
+        <Box>
+          <Typography variant="h5">Номер заявки: {data?.number}</Typography>
+
+          <Typography variant="body1" sx={{ mt: 1 }}>
+            Статус: <StatusSpan status={data?.calendar?.status} />
+          </Typography>
+        </Box>
       <CalendarHead years={years} year={year} setYear={setYear} />
+      </Stack>
+
 
       <Grid>
-        <Stack sx={{ alignItems: 'end', mt: 1 }}>
+        <Stack sx={{alignItems: 'end'}}>
           {mode === 'view' ? (
             <Button variant="text" onClick={() => handleClearCalendar()}>
               Очистить
@@ -133,18 +161,23 @@ export default function MyVacationsClientAdd() {
         </Grid>
       </Grid>
 
-      <Stack
-        sx={{ flexDirection: 'row', justifyContent: 'end', gap: 1, mt: 2 }}
-      >
-        <Button
-          variant="contained"
-          color="success"
-          disabled={isSelectCalendar()}
-          onClick={() => handleUpdateLeave()}
-        >
-          Добавить
-        </Button>
-      </Stack>
+        <Stack sx={{ flexDirection: 'row', justifyContent: 'end', gap: 1, mt: 2 }}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => handleDeleteLeave()}
+          >
+            Удалить
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            disabled={isSelectCalendar()}
+            onClick={() => handleUpdateLeave()}
+          >
+            Сохранить
+          </Button>
+        </Stack>
     </Stack>
   );
 }
