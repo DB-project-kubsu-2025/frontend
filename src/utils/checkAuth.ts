@@ -25,7 +25,7 @@ export async function verifyToken(request: {
     if (!anyId) return { error: 'Ошибка авторизации', status: 403 };
 
     const user_id = typeof anyId === 'number' ? String(anyId) : String(anyId);
-    
+
     return {
       valid: true,
       user_id,

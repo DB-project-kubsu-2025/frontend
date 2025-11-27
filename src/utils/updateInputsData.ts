@@ -3,7 +3,9 @@ export const getDate = (str: string, format: string = ''): string => {
 
   if (format === '') return str;
 
-  const [day, month, year] = str.includes('-') ? str.split('-') : str.split('.');
+  const [day, month, year] = str.includes('-')
+    ? str.split('-')
+    : str.split('.');
 
   if (format === 'ymd') {
     return `${year}-${month}-${day}`;
@@ -32,7 +34,7 @@ export function updateInputsData(
     console.log('update input data: array');
     const [parentPath, fieldName] = sectionPaths as [string[], string];
 
-    parentPath.slice(0, -1).forEach(key => {
+    parentPath.slice(0, -1).forEach((key) => {
       if (!current[key]) current[key] = {};
       current = current[key];
     });
@@ -64,7 +66,7 @@ export function updateInputsData(
     const flatPath = sectionPaths as string[];
     const lastKey = flatPath[flatPath.length - 1];
 
-    flatPath.slice(0, -1).forEach(key => {
+    flatPath.slice(0, -1).forEach((key) => {
       if (!current[key]) current[key] = {};
       current = current[key];
     });

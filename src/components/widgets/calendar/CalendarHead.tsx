@@ -1,5 +1,4 @@
-import { Button, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import Link from 'next/link';
+import { Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { Dispatch, SetStateAction } from 'react';
 
 export default function CalendarHead({
@@ -12,11 +11,7 @@ export default function CalendarHead({
   setYear: Dispatch<SetStateAction<number>>;
 }) {
   return (
-    <Stack
-      direction="row"
-      justifyContent="end"
-      alignItems="start"
-    >
+    <Stack direction="row" justifyContent="end" alignItems="start">
       <ToggleButtonGroup
         size="small"
         value={year}

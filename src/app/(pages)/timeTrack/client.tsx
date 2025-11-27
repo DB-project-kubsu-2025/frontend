@@ -1,9 +1,7 @@
 'use client';
-import MultiSelect from '@/components/UI/MultiSelect';
 import CalendarWidget from '@/components/widgets/fullCalendar/CalendarWidget';
 import { CalendarTimeTrack, employeesList } from '@/types/common';
 import { EventContentArg } from '@fullcalendar/core/index.js';
-import { useState } from 'react';
 
 function getColorTime(work_time: number, all_time: number) {
   const diff = work_time - all_time;
@@ -26,18 +24,7 @@ export default function TimeTrackClient({
   events: CalendarTimeTrack[];
   employees: employeesList[];
 }) {
-  const [selectedEmployees, setSelectedEmployees] = useState<employeesList[]>(
-    [],
-  );
-
-  const filterEvents =
-    selectedEmployees.length === 0
-      ? events
-      : events.filter((e) =>
-          selectedEmployees.some((emp) => emp.id == e.employee_role_id),
-        );
-
-  const filterEventsRes = filterEvents.map((ev) => ({
+  const filterEventsRes = events.map((ev) => ({
     ...ev,
     backgroundColor: 'transparent',
     borderColor: 'transparent',
@@ -91,19 +78,11 @@ export default function TimeTrackClient({
   };
 
   return (
-    <>
-      <MultiSelect
-        options={employees}
-        value={selectedEmployees}
-        onChange={setSelectedEmployees}
-        sx={{ width: '15rem', mb: 2 }}
-      />
-      <CalendarWidget
-        events={filterEventsRes}
-        overrides={{
-          eventContent,
-        }}
-      />
-    </>
+    <CalendarWidget
+      events={filterEventsRes}
+      overrides={{
+        eventContent,
+      }}
+    />
   );
 }

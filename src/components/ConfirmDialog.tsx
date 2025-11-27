@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -8,7 +8,7 @@ import {
   DialogActions,
   Button,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
 type ConfirmOptions = {
   title?: string;
@@ -28,14 +28,13 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
 
   const confirm: ConfirmFn = (message) => {
     return new Promise<boolean>((resolve) => {
-      const opts =
-        typeof message === "string" ? { message } : message;
+      const opts = typeof message === 'string' ? { message } : message;
 
       setOptions({
         title: opts.title,
-        message: opts.message ?? "Вы уверены?",
-        confirmText: opts.confirmText ?? "Да",
-        cancelText: opts.cancelText ?? "Отмена",
+        message: opts.message ?? 'Вы уверены?',
+        confirmText: opts.confirmText ?? 'Да',
+        cancelText: opts.cancelText ?? 'Отмена',
       });
 
       setResolver(() => resolve);
@@ -52,9 +51,9 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
     <ConfirmContext.Provider value={confirm}>
       {children}
 
-      <Dialog open={open} onClose={() => handleClose(false)} maxWidth='xs'>
+      <Dialog open={open} onClose={() => handleClose(false)} maxWidth="xs">
         <DialogTitle>{options.title}</DialogTitle>
-        <DialogContent sx={{minWidth: 250}}>
+        <DialogContent sx={{ minWidth: 250 }}>
           <Typography>{options.message}</Typography>
         </DialogContent>
 
@@ -62,10 +61,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
           <Button onClick={() => handleClose(false)}>
             {options.cancelText}
           </Button>
-          <Button
-            variant="contained"
-            onClick={() => handleClose(true)}
-          >
+          <Button variant="contained" onClick={() => handleClose(true)}>
             {options.confirmText}
           </Button>
         </DialogActions>
@@ -77,7 +73,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
 export function useConfirm(): ConfirmFn {
   const ctx = useContext(ConfirmContext);
   if (!ctx) {
-    throw new Error("useConfirm must be used within ConfirmProvider");
+    throw new Error('useConfirm must be used within ConfirmProvider');
   }
   return ctx;
 }

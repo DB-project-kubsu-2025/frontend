@@ -13,7 +13,7 @@ export async function apiFetch(
 ) {
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
-  
+
   const headers: any = {
     'Content-Type': 'application/json',
     ...options.headers,
@@ -22,7 +22,7 @@ export async function apiFetch(
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
-  
+
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     method,
     headers,

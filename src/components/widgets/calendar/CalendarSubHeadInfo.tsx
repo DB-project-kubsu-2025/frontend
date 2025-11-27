@@ -1,22 +1,6 @@
-import {
-  Card,
-  CardContent,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Card, Divider, Stack, Typography } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import {
-  differenceDates,
-  formatDate,
-  getStatusColor,
-  getStatusRus,
-} from '@/utils/helper';
+import { differenceDates, formatDate } from '@/utils/helper';
 import { calendarLeaves } from '@/types/common';
 import Link from 'next/link';
 import StatusSpan from '@/components/UI/StatusSpan';

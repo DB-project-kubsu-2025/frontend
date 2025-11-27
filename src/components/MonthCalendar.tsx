@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  Box,
-  Typography,
-  alpha,
-  useTheme,
-} from '@mui/material';
+import { Card, CardHeader, CardContent, useTheme } from '@mui/material';
 import { format, isSameMonth, isWeekend } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { monthMatrix, dayInAnyLeave } from '@/libs/calendar';
@@ -129,7 +121,8 @@ export default function MonthCalendar({
                         color: color,
                         cursor: mode === 'edit' ? 'pointer' : 'default',
                         opacity: backOpacity && isPastDay ? 0.45 : 1,
-                        pointerEvents: backOpacity && isPastDay ? 'none' : 'auto',
+                        pointerEvents:
+                          backOpacity && isPastDay ? 'none' : 'auto',
                       }}
                       aria-label={format(d, 'yyyy-MM-dd')}
                     >

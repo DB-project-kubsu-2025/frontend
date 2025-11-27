@@ -39,7 +39,6 @@ export interface CalendarEvents {
 export interface CalendarTimeTrack {
   id: string;
   date: string;
-  employee_role_id: number;
   employee_name: string;
   work_time: number;
   all_time: number;

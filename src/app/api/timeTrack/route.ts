@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
       {
         id: 1,
         date: '2025-11-01',
-        employee_role_id: 1,
         employee_name: 'Иванов И. И.',
         work_time: 481,
         all_time: 480,
@@ -18,7 +17,6 @@ export async function GET(req: NextRequest) {
       {
         id: 2,
         date: '2025-11-01',
-        employee_role_id: 3,
         employee_name: 'Васильев А. А.',
         work_time: 420,
         all_time: 480,
@@ -26,7 +24,6 @@ export async function GET(req: NextRequest) {
       {
         id: 3,
         date: '2025-11-02',
-        employee_role_id: 1,
         employee_name: 'Иванов И. И.',
         work_time: 480,
         all_time: 480,
@@ -34,7 +31,6 @@ export async function GET(req: NextRequest) {
       {
         id: 4,
         date: '2025-11-02',
-        employee_role_id: 3,
         employee_name: 'Васильев А. А.',
         work_time: 480,
         all_time: 480,
@@ -42,7 +38,6 @@ export async function GET(req: NextRequest) {
       {
         id: 5,
         date: '2025-11-04',
-        employee_role_id: 5,
         employee_name: 'Петькин К. А.',
         work_time: 480,
         all_time: 480,
@@ -50,7 +45,6 @@ export async function GET(req: NextRequest) {
       {
         id: 6,
         date: '2025-11-11',
-        employee_role_id: 2,
         employee_name: 'Дубров К. М.',
         work_time: 240,
         all_time: 480,

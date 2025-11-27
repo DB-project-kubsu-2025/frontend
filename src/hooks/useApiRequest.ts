@@ -1,5 +1,5 @@
 'use client';
-import axios, { Method, AxiosResponse, AxiosHeaders } from 'axios';
+import axios, { Method, AxiosHeaders } from 'axios';
 import { getCookie, deleteCookie } from 'cookies-next/client';
 import { useSnackbar } from 'notistack';
 
@@ -59,7 +59,7 @@ export function useApiRequest() {
         signal,
       });
 
-      if(method === 'GET') {
+      if (method === 'GET') {
         return response.data;
       } else {
         return {

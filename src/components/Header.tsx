@@ -24,15 +24,18 @@ const Header: React.FC<HeaderProps> = ({ ToggleDrawer }) => {
     <AppBar sx={appBarStyle}>
       <Toolbar sx={{ justifyContent: 'space-between', width: '100%' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <IconButton color="inherit" aria-label="open drawer" onClick={ToggleDrawer} edge="start">
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={ToggleDrawer}
+            edge="start"
+          >
             <MenuIcon sx={{ width: '28px', height: 'unset', fill: '#888' }} />
           </IconButton>
           <Link href="/" passHref>
             <Typography variant="h5" component="div" className="logo">
               {/* <Image src="/img/logo.png" alt="Логотип" width={40} height={40} /> */}
-              <span className="logoName">
-                CRM
-              </span>
+              <span className="logoName">CRM</span>
             </Typography>
           </Link>
         </Box>

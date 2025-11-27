@@ -3,11 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import ruLocale from '@fullcalendar/core/locales/ru';
-import {
-  CalendarEvents,
-  CalendarTimeTrack,
-  employeesList,
-} from '@/types/common';
+import { CalendarEvents, CalendarTimeTrack } from '@/types/common';
 import { useEffect, useRef, useState } from 'react';
 import { CalendarOptions } from '@fullcalendar/core/index.js';
 
@@ -40,7 +36,10 @@ export default function CalendarWidget({
   }, [containerWidth]);
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: 'calc(100vh - 167px)' }}>
+    <div
+      ref={containerRef}
+      style={{ width: '100%', height: 'calc(100vh - 167px)' }}
+    >
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
