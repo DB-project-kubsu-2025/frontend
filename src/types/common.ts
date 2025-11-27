@@ -29,11 +29,20 @@ export interface LeavesCalendarProps {
 export interface CalendarEvents {
   id: string;
   title: string;
-  employee_id: number;
+  employee_role_id: number;
   date?: string;
   start?: string;
   end?: string;
   color?: string;
+}
+
+export interface CalendarTimeTrack {
+  id: string;
+  date: string;
+  employee_role_id: number;
+  employee_name: string;
+  work_time: number;
+  all_time: number;
 }
 
 export interface calendarLeavesEdit {

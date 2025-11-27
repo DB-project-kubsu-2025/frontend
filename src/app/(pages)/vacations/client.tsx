@@ -1,10 +1,10 @@
 'use client';
 import MultiSelect from '@/components/UI/MultiSelect';
-import CalendarWidget from '@/components/widgets/calendar/CalendarWidget';
+import CalendarWidget from '@/components/widgets/fullCalendar/CalendarWidget';
 import { CalendarEvents, employeesList } from '@/types/common';
 import { useState } from 'react';
 
-export default function CalendarClient({
+export default function VacationsClient({
   events,
   employees,
 }: {
@@ -15,6 +15,14 @@ export default function CalendarClient({
   const [selectedEmployees, setSelectedEmployees] = useState<employeesList[]>(
     [],
   );
+
+  const filterEvents =
+    selectedEmployees.length === 0
+      ? events
+      : events.filter((e) =>
+          selectedEmployees.some((emp) => emp.id == e.employee_role_id),
+        )
+
   return (
     <>
       <MultiSelect
@@ -23,7 +31,24 @@ export default function CalendarClient({
         onChange={setSelectedEmployees}
         sx={{ width: '15rem', mb: 2 }}
       />
-      <CalendarWidget events={events} filterEmployees={selectedEmployees} />
+      <CalendarWidget
+        events={filterEvents}
+        overrides={{
+          customButtons: {
+            addEventBtn: {
+              text: 'Добавить отпуск',
+              click: () => {
+                console.log('Клик по Добавить отпуск');
+              },
+            },
+          },
+          headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'addEventBtn',
+          },
+        }}
+      />
     </>
   );
 }

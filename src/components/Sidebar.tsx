@@ -22,6 +22,7 @@ import { RiTruckLine } from 'react-icons/ri';
 import { IoNewspaperOutline } from 'react-icons/io5';
 import { TbReportSearch } from 'react-icons/tb';
 import { GiArtificialHive } from 'react-icons/gi';
+import { IoIosTimer } from "react-icons/io";
 
 interface NestedItem {
   name: string;
@@ -108,6 +109,11 @@ const sidebarItems: SidebarSection[] = [
         name: 'Отчёты',
         iconLeft: <TbReportSearch />,
         link: '/reports',
+      },
+      {
+        name: 'Учёт времени',
+        iconLeft: <IoIosTimer />,
+        link: '/timeTrack',
       },
       {
         name: 'Прогнозы',

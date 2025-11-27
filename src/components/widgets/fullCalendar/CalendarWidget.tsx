@@ -3,26 +3,24 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import ruLocale from '@fullcalendar/core/locales/ru';
-import { CalendarEvents, employeesList } from '@/types/common';
+import {
+  CalendarEvents,
+  CalendarTimeTrack,
+  employeesList,
+} from '@/types/common';
 import { useEffect, useRef, useState } from 'react';
+import { CalendarOptions } from '@fullcalendar/core/index.js';
 
 export default function CalendarWidget({
   events,
-  filterEmployees,
+  overrides,
 }: {
-  events: CalendarEvents[];
-  filterEmployees: employeesList[];
+  events: CalendarEvents[] | CalendarTimeTrack[];
+  overrides?: Partial<CalendarOptions>;
 }) {
   const calendarRef = useRef<FullCalendar | null>(null);
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
-
-  const filterEvents =
-    filterEmployees.length === 0
-      ? events
-      : events.filter((e) =>
-          filterEmployees.some((emp) => emp.id === e.employee_id),
-        );
 
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
@@ -42,30 +40,20 @@ export default function CalendarWidget({
   }, [containerWidth]);
 
   return (
-    <div ref={containerRef} style={{ width: '100%' }}>
+    <div ref={containerRef} style={{ width: '100%', height: 'calc(100vh - 167px)' }}>
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        events={filterEvents}
+        events={events}
         locale={ruLocale}
         ref={calendarRef}
         dayMaxEvents={true}
         dayMaxEventRows={3}
-        height={1000}
+        height="100%"
+        contentHeight="100%"
+        expandRows={true}
         handleWindowResize={false}
-        customButtons={{
-          addEventBtn: {
-            text: 'Добавить',
-            click: () => {
-              console.log('Нажали на кнопку');
-            },
-          },
-        }}
-        headerToolbar={{
-          left: 'prev,next today',
-          center: 'title',
-          right: 'addEventBtn',
-        }}
+        {...overrides}
       />
     </div>
   );

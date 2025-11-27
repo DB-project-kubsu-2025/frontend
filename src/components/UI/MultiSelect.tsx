@@ -33,7 +33,7 @@ export default function MultiSelect({
       renderOption={(props, option, { selected }) => {
         const { key, ...optionProps } = props;
         return (
-          <li key={key} {...optionProps}>
+          <li key={key} style={{padding: 0}} {...optionProps}>
             <Checkbox
               icon={icon}
               checkedIcon={checkedIcon}
