@@ -78,7 +78,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ---
 
-## Данные авторизованного пользователя
+## ДАННЫЕ АВТОРИЗИРОВАННОГО ПОЛЬЗОВАТЕЛЯ
 
 ### GET `/api/auth/me`
 
@@ -105,7 +105,81 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ---
 
-## Отпуска
+## УЧЁТ ВРЕМЕНИ
+
+### GET `/api/timeTrack?year={year}?month={month}`
+
+Получение информации об отпусках всех сотрудников за выбранный год
+
+#### Параметры (URL)
+
+| Имя     | Тип | Обязательное | Описание                      |
+| ------- | --- | ------------ | ----------------------------- |
+| `year`  | int | да           | год, по которому идёт поиск   |
+| `month` | int | да           | месяц, по которому идёт поиск |
+
+#### Response 200
+
+```json
+{
+  "events": [
+    {
+      "id": 1,
+      "date": "2025-11-01",
+      "employee_name": "Иванов И. И.",
+      "work_time": 481, //в минутах
+      "all_time": 480
+    },
+    {
+      "id": 2,
+      "date": "2025-11-01",
+      "employee_name": "Васильев А. А.",
+      "work_time": 420,
+      "all_time": 480
+    },
+    {
+      "id": 3,
+      "date": "2025-11-02",
+      "employee_name": "Иванов И. И.",
+      "work_time": 480,
+      "all_time": 480
+    },
+    {
+      "id": 4,
+      "date": "2025-11-02",
+      "employee_name": "Васильев А. А.",
+      "work_time": 480,
+      "all_time": 480
+    },
+    {
+      "id": 5,
+      "date": "2025-11-04",
+      "employee_name": "Петькин К. А.",
+      "work_time": 480,
+      "all_time": 480
+    },
+    {
+      "id": 6,
+      "date": "2025-11-11",
+      "employee_name": "Дубров К. М.",
+      "work_time": 240,
+      "all_time": 480
+    }
+  ]
+}
+```
+
+**Response 400:**
+
+```json
+{
+  "message": "Некорректные данные"
+}
+```
+
+---
+
+## ОТПУСКА
 
 ### GET `/api/vacations?year={year}`
 
@@ -124,20 +198,20 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
   "events": [
     {
       "id": 1,
-      "employee_id": 1,
+      "employee_role_id": 1,
       "title": "отпуск 1 Сотрудник ГК",
       "date": "2025-11-01",
       "color": "#aa0000"
     },
     {
       "id": "2",
-      "employee_id": 3,
+      "employee_role_id": 3,
       "title": "отпуск 1 Товаровед",
       "date": "2025-11-02"
     },
     {
       "id": "6",
-      "employee_id": 2,
+      "employee_role_id": 2,
       "title": "Директор магазина",
       "start": "2025-11-01",
       "end": "2025-11-04" //с 01.11 до 03.11 включительно
@@ -279,7 +353,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ```json
 {
-  "message": "Отпуска не найдены"
+  "message": "Отпуск не найден"
 }
 ```
 
@@ -340,6 +414,196 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ```json
 {
   "message": "Отпуск удалён"
+}
+```
+
+#### Response 400
+
+```json
+{
+  "message": "Некорректные данные"
+}
+```
+
+---
+
+## БОЛЬНИЧНЫЕ
+
+### GET `/api/sickLeaves?year={year}`
+
+Получение информации о больничных за выбранный год
+
+#### Параметры (URL)
+
+| Имя    | Тип | Обязательное | Описание                    |
+| ------ | --- | ------------ | --------------------------- |
+| `year` | int | да           | год, по которому идёт поиск |
+
+#### Response 200
+
+```json
+{
+  "used_days": 21,
+  "balance_days": 9,
+  "planned_days": 2,
+  "calendarLeaves": [
+    {
+      "id": 1,
+      "start_date": "2025-01-01",
+      "end_date": "2025-01-07",
+      "status": "done"
+    },
+    {
+      "id": 2,
+      "start_date": "2025-03-10",
+      "end_date": "2025-03-20",
+      "status": "done"
+    },
+    {
+      "id": 3,
+      "start_date": "2025-05-05",
+      "end_date": "2025-05-12",
+      "status": "planned"
+    }
+  ]
+}
+```
+
+#### Response 400
+
+```json
+{
+  "message": "Больничные не найдены"
+}
+```
+
+---
+
+## POST `/api/sickLeaves`
+
+Добавление больничного
+
+#### Request Body
+
+```json
+{
+  "calendar": {
+    "start_date": "2025-09-05",
+    "end_date": "2025-09-12"
+  }
+}
+```
+
+#### Response 200
+
+```json
+{
+  "message": "Больничный добавлен"
+}
+```
+
+#### Response 400
+
+```json
+{
+  "message": "Некорректные данные"
+}
+```
+
+---
+
+## БОЛЬНИЧНЫЕ (ДЕТАЛЬНАЯ СТРАНИЦА)
+
+### GET `/api/sickLeaves/{id}?year={year}`
+
+Получение информации о больничном за выбранный год.
+
+### Параметры
+
+| Имя    | Тип | Обязательное | Описание                    |
+| ------ | --- | ------------ | --------------------------- |
+| `id`   | int | да           | Идентификатор записи        |
+| `year` | int | да           | год, по которому идёт поиск |
+
+#### Response 200
+
+```json
+{
+  "number": 1232432,
+  "calendar": {
+    "id": 1,
+    "start_date": "2025-07-01",
+    "end_date": "2025-07-14",
+    "status": "planned"
+  }
+}
+```
+
+#### Response 400
+
+```json
+{
+  "message": "больничный не найден"
+}
+```
+
+---
+
+## PUT `/api/sickLeaves/{id}`
+
+Обновление больничного
+
+### Параметры
+
+| Имя  | Тип | Обязательное | Описание             |
+| ---- | --- | ------------ | -------------------- |
+| `id` | int | да           | Идентификатор записи |
+
+#### Request Body
+
+```json
+{
+  "calendar": {
+    "id": 3,
+    "start_date": "2025-09-05",
+    "end_date": "2025-09-12"
+  }
+}
+```
+
+#### Response 200
+
+```json
+{
+  "message": "Больничный обновлён"
+}
+```
+
+#### Response 400
+
+```json
+{
+  "message": "Некорректные данные"
+}
+```
+
+---
+
+## DELETE `/api/sickLeaves/{id}`
+
+Удаление больничного
+
+### Параметры
+
+| Имя  | Тип | Обязательное | Описание             |
+| ---- | --- | ------------ | -------------------- |
+| `id` | int | да           | Идентификатор записи |
+
+#### Response 200
+
+```json
+{
+  "message": "Больничный удалён"
 }
 ```
 
