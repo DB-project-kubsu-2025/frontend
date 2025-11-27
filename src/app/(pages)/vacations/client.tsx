@@ -21,7 +21,7 @@ export default function CalendarClient({
         options={employees}
         value={selectedEmployees}
         onChange={setSelectedEmployees}
-        sx={{ width: '15rem' }}
+        sx={{ width: '15rem', mb: 2 }}
       />
       <CalendarWidget events={events} filterEmployees={selectedEmployees} />
     </>

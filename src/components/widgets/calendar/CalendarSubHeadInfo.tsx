@@ -44,7 +44,7 @@ export default function CalendarSubHeadInfo({
 
         <Divider orientation="vertical" flexItem />
 
-        <Stack direction="row" flexWrap="nowrap">
+        <Stack direction="row" flexWrap="wrap">
           {data?.calendarLeaves?.map((l: calendarLeaves, i: number) => (
             <Stack
               key={i}

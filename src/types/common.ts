@@ -6,7 +6,7 @@ export type employeeNames =
   | 'Продавец';
 
 export type statusTypes = 'done' | 'planned';
-export type SubjectMode = 'view' | 'edit';
+export type SubjectMode = 'view' | 'edit' | 'create';
   
 export interface employeesList {
   id: number;
@@ -29,13 +29,14 @@ export interface LeavesCalendarProps {
 export interface CalendarEvents {
   id: string;
   title: string;
+  employee_id: number;
   date?: string;
   start?: string;
   end?: string;
   color?: string;
 }
 
-export interface calendarLeavesEdit extends calendarLeaves {
+export interface calendarLeavesEdit {
   number: number;
   calendar: calendarLeaves;
 }
