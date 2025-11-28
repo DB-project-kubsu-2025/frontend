@@ -47,8 +47,8 @@ export default function TimeTrackClient({
           background: #fff;
           color: #333;
           border: 1px solid #555;
-          font-size: 0.7rem;
-          line-height: 0.8rem;
+          font-size: 0.8rem;
+          line-height: 0.9rem;
           display: grid;
           grid-template-columns: 1fr auto;
           grid-template-rows: auto auto;
@@ -59,18 +59,10 @@ export default function TimeTrackClient({
           </div>
 
           <div style="
-            grid-row: span 2;
-            font-size: 0.8rem;
             font-weight: 700; 
-            display: flex; 
-            align-items: center;
             color: ${time_color}
           ">
             ${minutesToHours(work_time)}/${minutesToHours(all_time)}
-          </div>
-
-          <div style="color: #777;">
-            ${employee_role_name}
           </div>
         </div>
       `,
