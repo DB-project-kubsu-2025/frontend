@@ -1,6 +1,6 @@
 'use client';
 import CalendarWidget from '@/components/widgets/fullCalendar/CalendarWidget';
-import { CalendarTimeTrack, employeesList } from '@/types/common';
+import { CalendarTimeTrack } from '@/types/common';
 import { EventContentArg } from '@fullcalendar/core/index.js';
 
 function getColorTime(work_time: number, all_time: number) {
@@ -19,10 +19,8 @@ function minutesToHours(minutes: number) {
 
 export default function TimeTrackClient({
   events,
-  employees,
 }: {
   events: CalendarTimeTrack[];
-  employees: employeesList[];
 }) {
   const filterEventsRes = events.map((ev) => ({
     ...ev,
@@ -31,11 +29,8 @@ export default function TimeTrackClient({
   }));
 
   const eventContent = (arg: EventContentArg) => {
-    const { employee_name, employee_role_id, work_time, all_time } =
+    const { employee_name, work_time, all_time } =
       arg.event.extendedProps;
-    const employee_role_name = employees.find(
-      (emp) => emp.id === employee_role_id,
-    )?.name;
     const time_color = getColorTime(work_time, all_time);
 
     return {
