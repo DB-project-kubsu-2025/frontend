@@ -98,11 +98,16 @@ export default function LoginPage() {
           px: 2,
         }}
       >
-        <Card sx={{ width: '100%', maxWidth: 420 }}>
+        <Card sx={{ width: '100%', maxWidth: 520, borderRadius: 6, border: '2px solid', borderColor: 'rgb(110, 68, 0, 0.6)', boxShadow: '2px 3px 3px rgb(110, 68, 0, 0.3)', }}>
           <CardHeader
             title={
               <>
-                <Typography variant="h5" component="h1">
+                <Typography variant="h5" component="h1" style={{
+                    color: 'rgba(128, 79, 0, 1)',
+                    letterSpacing: '2px',
+                    textAlign: 'center',
+                    fontWeight: '630',
+                }}>
                   Вход в систему
                 </Typography>
                 <Typography component="h6" className="field-message-error">
@@ -112,7 +117,7 @@ export default function LoginPage() {
             }
           />
           <CardContent>
-            <Box component="form" onSubmit={handleSubmit}>
+            <Box component="form" onSubmit={handleSubmit} >
               <Stack spacing={2.5}>
                 <Input
                   type="text"
@@ -125,6 +130,7 @@ export default function LoginPage() {
                   label="Логин"
                   shrink={true}
                   fieldsError={fieldsError?.username}
+                  
                 />
                 <Input
                   type={showPass ? 'text' : 'password'}
@@ -163,10 +169,11 @@ export default function LoginPage() {
                   variant="contained"
                   disabled={stateButton}
                   fullWidth
-                  size="large"
+                  size="large" 
+                  sx={{textSizeAdjust:24, backgroundColor: 'rgba(235, 180, 0, 1)'}}
                 >
                   {loading ? (
-                    <CircularProgress size={24} color="inherit" />
+                    <CircularProgress  />
                   ) : (
                     'Войти'
                   )}

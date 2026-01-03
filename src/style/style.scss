@@ -1,7 +1,7 @@
 @use 'global.scss' as *;
 
 header {
-    background: $color-white !important;
+    background-image: url('media/back.png');
     border-bottom: 1px $border-grey-color solid;
 }
 
@@ -26,11 +26,12 @@ a {
 }
 
 .sidebar a {
-    color: inherit;
+    color: rgba(235, 180, 0, 1);
 }
 
 button {
     white-space: nowrap;
+    color: rgba(235, 180, 0, 1);
 }
 
 .sidebar {
