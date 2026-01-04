@@ -45,16 +45,20 @@ export default function LoginPage() {
   const stateButton = loading || !username || !password;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    console.log('1');
     e.preventDefault();
 
     const errors: ErrorsData = {};
     if (password != undefined && password.length < 8) {
       errors.password = 'Не менее 8 символов';
     }
+    console.log('2');
+
     setFieldsError(errors);
     if (Object.keys(errors).length != 0) {
       return;
     }
+    console.log('3');
 
     setLoading(true);
     try {
@@ -62,9 +66,11 @@ export default function LoginPage() {
         method: 'POST',
         data: { username, password },
       });
+    console.log('4', res);
       
       const { token, user } = res.data;
       if (!token || !user) throw new Error('Некорректный ответ сервера');
+      console.log('----', user);
       dispatch(
         loginAction({
           user_id: user.id,
@@ -98,7 +104,7 @@ export default function LoginPage() {
           px: 2,
         }}
       >
-        <Card sx={{ width: '100%', maxWidth: 520, borderRadius: 6, border: '2px solid', borderColor: 'rgb(110, 68, 0, 0.6)', boxShadow: '2px 3px 3px rgb(110, 68, 0, 0.3)', }}>
+        <Card sx={{ width: '100%', maxWidth: 640,  alignContent: 'center', borderRadius: 6, border: '2px solid', borderColor: 'rgb(110, 68, 0, 0.6)', boxShadow: '2px 3px 3px rgb(110, 68, 0, 0.3)', }}>
           <CardHeader
             title={
               <>
@@ -106,7 +112,8 @@ export default function LoginPage() {
                     color: 'rgba(128, 79, 0, 1)',
                     letterSpacing: '2px',
                     textAlign: 'center',
-                    fontWeight: '630',
+                    fontWeight: '750',
+                    fontSize: '40px',
                 }}>
                   Вход в систему
                 </Typography>
