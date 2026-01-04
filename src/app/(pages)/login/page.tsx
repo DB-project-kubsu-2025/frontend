@@ -123,9 +123,9 @@ export default function LoginPage() {
               </>
             }
           />
-          <CardContent>
+          <CardContent >
             <Box component="form" onSubmit={handleSubmit} >
-              <Stack spacing={2.5}>
+              <Stack spacing={2.5} fontSize={40} >                  
                 <Input
                   type="text"
                   name="username"
@@ -134,13 +134,14 @@ export default function LoginPage() {
                   setInputsData={setInputsData}
                   quickSaveValue={true}
                   onChange={() => onChange}
-                  label="Логин"
+                  label="Логин" 
                   shrink={true}
                   fieldsError={fieldsError?.username}
                   
                 />
                 <Input
                   type={showPass ? 'text' : 'password'}
+                  
                   name="password"
                   value={safeText(inputsData?.password)}
                   sectionPaths={['password']}

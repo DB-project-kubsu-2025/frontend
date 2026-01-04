@@ -5,14 +5,15 @@ const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#1976d2',
+      main: 'rgba(148, 98, 17, 1)',
     },
     secondary: {
       main: '#9c27b0',
     },
   },
   typography: {
-    fontFamily: 'Roboto, sans-serif',
+    fontFamily: 'Roboto, sans-serif, #fff',
+
   },
 });
 

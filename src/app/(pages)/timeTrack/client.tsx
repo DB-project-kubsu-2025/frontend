@@ -40,7 +40,7 @@ export default function TimeTrackClient({
           margin-bottom: 2px;
           border-radius: 5px;
           background: #fff;
-          color: #333;
+          color: #ffffffff;
           border: 1px solid #555;
           font-size: 0.8rem;
           line-height: 0.9rem;

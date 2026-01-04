@@ -16,7 +16,9 @@ export async function GET(
         start_date: '2025-07-01',
         end_date: '2025-07-14',
         status: 'planned',
+        color: 'rgba(128, 79, 0, 1)', 
       },
+
     };
 
     return NextResponse.json(vacations, { status: 200 });
@@ -24,6 +26,7 @@ export async function GET(
     console.error('Ошибка при обработке запроса:', error);
     return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });
   }
+
 }
 
 export async function PUT(req: NextRequest) {

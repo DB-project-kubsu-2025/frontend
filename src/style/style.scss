@@ -2,16 +2,19 @@
 
 header {
     background-image: url('media/back.png');
-    border-bottom: 1px $border-grey-color solid;
+    border-bottom: 1px solid rgba(235, 180, 0, 1);
+
 }
 
 .logo img {
     width: 35px;
     height: auto;
+    
 }
 
 .css-cokf1l-MuiListItemIcon-root {
     min-width: unset !important;
+    color: white;
 }
 
 .moreText {
@@ -19,6 +22,7 @@ header {
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 1rem !important;
+    color: white;
 }
 
 a {
@@ -26,7 +30,7 @@ a {
 }
 
 .sidebar a {
-    color: rgba(235, 180, 0, 1);
+    color: rgb(0, 0, 0);
 }
 
 button {
@@ -45,11 +49,12 @@ button {
             width: 20px;
             height: unset;
             top: 0 !important;
+            
         }
 
         .sidebar_ico_osgop polygon {
             &:first-child {
-                fill: $color-grey;
+                fill: $color-white;
             }
 
             &:last-child {
@@ -104,7 +109,7 @@ main{
 .icoBtn {
     cursor: pointer;
     transition: .3s opacity !important;
-
+    
     &:hover {
         opacity: 0.7;
     }
@@ -129,7 +134,7 @@ main{
 #loader.loaderActive span {
     position: absolute;
     left: 0;
-    background: $color-green1;
+    background: $color-white;
     width: 0;
     height: 4px;
     animation: 1.8s cubic-bezier(0.4, 0.3, 0.5, 0.2) infinite loader_head;
@@ -145,6 +150,7 @@ main{
     display: flex;
     flex-direction: column;
     height: 100%;
+    
 }
 .modalViewDetail-head {
     display: flex;
@@ -162,8 +168,8 @@ main{
     overflow: auto;
     position: relative;
     
-    -webkit-mask-image: linear-gradient(to bottom, transparent, black 2rem, black calc(100% - 2rem), transparent);
-    mask-image: linear-gradient(to bottom, transparent, black 2rem, black calc(100% - 2rem), transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, rgb(255, 255, 255) 2rem, rgb(255, 255, 255) calc(100% - 2rem), transparent);
+    mask-image: linear-gradient(to bottom, transparent, rgb(255, 255, 255) 2rem, rgb(255, 255, 255) calc(100% - 2rem), transparent);
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;
@@ -172,7 +178,7 @@ main{
 
     h4,
     h6 {
-        color: #555;
+        color: #ffffff;
     }
 }
 
@@ -186,7 +192,7 @@ main{
         right: 0;
         top: 50%;
         height: 1px;
-        background-color: #777;
+        background-color: #ffffff;
         z-index: -1;
     }
 
@@ -200,7 +206,10 @@ main{
 
 .modal-open {
     overflow: hidden;
+    
 }
+
+
 
 @keyframes loader_head {
     10% {
@@ -216,11 +225,15 @@ main{
     70% {
         left: 100%;
         width: 0;
-        background: #1784c7;
+        background: rgba(128, 79, 0, 1);
     }
 
     100% {
         left: 100%;
         width: 0;
     }
+}
+header{
+  color: rgb(255, 255, 255);
+  background-color: rgba(128, 79, 0, 1);
 }
