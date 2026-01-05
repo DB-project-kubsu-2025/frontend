@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    
+    console.log(`${process.env.API_URL}/auth_service/token/obtain/`, process.env.API_URL);
     const r = await fetch(
       `${process.env.API_URL}/auth_service/token/obtain/`,
       {

@@ -64,7 +64,7 @@ export default function LoginPage() {
       });
       
       if(res.status === 200) {
-        router.replace('/');
+        location.pathname = '/';
       }
     } catch (err: any) {
       if(err?.response?.status === 401) {
