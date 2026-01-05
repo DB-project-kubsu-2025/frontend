@@ -4,9 +4,9 @@ import { getCookie, deleteCookie } from 'cookies-next/client';
 import { useSnackbar } from 'notistack';
 
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: '/api', //process.env.NEXT_PUBLIC_API_URL,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 5000, //7000,
+  timeout: 8000, //7000,
   withCredentials: true,
   // validateStatus: (status) => status < 403,
 });
@@ -82,8 +82,10 @@ export function useApiRequest() {
       console.error('Ошибка API:', message);
 
       if (status === 401) {
-        deleteCookie('token', { path: '/' });
-        window.location.replace('/login');
+        if(window.location.pathname !== '/login') {
+          deleteCookie('token', { path: '/' });
+          window.location.replace('/login');
+        }
       }
 
       return Promise.reject({
