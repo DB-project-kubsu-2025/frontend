@@ -20,7 +20,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const sidebarOpen = useAppSelector((s) => s.sidebarOpen.isOpen);
   const ToggleDrawer = () => dispatch(toggleSidebar());
 
-  const noLayoutPaths = ['/login', '/waybills'];
+  const noLayoutPaths = ['/login', '/registration'];
   const hideLayout = useMemo(
     () => noLayoutPaths.some((p) => pathname.startsWith(p)),
     [pathname],
