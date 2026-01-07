@@ -7,7 +7,23 @@ export type employeeNames =
 
 export type statusTypes = 'done' | 'planned';
 export type SubjectMode = 'view' | 'edit' | 'create';
-  
+
+export interface ComponentSelectItem {
+  id: number | string;
+  [key: string]: any;
+}
+
+export interface UISelectProps {
+  value: string | number | undefined;
+  label?: string;
+  selectValues?: ComponentSelectItem[];
+  sortName?: string;
+  setInputsData: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+  fieldsError?: string | null;
+  setFieldsError?: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+  inputsDataPath: string[];
+}
+
 export interface employeesList {
   id: number;
   name: employeeNames;

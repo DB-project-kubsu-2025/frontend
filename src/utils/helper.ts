@@ -5,8 +5,25 @@ export const safeText = (str: any, replace: string = ''): string => {
   return str || replace;
 };
 
+export const isNonEmptyString = (v: unknown) =>
+  typeof v === 'string' && v.trim().length > 0;
+
+export const isValidNumberString = (v: unknown, minLen?: number, maxLen?: number) => {
+  const s = String(v ?? '').replace(/\D/g, '');
+  if (!s) return false;
+  if (minLen && s.length < minLen) return false;
+  if (maxLen && s.length > maxLen) return false;
+  return true;
+};
+
+export const isValidDate = (v: unknown) => {
+  if (v instanceof Date) return !Number.isNaN(v.getTime());
+  if (typeof v === 'string') return v.trim().length > 0;
+  return false;
+};
+
 export function formatDate(
-  dateString: string | Date,
+  dateString: undefined | string | Date,
   format: 'dmy' | 'ymd' = 'dmy',
 ): string {
   if (!dateString) return '';

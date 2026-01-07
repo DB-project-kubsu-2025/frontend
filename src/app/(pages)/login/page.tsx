@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   Box,
   Button,
@@ -17,8 +16,6 @@ import {
 import { MdOutlineVisibility } from 'react-icons/md';
 import { MdOutlineVisibilityOff } from 'react-icons/md';
 import { useApiRequest } from '@/hooks/useApiRequest';
-import { useAppDispatch } from '@/store/hooks';
-import { login as loginAction } from '@/store/userSlice';
 import Input from '@/components/UI/Input';
 import { safeText } from '@/utils/helper';
 
@@ -32,8 +29,6 @@ interface ErrorsData extends InputsData {
 }
 
 export default function LoginPage() {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
   const { request } = useApiRequest();
   const [inputsData, setInputsData] = useState<InputsData>({});
   const [fieldsError, setFieldsError] = useState<ErrorsData>({});
