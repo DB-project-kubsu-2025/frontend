@@ -24,7 +24,7 @@ export function updateInputsData(
 ): Record<string, any> {
   if (!sectionPaths) return prevValues;
 
-  if (type === 'date') newValue = getDate(newValue, 'dmy');
+  // if (type === 'date') newValue = getDate(newValue, 'dmy');
 
   const updatedValues = { ...prevValues };
   let current = updatedValues;

@@ -23,7 +23,7 @@ export const isValidDate = (v: unknown) => {
 };
 
 export function formatDate(
-  dateString: string | Date,
+  dateString: undefined | string | Date,
   format: 'dmy' | 'ymd' = 'dmy',
 ): string {
   if (!dateString) return '';

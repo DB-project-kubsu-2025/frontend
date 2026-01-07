@@ -1,91 +1,109 @@
-import React, { ChangeEvent } from 'react';
-import TextField from '@mui/material/TextField';
+'use client';
+
+import * as React from 'react';
 import dayjs, { Dayjs } from 'dayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { updateInputsData } from '@/utils/updateInputsData';
-import { formatDate } from '@/utils/helper';
+
+dayjs.extend(customParseFormat);
+
+type ISODate = string;
 
 interface DateInputProps {
   label?: string;
-  value?: string;
   name: string;
+  value?: ISODate;
   required?: boolean;
-  errors?: string;
+  fieldsError?: string;
   sectionPaths?: string[];
   setInputsData?: React.Dispatch<React.SetStateAction<any>>;
-  onChange?: (e: ChangeEvent<HTMLInputElement> | string) => void;
-  [x: string]: any;
-  error?: string | null;
+  onChangeISO?: (iso: ISODate) => void;
   clearFieldError?: (section: string, name: string) => void;
-  sectionListRef?: React.Ref<HTMLInputElement>;
+  minDate?: string;
+  maxDate?: string;
+  [x: string]: any;
 }
 
-const DateInput: React.FC<DateInputProps> = ({
+const ISO_FORMAT = 'YYYY-MM-DD';
+const UI_FORMAT = 'DD.MM.YYYY';
+
+function isoToDayjs(iso?: string): Dayjs | null {
+  if (!iso) return null;
+  const d = dayjs(iso, ISO_FORMAT, true);
+  return d.isValid() ? d : null;
+}
+
+export default function DateInput({
   label,
-  value,
   name,
+  value = '',
   required = false,
-  errors,
+  fieldsError,
+
   sectionPaths,
   setInputsData,
-  onChange,
-  error = null,
+  onChangeISO,
   clearFieldError,
-  sectionListRef,
+
+  minDate,
+  maxDate,
   ...rest
-}) => {
-  const hasError = Boolean(errors);
-  const errorText = typeof errors === 'string' ? errors : '';
+}: DateInputProps) {
+  const [draft, setDraft] = React.useState<Dayjs | null>(isoToDayjs(value));
 
-  const handleDateChange = (newValue: Dayjs | null) => {
-    if (newValue === null) {
-      if (sectionPaths && setInputsData) {
-        setInputsData((prevValues: any) =>
-          updateInputsData('date', '', sectionPaths, prevValues),
-        );
-      }
-      return;
-    }
+  React.useEffect(() => {
+    setDraft(isoToDayjs(value));
+  }, [value]);
 
-    const parsedDate = dayjs(newValue.format('DD.MM.YYYY'), 'DD.MM.YYYY', true);
-
-    if (!parsedDate.isValid()) return;
-
-    const formattedValue = parsedDate.format('YYYY-MM-DD');
-
-    if (formattedValue.startsWith('0')) return;
-    onChange?.(formattedValue);
-
-    if (clearFieldError && sectionPaths) {
-      clearFieldError(sectionPaths[0][0], name);
-    }
+  const commitISO = (iso: ISODate) => {
+    onChangeISO?.(iso);
 
     if (sectionPaths && setInputsData) {
-      setInputsData((prevValues: any) =>
-        updateInputsData('date', formattedValue, sectionPaths, prevValues),
+      setInputsData((prev: any) =>
+        updateInputsData('date', iso, sectionPaths, prev),
       );
+    }
+
+    if (clearFieldError && sectionPaths?.[0]) {
+      clearFieldError(sectionPaths[0], name);
     }
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div
-        className={`input-box ${error ? 'error' : ''}`}
+        className={`input-box ${fieldsError ? 'error' : ''}`}
         style={{ width: '100%' }}
       >
         <DatePicker
           label={label}
-          value={value ? dayjs(formatDate(value, 'ymd'), 'YYYY-MM-DD') : null}
-          onChange={handleDateChange}
-          format="DD.MM.YYYY"
+          format={UI_FORMAT}
+          value={draft}
+          onChange={(newValue) => {
+            setDraft(newValue);
+            if (newValue === null) {
+              commitISO('');
+            }
+          }}
+          onAccept={(newValue) => {
+            if (!newValue) return;
+            if (!dayjs.isDayjs(newValue)) return;
+            if (!newValue.isValid()) return;
+            const y = newValue.year();
+            if (y < 1900 || y > 2100) return;
+            commitISO(newValue.format(ISO_FORMAT));
+          }}
+          minDate={minDate ? dayjs(minDate, ISO_FORMAT, true) : undefined}
+          maxDate={maxDate ? dayjs(maxDate, ISO_FORMAT, true) : undefined}
           slotProps={{
             textField: {
               name,
               required,
-              error: hasError,
-              helperText: errorText,
+              error: Boolean(fieldsError),
+              helperText: typeof fieldsError === 'string' ? fieldsError : '',
               fullWidth: true,
               InputProps: {
                 sx: {
@@ -94,11 +112,10 @@ const DateInput: React.FC<DateInputProps> = ({
               },
             },
           }}
+          {...rest}
         />
-        <h5>{error == 'error' ? '' : error}</h5>
+        <h5>{fieldsError == 'error' ? '' : fieldsError}</h5>
       </div>
     </LocalizationProvider>
   );
-};
-
-export default React.memo(DateInput);
+}

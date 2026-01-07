@@ -39,7 +39,7 @@ interface InputsData {
   snils?: number;
   inn?: number;
   work_phone?: string;
-  // type?: string;
+  type?: string;
   series?: number;
   number?: number;
   issue_date?: string;
@@ -55,21 +55,26 @@ interface ErrorsData extends InputsData {
   message?: string;
 }
 
-const genderOptions = [
+const GENDER_OPTIONS = [
   { id: 'male', name: 'Мужской' },
   { id: 'female', name: 'Женский' },
 ];
 
-const date_now = new Date();
+
+const PASSPORT_TYPE = [
+  { id: 'simple', name: 'Обычный' },
+  { id: 'foreign', name: 'Заграничный' },
+];
 
 export default function LoginPage() {
   const { request } = useApiRequest();
   const [inputsData, setInputsData] = useState<InputsData>({});
-  const [fieldsError, setFieldsError] = useState<ErrorsData>({});
+  const [fieldsError, setFieldsError] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
-  const requiredOk =
+  const requiredOk = true;
+  const ee = 
     isNonEmptyString(inputsData.username) &&
     isNonEmptyString(inputsData.last_name) &&
     isNonEmptyString(inputsData.first_name) &&
@@ -107,23 +112,19 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      // const res = await request('/auth', {
-      //   method: 'POST',
-      //   data: { username, password },
-      // });
+      const res = await request('/registration', {
+        method: 'POST',
+        data: inputsData,
+      });
 
-      // if (res.status === 200) {
-      //   location.pathname = '/';
-      // }
+      if (res.status === 200) {
+        location.pathname = '/';
+      }
     } catch (err: any) {
-      if (err?.response?.status === 401) {
-        setFieldsError({ message: 'Неверный логин или пароль' });
+      if (err?.response?.status === 400) {
+        setFieldsError(err?.response?.data?.message || {});
         return;
       }
-
-      const msg =
-        err?.response?.data?.message || err?.message || 'Ошибка входа';
-      setFieldsError({ message: msg });
     } finally {
       setLoading(false);
     }
@@ -176,6 +177,18 @@ export default function LoginPage() {
                 />
                 <Input
                   type="text"
+                  name="email"
+                  value={safeText(inputsData?.email)}
+                  sectionPaths={['email']}
+                  setInputsData={setInputsData}
+                  quickSaveValue={true}
+                  onChange={() => onChange}
+                  label="email"
+                  shrink={true}
+                  fieldsError={fieldsError?.email}
+                />
+                <Input
+                  type="text"
                   name="last_name"
                   value={safeText(inputsData?.last_name)}
                   sectionPaths={['last_name']}
@@ -216,9 +229,10 @@ export default function LoginPage() {
                 <Select
                   value={inputsData?.gender}
                   label="Пол"
-                  selectValues={genderOptions}
+                  selectValues={GENDER_OPTIONS}
                   setInputsData={setInputsData}
                   inputsDataPath={['gender']}
+                  fieldsError={fieldsError?.gender}
                 />
 
                 <Input
@@ -237,7 +251,7 @@ export default function LoginPage() {
                 <DateInput
                   name="birth_date"
                   label="Дата рождения"
-                  value={formatDate(inputsData?.birth_date ?? date_now, 'ymd')}
+                  value={formatDate(inputsData?.birth_date, 'ymd')}
                   sectionPaths={['birth_date']}
                   setInputsData={setInputsData}
                   fieldsError={fieldsError?.birth_date}
@@ -283,6 +297,15 @@ export default function LoginPage() {
                   maxLength={11}
                 />
 
+                <Select
+                  value={inputsData?.type}
+                  label="Тип паспорта"
+                  selectValues={PASSPORT_TYPE}
+                  setInputsData={setInputsData}
+                  inputsDataPath={['type']}
+                  fieldsError={fieldsError?.type}
+                />
+
                 <Input
                   type="number"
                   name="series"
@@ -313,8 +336,8 @@ export default function LoginPage() {
 
                 <DateInput
                   name="issue_date"
-                  label="Дата рождения"
-                  value={formatDate(inputsData?.issue_date ?? date_now, 'ymd')}
+                  label="Дата получения"
+                  value={formatDate(inputsData?.issue_date ?? '', 'ymd')}
                   sectionPaths={['issue_date']}
                   setInputsData={setInputsData}
                   fieldsError={fieldsError?.issue_date}
