@@ -16,9 +16,10 @@ export default function MyVacationsClient(initData: LeavesCalendarProps) {
   const { data } = useCalendarLeaves('vacations/my', year, initData);
 
   return (
-    <Stack sx={{ background: '#fff', p: 2 }} spacing={2}>
+    <Stack sx={{ background: 'rgba(235, 180, 0, 0.25)', p: 2 }} spacing={2}>
       <Stack direction="row" justifyContent="space-between" alignItems="start">
-        <Button variant="contained" component={Link} href="/vacations/my/add">
+        
+        <Button variant="contained" component={Link} href="/vacations/my/add" >
           Добавить
         </Button>
         <CalendarHead years={years} year={year} setYear={setYear} />
@@ -27,7 +28,7 @@ export default function MyVacationsClient(initData: LeavesCalendarProps) {
       <CalendarSubHeadInfo href="/vacations/my" year={year} data={data} />
 
       <Grid>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} >
           {Array.from({ length: 12 }).map((_, m) => (
             <Grid key={m} size={{ xl: 2, lg: 3, md: 4, sm: 6, xs: 12 }}>
               <MonthCalendar

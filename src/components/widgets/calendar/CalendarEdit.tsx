@@ -84,16 +84,17 @@ export default function EditCalendarForm({
   }
 
   return (
-    <Stack sx={{ background: '#fff', p: 2 }}>
+    <Stack sx={{ background: 'rgba(235, 180, 0, 0.16)', p: 2 }}>
       <Stack
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
           flexDirection: 'row',
+          
         }}
       >
         <Box>
-          <Typography variant="h5">
+          <Typography variant="h5" >
             {title} {mode === 'edit' && `: ${data?.number}`}
           </Typography>
 
@@ -120,7 +121,7 @@ export default function EditCalendarForm({
           )}
         </Stack>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} >
           {Array.from({ length: 12 }).map((_, m) => (
             <Grid key={m} size={{ xl: 2, lg: 3, md: 4, sm: 6, xs: 12 }}>
               <MonthCalendar
@@ -137,7 +138,7 @@ export default function EditCalendarForm({
       </Grid>
 
       <Stack
-        sx={{ flexDirection: 'row', justifyContent: 'end', gap: 1, mt: 2 }}
+        sx={{ flexDirection: 'row', justifyContent: 'end', gap: 1, mt: 2, }}
       >
         {mode === 'edit' && (
           <Button variant="contained" color="error" onClick={handleDelete}>

@@ -188,10 +188,10 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebar_open, DrawerHeader }) => {
                       py: 0.5,
                       background:
                         item.link === locationBase
-                          ? 'rgba(0, 0, 0, 0.04)'
+                          ? 'rgba(255, 177, 52, 0.32)'
                           : 'transparent',
                       transition: '.5s',
-                      '&:hover': { backgroundColor: 'action.hover' },
+                      '&:hover': { backgroundColor: 'rgba(255, 183, 68, 0.21)' },
                     }}
                     onMouseEnter={() => setHoveredItem(`${index}${idx}`)}
                     onMouseLeave={() => setHoveredItem(null)}
@@ -237,7 +237,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebar_open, DrawerHeader }) => {
                           top: 0,
                           left: drawerWidth - 1,
                           backgroundColor: '#fff',
-                          boxShadow: '2px 0 5px rgba(0, 0, 0, 0.1)',
+                          boxShadow: '2px 0 5px rgba(148, 98, 17, 0.1)',
                         }}
                       >
                         <List disablePadding>

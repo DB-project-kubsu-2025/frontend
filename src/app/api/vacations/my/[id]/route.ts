@@ -17,6 +17,7 @@ export async function GET(
         end_date: '2025-07-14',
         status: 'planned',
       },
+
     };
 
     return NextResponse.json(vacations, { status: 200 });
@@ -24,13 +25,14 @@ export async function GET(
     console.error('Ошибка при обработке запроса:', error);
     return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });
   }
+
 }
 
 export async function PUT(req: NextRequest) {
   const reqData = await req.json();
   const calendar = reqData.calendar;
   console.log('###', calendar);
-  return NextResponse.json({ message: 'Отпускной обновлен' }, { status: 200 });
+  return NextResponse.json({ message: 'Отпуск обновлен' }, { status: 200 });
 }
 
 export async function DELETE(
@@ -39,5 +41,5 @@ export async function DELETE(
 ) {
   const aa = await params;
   console.log(aa);
-  return NextResponse.json({ message: 'Отпускной удалён' }, { status: 200 });
+  return NextResponse.json({ message: 'Отпуск удалён' }, { status: 200 });
 }

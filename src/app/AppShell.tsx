@@ -47,11 +47,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       {!hideLayout ? (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', backgroundColor:'#fff' }}>
           <CssBaseline />
           <Header ToggleDrawer={ToggleDrawer} />
           <Sidebar sidebar_open={sidebarOpen} DrawerHeader={DrawerHeader} />
-
+          
           <Box component="main" sx={{ flexGrow: 1, p: 0 }}>
             <DrawerHeader />
             <Box sx={{ p: 2 }}>{children}</Box>

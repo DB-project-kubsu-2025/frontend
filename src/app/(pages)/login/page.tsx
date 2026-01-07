@@ -45,6 +45,7 @@ export default function LoginPage() {
   const stateButton = loading || !username || !password;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    console.log('1');
     e.preventDefault();
 
     const errors: ErrorsData = {};
@@ -55,6 +56,7 @@ export default function LoginPage() {
     if (Object.keys(errors).length != 0) {
       return;
     }
+    console.log('3');
 
     setLoading(true);
     try {
@@ -62,6 +64,7 @@ export default function LoginPage() {
         method: 'POST',
         data: { username, password },
       });
+    console.log('4', res);
       
       if(res.status === 200) {
         location.pathname = '/';
@@ -95,11 +98,17 @@ export default function LoginPage() {
           px: 2,
         }}
       >
-        <Card sx={{ width: '100%', maxWidth: 420 }}>
+        <Card sx={{ width: '100%', maxWidth: 640,  alignContent: 'center', borderRadius: 6, border: '2px solid', borderColor: 'rgb(110, 68, 0, 0.6)', boxShadow: '2px 3px 3px rgb(110, 68, 0, 0.3)', }}>
           <CardHeader
             title={
               <>
-                <Typography variant="h5" component="h1">
+                <Typography variant="h5" component="h1" style={{
+                    color: 'rgba(128, 79, 0, 1)',
+                    letterSpacing: '2px',
+                    textAlign: 'center',
+                    fontWeight: '750',
+                    fontSize: '40px',
+                }}>
                   Вход в систему
                 </Typography>
                 <Typography component="h6" className="field-message-error">
@@ -108,9 +117,9 @@ export default function LoginPage() {
               </>
             }
           />
-          <CardContent>
-            <Box component="form" onSubmit={handleSubmit}>
-              <Stack spacing={2.5}>
+          <CardContent >
+            <Box component="form" onSubmit={handleSubmit} >
+              <Stack spacing={2.5} fontSize={40} >                  
                 <Input
                   type="text"
                   name="username"
@@ -119,12 +128,14 @@ export default function LoginPage() {
                   setInputsData={setInputsData}
                   quickSaveValue={true}
                   onChange={() => onChange}
-                  label="Логин"
+                  label="Логин" 
                   shrink={true}
                   fieldsError={fieldsError?.username}
+                  
                 />
                 <Input
                   type={showPass ? 'text' : 'password'}
+                  
                   name="password"
                   value={safeText(inputsData?.password)}
                   sectionPaths={['password']}
@@ -160,10 +171,11 @@ export default function LoginPage() {
                   variant="contained"
                   disabled={stateButton}
                   fullWidth
-                  size="large"
+                  size="large" 
+                  sx={{textSizeAdjust:24, backgroundColor: 'rgba(235, 180, 0, 1)'}}
                 >
                   {loading ? (
-                    <CircularProgress size={24} color="inherit" />
+                    <CircularProgress  />
                   ) : (
                     'Войти'
                   )}

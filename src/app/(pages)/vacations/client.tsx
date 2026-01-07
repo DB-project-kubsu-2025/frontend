@@ -12,6 +12,7 @@ export default function VacationsClient({
   employees: employeesList[];
 }) {
   console.log(events);
+  
   const [selectedEmployees, setSelectedEmployees] = useState<employeesList[]>(
     [],
   );
@@ -29,10 +30,10 @@ export default function VacationsClient({
         options={employees}
         value={selectedEmployees}
         onChange={setSelectedEmployees}
-        sx={{ width: '15rem', mb: 2 }}
+        sx={{ width: '15rem', mb: 2, boxShadow: '2px 3px 3px #fff', }}
       />
-      <CalendarWidget
-        events={filterEvents}
+      <CalendarWidget 
+        events={filterEvents} 
         overrides={{
           customButtons: {
             addEventBtn: {
@@ -41,13 +42,14 @@ export default function VacationsClient({
                 console.log('Клик по Добавить отпуск');
               },
             },
-          },
+          }, 
           headerToolbar: {
             left: 'prev,next today',
             center: 'title',
             right: 'addEventBtn',
           },
         }}
+
       />
     </>
   );

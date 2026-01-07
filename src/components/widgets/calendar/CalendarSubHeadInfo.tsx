@@ -16,7 +16,7 @@ export default function CalendarSubHeadInfo({
 }) {
   return (
     <Card variant="outlined" sx={{ width: '100%' }}>
-      <Stack direction="row" sx={{ width: '100%' }}>
+      <Stack direction="row" sx={{  width: '100%' }}>
         <Stack spacing={1} sx={{ p: 2, minWidth: 200 }}>
           <Typography variant="body2">
             Использованно дней - <b>{data?.used_days}</b>
@@ -36,6 +36,7 @@ export default function CalendarSubHeadInfo({
                 p: 2,
                 minWidth: 190,
                 gap: 0.6,
+                backgroundColor:'#fff',
               }}
             >
               <Stack flexDirection="row">
