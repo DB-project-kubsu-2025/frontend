@@ -38,7 +38,7 @@ export default function MonthCalendar({
     weeks.push(days.slice(i, i + 7));
   }
   return (
-    <Card variant="outlined" sx={{ height: '100%', background: '#f5f6fa' }}>
+    <Card variant="outlined" sx={{ height: '100%', background: '#ffffffff' }}>
       <CardHeader
         title={format(new Date(year, monthIndex0, 1), 'LLLL', { locale: ru })}
         titleTypographyProps={{
@@ -72,7 +72,7 @@ export default function MonthCalendar({
           </thead>
           <tbody
             style={{
-              background: '#fff',
+              background: '#a7a7a71a',
             }}
           >
             {weeks.map((week, wi) => (

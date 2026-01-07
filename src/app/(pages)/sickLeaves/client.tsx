@@ -16,7 +16,7 @@ export default function SickLeavesClient(initData: LeavesCalendarProps) {
   const { data } = useCalendarLeaves('sickLeaves', year, initData);
 
   return (
-    <Stack sx={{ background: '#fff', p: 2 }} spacing={2}>
+    <Stack sx={{ background: 'rgba(235, 180, 0, 0.25)', p: 2 }} spacing={2}>
       <Stack direction="row" justifyContent="space-between" alignItems="start">
         <Button variant="contained" component={Link} href="/sickLeaves/add">
           Добавить

@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ ToggleDrawer }) => {
     zIndex: 999999,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    color: '#3e454c',
+    color: '#c99a54ff',
   };
 
   return (
@@ -30,7 +30,7 @@ const Header: React.FC<HeaderProps> = ({ ToggleDrawer }) => {
             onClick={ToggleDrawer}
             edge="start"
           >
-            <MenuIcon sx={{ width: '28px', height: 'unset', fill: '#888' }} />
+            <MenuIcon sx={{ width: '28px', height: 'unset', fill: '#fff' }} />
           </IconButton>
           <Link href="/" passHref>
             <Typography variant="h5" component="div" className="logo">

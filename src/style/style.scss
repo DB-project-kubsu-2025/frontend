@@ -30,7 +30,8 @@ a {
 }
 
 .sidebar a {
-    color: rgb(0, 0, 0);
+    color: rgb(180, 111, 0);
+    text-shadow: 1px 1px 1px rgba(128, 79, 0, 0.219);
 }
 
 button {
@@ -49,7 +50,7 @@ button {
             width: 20px;
             height: unset;
             top: 0 !important;
-            
+            color:rgb(116, 71, 0)
         }
 
         .sidebar_ico_osgop polygon {
@@ -83,7 +84,7 @@ button {
         flex-grow: unset;
         opacity: .5;
         transition: .3s;
-
+        color: #fff;
         &:hover {
             opacity: 1;
         }
@@ -236,4 +237,57 @@ main{
 header{
   color: rgb(255, 255, 255);
   background-color: rgba(128, 79, 0, 1);
+}
+
+.fc-button {
+  background-color: #6e4400 !important; 
+  border-color: #6e4400 !important; 
+  color: #ffffff !important; 
+  
+  &:hover {
+    background-color: #8a5500 !important; 
+    border-color: #8a5500 !important;
+  }
+  
+  &:active,
+  &:focus {
+    background-color: #5a3800 !important; 
+    border-color: #5a3800 !important;
+  }
+}
+
+
+.fc-addEventBtn-button {
+  background-color: #6e4400 !important;
+  border-color: #6e4400 !important;
+  color: #ffffff !important;
+  
+  &:hover {
+    background-color: #8a5500 !important;
+    border-color: #8a5500 !important;
+  }
+}
+
+
+.fc-today-button {
+  background-color: #6e4400 !important;
+  border-color: #6e4400 !important;
+  color: #ffffff !important;
+  
+  &:hover {
+    background-color: #8a5500 !important;
+    border-color: #8a5500 !important;
+  }
+}
+
+.fc-prev-button,
+.fc-next-button {
+  background-color: #6e4400 !important;
+  border-color: #6e4400 !important;
+  color: #ffffff !important;
+  
+  &:hover {
+    background-color: #8a5500 !important;
+    border-color: #8a5500 !important;
+  }
 }

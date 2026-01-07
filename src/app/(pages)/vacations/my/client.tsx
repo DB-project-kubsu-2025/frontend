@@ -28,7 +28,7 @@ export default function MyVacationsClient(initData: LeavesCalendarProps) {
       <CalendarSubHeadInfo href="/vacations/my" year={year} data={data} />
 
       <Grid>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} >
           {Array.from({ length: 12 }).map((_, m) => (
             <Grid key={m} size={{ xl: 2, lg: 3, md: 4, sm: 6, xs: 12 }}>
               <MonthCalendar

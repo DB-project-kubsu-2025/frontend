@@ -8,6 +8,7 @@ const DEFAULT_DATA: calendarLeavesEdit = {
     start_date: '',
     end_date: '',
     status: 'planned',
+    
   },
 };
 
@@ -20,6 +21,7 @@ export default function SickLeavesClientAdd() {
       updateEndpoint="/sickLeaves"
       invalidateKey="sickLeaves"
       redirectUrl="/sickLeaves"
+      
     />
   );
 }

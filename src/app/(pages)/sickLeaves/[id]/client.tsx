@@ -10,6 +10,7 @@ export default function SickLeavesClientEdit({
 }) {
   return (
     <EditCalendarForm
+
       id={id}
       initData={initData}
       title="Больничный"

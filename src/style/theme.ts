@@ -8,11 +8,11 @@ const theme = createTheme({
       main: 'rgba(148, 98, 17, 1)',
     },
     secondary: {
-      main: '#9c27b0',
+      main: '#d34d00e1',
     },
   },
   typography: {
-    fontFamily: 'Roboto, sans-serif, #fff',
+    fontFamily: 'Roboto, sans-serif, #fff, 24px'
 
   },
 });

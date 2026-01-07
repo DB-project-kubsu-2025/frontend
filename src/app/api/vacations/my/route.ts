@@ -66,5 +66,5 @@ export async function POST(req: NextRequest) {
   const reqData = await req.json();
   const calendar = reqData.calendar;
   console.log('###', calendar);
-  return NextResponse.json({ message: 'Отпускной добавлен' }, { status: 200 });
+  return NextResponse.json({ message: 'Отпуск добавлен' }, { status: 200 });
 }

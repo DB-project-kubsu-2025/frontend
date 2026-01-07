@@ -30,7 +30,7 @@ export default function VacationsClient({
         options={employees}
         value={selectedEmployees}
         onChange={setSelectedEmployees}
-        sx={{ width: '15rem', mb: 2, boxShadow: '2px 3px 3px rgb(110, 68, 0, 0.3)', }}
+        sx={{ width: '15rem', mb: 2, boxShadow: '2px 3px 3px #fff', }}
       />
       <CalendarWidget 
         events={filterEvents} 
