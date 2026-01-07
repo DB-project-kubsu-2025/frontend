@@ -29,12 +29,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/api/auth/me', { credentials: 'include' });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (data?.authenticated && data.user) {
-          dispatch(loginAction(data.user));
-        }
+        // const res = await fetch('/api/auth/me', { credentials: 'include' });
+        // if (!res.ok) return;
+        // const data = await res.json();
+        // if (data?.authenticated && data.user) {
+        //   dispatch(loginAction(data.user));
+        // }
       } catch {}
     })();
   }, [dispatch]);

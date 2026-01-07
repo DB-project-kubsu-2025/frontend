@@ -49,11 +49,9 @@ export default function LoginPage() {
     e.preventDefault();
 
     const errors: ErrorsData = {};
-    if (password != undefined && password.length < 8) {
-      errors.password = 'Не менее 8 символов';
-    }
-    console.log('2');
-
+    // if (password != undefined && password.length < 8) {
+    //   errors.password = 'Не менее 8 символов';
+    // }
     setFieldsError(errors);
     if (Object.keys(errors).length != 0) {
       return;
@@ -68,19 +66,15 @@ export default function LoginPage() {
       });
     console.log('4', res);
       
-      const { token, user } = res.data;
-      if (!token || !user) throw new Error('Некорректный ответ сервера');
-      console.log('----', user);
-      dispatch(
-        loginAction({
-          user_id: user.id,
-          user_name: user.name,
-          user_role: user.role,
-        }),
-      );
-
-      router.replace('/');
+      if(res.status === 200) {
+        location.pathname = '/';
+      }
     } catch (err: any) {
+      if(err?.response?.status === 401) {
+        setFieldsError({ message: 'Неверный логин или пароль' });
+        return;
+      }
+
       const msg =
         err?.response?.data?.message || err?.message || 'Ошибка входа';
       setFieldsError({ message: msg });

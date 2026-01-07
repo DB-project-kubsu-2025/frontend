@@ -1,0 +1,16 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: npm run dev -- --port 8075
+    volumes:
+      - ./:/app
+    ports:
+      - "8075:8075"
+    networks:
+      - db_project_network
+
+networks:
+  db_project_network:
+    external: true
