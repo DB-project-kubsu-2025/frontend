@@ -110,6 +110,7 @@ export default function UniversalTable<T extends { id: number }>({
                 key={row.id}
                 hover={clickableRow}
                 onClick={() => handleClickRow(`${pathname}/${row.id}`)}
+                sx={{cursor: clickableRow ? 'pointer' : 'default'}}
                 {...rowProps?.(row)}
               >
                 {columns.map(col => {

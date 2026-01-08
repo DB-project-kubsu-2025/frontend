@@ -1,3 +1,5 @@
+import { SxProps, Theme } from '@mui/material';
+
 export type employeeNames =
   | 'Сотрудник ГК'
   | 'Директор магазина'
@@ -6,7 +8,7 @@ export type employeeNames =
   | 'Продавец';
 
 export type statusTypes = 'done' | 'planned';
-export type SubjectMode = 'view' | 'edit' | 'create';
+export type SubjectModes = 'view' | 'edit' | 'create';
 export type nameSubjects = 'products';
 
 export interface ComponentSelectItem {
@@ -28,7 +30,33 @@ export interface UISelectProps {
 export interface employeesList {
   id: number;
   name: employeeNames;
-};
+}
+
+export interface ComponentDetailFields {
+  mode: SubjectModes;
+  value: string | number | boolean;
+  typeVal?: 'integer';
+  fieldType: 'text' | 'number' | 'date' | 'select';
+  setInputsData: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+  fieldsError: string;
+  setFieldsError?: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+  sectionPaths: [string[], string] | string[];
+  selectValues?: ComponentSelectItem[];
+  name?: string;
+  maxLength?: number;
+  sortName?: string;
+  label?: string;
+  placeholder?: string;
+  type?: string;
+  onBlur?: () => void;
+  showDropdown?: boolean;
+  onSelect?: (data: any) => void;
+  inputsData?: Record<string, any>;
+  inputRef?: React.RefObject<HTMLInputElement> | null;
+  nextInputRef?: React.RefObject<HTMLInputElement> | null;
+  mask?: string;
+  sx?: SxProps<Theme>;
+}
 
 export type calendarLeaves = {
   id: number;

@@ -6,6 +6,7 @@ services:
     command: npm run dev -- --port 8075
     volumes:
       - ./:/app
+      - /app/node_modules
     ports:
       - "8075:8075"
     networks:

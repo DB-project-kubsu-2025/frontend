@@ -34,7 +34,8 @@
     "react-dom": "19.1.0",
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",
-    "sass": "^1.93.2"
+    "sass": "^1.93.2",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

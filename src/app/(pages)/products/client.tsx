@@ -1,31 +1,18 @@
 'use client';
+import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import TableList, { ColumnDef } from '@/components/widgets/TableList';
 import { TableListRowButtons } from '@/components/widgets/TableListRowButtons';
 import { useAppSelector } from '@/store/hooks';
-import { useMemo } from 'react';
+import { ProductsListNormalized } from '@/entities/products';
 
-interface ProductProps {
-  id: number;
-  unit: number;
-  category: number;
-  name: string;
-  description: string;
-  expiration_days: number;
-  producer_name: string;
-  producer_code: string;
-  country_name: string;
-  additional_info: string;
-  category_name: string;
-}
-
-const COLUMNS: Array<ColumnDef<ProductProps>> = [
+const COLUMNS: Array<ColumnDef<ProductsListNormalized>> = [
   { id: 'category_name', label: 'Категория' },
   { id: 'name', label: 'Название' },
   { id: 'additional_info', label: 'Информация' },
 ];
 
-export default function VacationsClient({ initData }: { initData: any }) {
+export default function ProductsClient({ initData }: { initData: any }) {
   const router = useRouter();
   const categories = useAppSelector((s) => s.dicts.categories);
 
@@ -34,14 +21,14 @@ export default function VacationsClient({ initData }: { initData: any }) {
   }, [categories]);
 
   const data = useMemo(() => {
-    return (initData ?? []).map((p: ProductProps) => ({
+    return (initData ?? []).map((p: ProductsListNormalized) => ({
       ...p,
       category_name: categoriesMap.get(p.category) ?? String(p.category),
     }));
   }, [initData, categoriesMap]);
   console.log(data);
   return (
-    <TableList<ProductProps>
+    <TableList<ProductsListNormalized>
       columns={COLUMNS}
       data={data}
       pageName="products"
