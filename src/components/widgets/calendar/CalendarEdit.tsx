@@ -10,7 +10,7 @@ import { enqueueSnackbar } from 'notistack';
 import { useRouter } from 'next/navigation';
 import { queryClient } from '@/utils/queryClient';
 import { useCalendarEdit } from '@/hooks/useCalendarEdit';
-import { calendarLeavesEdit, SubjectMode } from '@/types/common';
+import { calendarLeavesEdit, SubjectModes } from '@/types/common';
 
 type Props = {
   id?: number;
@@ -21,7 +21,7 @@ type Props = {
   updateEndpoint: string;
   invalidateKey: string;
   redirectUrl: string;
-  mode?: SubjectMode;
+  mode?: SubjectModes;
 };
 
 export default function EditCalendarForm({

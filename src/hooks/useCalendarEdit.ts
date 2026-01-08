@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { calendarLeavesEdit, SubjectMode } from '@/types/common';
+import { calendarLeavesEdit, SubjectModes } from '@/types/common';
 import { formatDate, differenceDates } from '@/utils/helper';
 
 export function useCalendarEdit(initData: calendarLeavesEdit) {
@@ -11,7 +11,7 @@ export function useCalendarEdit(initData: calendarLeavesEdit) {
 
   const [year, setYear] = useState(currYear);
   const [data, setData] = useState(initData);
-  const [modeCalendar, setModeCalendar] = useState<SubjectMode>('view');
+  const [modeCalendar, setModeCalendar] = useState<SubjectModes>('view');
 
   function handleClearCalendar() {
     setData((prev) => ({

@@ -4,10 +4,10 @@ import { Card, CardHeader, CardContent, useTheme } from '@mui/material';
 import { format, isSameMonth, isWeekend } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { monthMatrix, dayInAnyLeave } from '@/libs/calendar';
-import { calendarLeaves, SubjectMode } from '@/types/common';
+import { calendarLeaves, SubjectModes } from '@/types/common';
 
 type Props = {
-  mode?: SubjectMode;
+  mode?: SubjectModes;
   year: number;
   monthIndex0: number;
   leaves: calendarLeaves[];

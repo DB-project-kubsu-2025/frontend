@@ -5,6 +5,7 @@ import { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { toggleSidebar, setSidebar } from '@/store/sidebarOpenSlice';
 import { login as loginAction } from '@/store/userSlice';
+import { preloadDicts } from '@/store/dictsSlice';
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import { Box, styled, CssBaseline } from '@mui/material';
@@ -37,6 +38,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         // }
       } catch {}
     })();
+    dispatch(preloadDicts());
   }, [dispatch]);
 
   useEffect(() => {
