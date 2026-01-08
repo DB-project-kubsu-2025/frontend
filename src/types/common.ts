@@ -7,6 +7,7 @@ export type employeeNames =
 
 export type statusTypes = 'done' | 'planned';
 export type SubjectMode = 'view' | 'edit' | 'create';
+export type nameSubjects = 'products';
 
 export interface ComponentSelectItem {
   id: number | string;

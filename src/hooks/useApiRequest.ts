@@ -1,99 +1,22 @@
 'use client';
-import axios, { Method, AxiosHeaders } from 'axios';
-import { getCookie, deleteCookie } from 'cookies-next/client';
+
 import { useSnackbar } from 'notistack';
-
-const apiClient = axios.create({
-  baseURL: '/api', //process.env.NEXT_PUBLIC_API_URL,
-  headers: { 'Content-Type': 'application/json' },
-  timeout: 8000, //7000,
-  withCredentials: true,
-  // validateStatus: (status) => status < 403,
-});
-
-interface ApiRequestOptions {
-  method?: Method;
-  data?: any;
-  headers?: Record<string, string>;
-  signal?: AbortSignal;
-}
-
-interface ApiResponse {
-  status: number;
-  message?: string;
-  data: any;
-}
+import { apiRequest, ApiRequestOptions, ApiResponse } from '@/shared/api/request';
 
 export function useApiRequest() {
   const { enqueueSnackbar } = useSnackbar();
-  async function request(
+
+  async function request<T = any>(
     endpoint: string,
-    {
-      method = 'GET',
-      data = null,
-      headers = {},
-      signal,
-    }: ApiRequestOptions = {},
-  ): Promise<ApiResponse> {
-    const token = getCookie('token');
-    const requestHeaders = new AxiosHeaders();
-    requestHeaders.set('Content-Type', 'application/json');
-
-    document.dispatchEvent(new Event('ajaxStart'));
-
-    Object.entries(headers).forEach(([key, value]) => {
-      requestHeaders.set(key, value);
-    });
-
-    if (token) {
-      requestHeaders.set('Authorization', `Bearer ${token}`);
-    }
-
+    options: ApiRequestOptions = {},
+  ): Promise<ApiResponse<T>> {
     try {
-      console.log('Отправка запроса:', endpoint, method);
-      const response = await apiClient({
-        url: endpoint,
-        method,
-        headers: requestHeaders,
-        ...(method === 'GET' ? { params: data } : { data }),
-        signal,
-      });
-
-      if (method === 'GET') {
-        return response.data;
-      } else {
-        return {
-          status: response.status,
-          message: response.data?.message,
-          data: response.data,
-        };
-      }
+      return await apiRequest<T>(endpoint, options);
     } catch (error: any) {
-      if (error.response?.status === 400) {
-        if (error.response?.data?.message) {
-          enqueueSnackbar(error.response.data.message, { variant: 'error' });
-        }
-        throw error;
+      if (error?.response?.status === 400 && error?.response?.data?.message) {
+        enqueueSnackbar(error.response.data.message, { variant: 'error' });
       }
-
-      const status = error.response?.status || 500;
-      const message =
-        error.response?.data?.message || 'Ошибка соединения с сервером';
-      console.error('Ошибка API:', message);
-
-      if (status === 401) {
-        if(window.location.pathname !== '/login') {
-          deleteCookie('token', { path: '/' });
-          window.location.replace('/login');
-        }
-      }
-
-      return Promise.reject({
-        response: { status, data: { message } },
-        message,
-      });
-    } finally {
-      document.dispatchEvent(new Event('ajaxStop'));
+      throw error;
     }
   }
 
