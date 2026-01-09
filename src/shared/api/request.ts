@@ -23,12 +23,7 @@ export interface ApiResponse<T = any> {
 
 export async function apiRequest<T = any>(
   endpoint: string,
-  {
-    method = 'GET',
-    data = null,
-    headers = {},
-    signal,
-  }: ApiRequestOptions = {},
+  { method = 'GET', data = null, headers = {}, signal }: ApiRequestOptions = {},
 ): Promise<ApiResponse<T>> {
   const token = getCookie('token');
 
@@ -58,19 +53,27 @@ export async function apiRequest<T = any>(
       data: response.data,
     };
   } catch (error: any) {
-    const status = error.response?.status || 500;
+    const status = error?.response?.status ?? 500;
+    const responseData = error?.response?.data; // ✅ вот оно, реальное тело от бэка
+
+    // нормальное сообщение (если есть)
     const message =
-      error.response?.data?.message || 'Ошибка соединения с сервером';
+      responseData?.message ??
+      (typeof responseData === 'string' ? responseData : null) ??
+      'Ошибка соединения с сервером';
 
     if (status === 401) {
-      if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+      if (
+        typeof window !== 'undefined' &&
+        window.location.pathname !== '/login'
+      ) {
         deleteCookie('token', { path: '/' });
         window.location.replace('/login');
       }
     }
 
     return Promise.reject({
-      response: { status, data: { message } },
+      response: { status, data: responseData }, // ✅ НЕ затираем, отдаём как есть
       message,
     });
   }

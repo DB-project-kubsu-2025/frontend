@@ -13,9 +13,10 @@ export function useApiRequest() {
     try {
       return await apiRequest<T>(endpoint, options);
     } catch (error: any) {
-      if (error?.response?.status === 400 && error?.response?.data?.message) {
-        enqueueSnackbar(error.response.data.message, { variant: 'error' });
-      }
+      // console.log(error?.response?.data?.message, '@@@@@@@@@@@@@@@@');
+      // if (error?.response?.status === 400 && error?.response?.data?.message) {
+      //   enqueueSnackbar(error.response.data.message, { variant: 'error' });
+      // }
       throw error;
     }
   }

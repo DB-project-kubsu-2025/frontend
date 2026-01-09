@@ -37,6 +37,9 @@ export async function apiFetch<T = any>(
   // попытка красиво достать текст ошибки
   if (!res.ok) {
     const text = await res.text().catch(() => '');
+    if(res.status === 400) {
+      return JSON.parse(text) as T;
+    }
     throw new Error(
       `Ошибка API ${res.status}: ${res.statusText}${text ? ` — ${text}` : ''}`,
     );
