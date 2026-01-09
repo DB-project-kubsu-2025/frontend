@@ -97,82 +97,97 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
 
   return (
     <Box 
-      className="modalViewDetail-block"
-      sx={{
-        backgroundColor: 'transparent',
-        '& .modalViewDetail-content': {
-          background: 'transparent !important',
-          backgroundColor: 'transparent !important',
+    className="modalViewDetail-block"
+    sx={{
+      backgroundColor: 'transparent',
+      '& .modalViewDetail-content': {
+        background: 'transparent !important',
+        backgroundColor: 'transparent !important',
+      },
+      '& .MuiTextField-root': {
+        '& .MuiInputBase-root': {
+          padding: '8px 12px', 
+          fontSize: '0.84rem', // Увеличил шрифт
+          height: '48px', // Увеличил высоту
+          minHeight: '48px',
         },
+        '& .MuiInputLabel-root': {
+          fontSize: '0.875rem',
+          transform: 'translate(12px, 14px) scale(1)',
+          '&.MuiInputLabel-shrink': {
+            transform: 'translate(12px, -9px) scale(0.75)',
+          },
+        },
+      },
+      '& .MuiInputBase-root': {
+        padding: '8px 12px',
+        fontSize: '0.875rem',
+        minHeight: '48px',
+        height: '48px',
+      },
+      '& .MuiSelect-root': {
+        padding: '8px 12px',
+        fontSize: '0.875rem',
+        minHeight: '48px',
+        height: '48px',
+      },
+      '& .MuiOutlinedInput-root': {
+        padding: '8px 12px',
+        height: '48px',
+        minHeight: '48px',
+        '& input': {
+          padding: '8px 12px',
+          fontSize: '0.875rem',
+          height: '32px',
+        },
+      },
+      '& .MuiDatePicker-root .MuiTextField-root': {
+        '& .MuiInputBase-root': {
+          padding: '8px 12px !important',
+          fontSize: '0.875rem',
+          minHeight: '48px !important',
+          height: '48px !important',
+        },
+        '& .MuiInputBase-input': {
+          padding: '8px 12px !important',
+          fontSize: '0.875rem',
+          height: '32px !important',
+          minHeight: '32px !important',
+        },
+      },
+      '& .input-box': {
         '& .MuiTextField-root': {
           '& .MuiInputBase-root': {
-            padding: '4px 8px',
-            fontSize: '0.75rem',
-            height: '28px',
-          },
-          '& .MuiInputLabel-root': {
-            fontSize: '0.75rem',
-            transform: 'translate(8px, 8px) scale(1)',
-            '&.MuiInputLabel-shrink': {
-              transform: 'translate(8px, -9px) scale(0.75)',
-            },
-          },
-        },
-        '& .MuiInputBase-root': {
-          padding: '4px 8px',
-          fontSize: '0.75rem',
-          minHeight: '28px',
-        },
-        '& .MuiSelect-root': {
-          padding: '4px 8px',
-          fontSize: '0.75rem',
-          minHeight: '28px',
-        },
-        '& .MuiOutlinedInput-root': {
-          padding: '4px 8px',
-          '& input': {
-            padding: '4px 8px',
-            fontSize: '0.75rem',
-            height: '20px',
-          },
-        },
-        '& .MuiDatePicker-root .MuiTextField-root': {
-          '& .MuiInputBase-root': {
-            padding: '4px 8px !important',
-            fontSize: '0.75rem',
-            minHeight: '28px !important',
-            height: '28px !important',
+            padding: '8px 12px !important',
+            fontSize: '0.875rem',
+            minHeight: '48px !important',
+            height: '48px !important',
           },
           '& .MuiInputBase-input': {
-            padding: '4px 8px !important',
-            fontSize: '0.75rem',
-            height: '20px !important',
-            minHeight: '20px !important',
+            padding: '8px 12px !important',
+            fontSize: '0.875rem',
+            height: '32px !important',
           },
         },
-        '& .input-box': {
-          '& .MuiTextField-root': {
-            '& .MuiInputBase-root': {
-              padding: '4px 8px !important',
-              fontSize: '0.75rem',
-              minHeight: '28px !important',
-              height: '28px !important',
-            },
-            '& .MuiInputBase-input': {
-              padding: '4px 8px !important',
-              fontSize: '0.75rem',
-              height: '20px !important',
-            },
-          },
-        },
-      }}
-    >
+      },
+      // Дополнительно для лучшего вида
+      '& .MuiInputBase-input': {
+        lineHeight: '1.5',
+      },
+      '& .MuiSelect-select': {
+        lineHeight: '1.5',
+        display: 'flex',
+        alignItems: 'center',
+      },
+    }}
+>
+
       <Grid className="modalViewDetail-head">
         <Typography variant="h4">Профиль</Typography>
       </Grid>
       <Stack spacing={2} className="modalViewDetail-content">
-        <Box sx={{ maxWidth: '50%' }}>
-          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Логин</Typography>
+        <Box sx={{ maxWidth: '75%' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.3rem', fontWeight: 500 }}>Логин</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -187,8 +202,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box sx={{ maxWidth: '50%' }}>
-          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Почта</Typography>
+        <Box sx={{ maxWidth: '75%' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.3rem', fontWeight: 500 }}>Почта</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -203,8 +218,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box sx={{ maxWidth: '50%' }}>
-          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Фамилия</Typography>
+        <Box sx={{ maxWidth: '75%' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.3rem', fontWeight: 500 }}>Фамилия</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -219,8 +234,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box sx={{ maxWidth: '50%' }}>
-          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Имя</Typography>
+        <Box sx={{ maxWidth: '75%' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.3rem', fontWeight: 500 }}>Имя</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -235,8 +250,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box sx={{ maxWidth: '50%' }}>
-          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Отчество</Typography>
+        <Box sx={{ maxWidth: '75%' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.3rem', fontWeight: 500 }}>Отчество</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -251,8 +266,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box sx={{ maxWidth: '50%' }}>
-          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Пол</Typography>
+        <Box sx={{ maxWidth: '75%' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.3rem', fontWeight: 500 }}>Пол</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -268,8 +283,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box sx={{ maxWidth: '50%' }}>
-          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Телефон</Typography>
+        <Box sx={{ maxWidth: '75%' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.3rem', fontWeight: 500 }}>Телефон</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -284,8 +299,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box sx={{ maxWidth: '50%' }}>
-          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Дата рождения</Typography>
+        <Box sx={{ maxWidth: '75%' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.3rem', fontWeight: 500 }}>Дата рождения</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -300,8 +315,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box sx={{ maxWidth: '50%' }}>
-          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>СНИЛС</Typography>
+        <Box sx={{ maxWidth: '75%' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.3rem', fontWeight: 500 }}>СНИЛС</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -316,8 +331,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box sx={{ maxWidth: '50%' }}>
-          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>ИНН</Typography>
+        <Box sx={{ maxWidth: '75%' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.3rem', fontWeight: 500 }}>ИНН</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -332,8 +347,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box sx={{ maxWidth: '50%' }}>
-          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Рабочий телефон</Typography>
+        <Box sx={{ maxWidth: '75%' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.3rem', fontWeight: 500 }}>Рабочий телефон</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
