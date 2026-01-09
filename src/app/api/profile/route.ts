@@ -13,14 +13,8 @@ export async function PATCH(req: Request) {
       },
     );
     console.log('%%%',data);
-    // if (!access_token) {
-    //   return NextResponse.json(
-    //     { message: 'Некорректный ответ сервера' },
-    //     { status: 502 },
-    //   );
-    // }
 
-    const res = NextResponse.json(data, { status: 400 });
+    const res = NextResponse.json(data.data ?? {message: 'Профиль обновлён'}, { status: data.status });
     return res;
   } catch (err: any) {
     console.error('Register route error:', err);

@@ -54,7 +54,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
         data: normalized,
       });
 
-      enqueueSnackbar('Данные сотрудника сохранены', {
+      enqueueSnackbar(res.data?.message, {
         variant: 'success',
       });
       return res.data;

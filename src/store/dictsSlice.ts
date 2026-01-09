@@ -15,9 +15,11 @@ type DictState = {
   paymentMethods: DictItem[];
   categories: DictItem[];
   units: DictItem[];
+
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error?: string | null;
   lastLoadedAt?: number | null;
+  invalidated?: boolean;
 };
 
 const initialState: DictState = {
@@ -35,66 +37,61 @@ const initialState: DictState = {
   status: 'idle',
   error: null,
   lastLoadedAt: null,
+  invalidated: true,
 };
 
 const TTL_MS = 10 * 60 * 1000;
 
+type DictsPayload = {
+  couponsDiscountsTypes: DictItem[];
+  movementsTypes: DictItem[];
+  priceListsBases: DictItem[];
+  priceListsTypes: DictItem[];
+  stockTakesTypes: DictItem[];
+  storagesSpacesTypes: DictItem[];
+  storagesTypes: DictItem[];
+  writeoffsReasons: DictItem[];
+  paymentMethods: DictItem[];
+  categories: DictItem[];
+  units: DictItem[];
+};
+
 export const preloadDicts = createAsyncThunk<
-  {
-    couponsDiscountsTypes: DictItem[];
-    movementsTypes: DictItem[];
-    priceListsBases: DictItem[];
-    priceListsTypes: DictItem[];
-    stockTakesTypes: DictItem[];
-    storagesSpacesTypes: DictItem[];
-    storagesTypes: DictItem[];
-    writeoffsReasons: DictItem[];
-    paymentMethods: DictItem[];
-    categories: DictItem[];
-    units: DictItem[];
-  },
+  DictsPayload,
   { force?: boolean } | void,
   { state: any }
 >(
   'dicts/preload',
   async () => {
-    const res = await apiRequest<{
-      couponsDiscountsTypes: DictItem[];
-      movementsTypes: DictItem[];
-      priceListsBases: DictItem[];
-      priceListsTypes: DictItem[];
-      stockTakesTypes: DictItem[];
-      storagesSpacesTypes: DictItem[];
-      storagesTypes: DictItem[];
-      writeoffsReasons: DictItem[];
-      paymentMethods: DictItem[];
-      categories: DictItem[];
-      units: DictItem[];
-    }>('/getDicts', { method: 'GET' });
+    const res = await apiRequest<DictsPayload>('/getDicts', { method: 'GET' });
     return res.data;
   },
   {
     condition: (arg, { getState }) => {
       const state = getState();
-      const last = state.dicts?.lastLoadedAt as number | null | undefined;
-      const status = state.dicts?.status as string | undefined;
+      const dicts = state.dicts as DictState | undefined;
 
-      if (arg?.force) return true;
+      const last = dicts?.lastLoadedAt ?? null;
+      const status = dicts?.status;
+      const invalidated = dicts?.invalidated ?? false;
+
+      if ((arg as any)?.force) return true;
       if (status === 'loading') return false;
+      if (invalidated) return true;
       if (last && Date.now() - last < TTL_MS) return false;
 
       const hasAny =
-        (state.dicts?.couponsDiscountsTypes?.length ?? 0) > 0 ||
-        (state.dicts?.movementsTypes?.length ?? 0) > 0 ||
-        (state.dicts?.priceListsBases?.length ?? 0) > 0 ||
-        (state.dicts?.priceListsTypes?.length ?? 0) > 0 ||
-        (state.dicts?.stockTakesTypes?.length ?? 0) > 0 ||
-        (state.dicts?.storagesSpacesTypes?.length ?? 0) > 0 ||
-        (state.dicts?.storagesTypes?.length ?? 0) > 0 ||
-        (state.dicts?.writeoffsReasons?.length ?? 0) > 0 ||
-        (state.dicts?.paymentMethods?.length ?? 0) > 0 ||
-        (state.dicts?.categories?.length ?? 0) > 0 ||
-        (state.dicts?.units?.length ?? 0) > 0;
+        (dicts?.couponsDiscountsTypes?.length ?? 0) > 0 ||
+        (dicts?.movementsTypes?.length ?? 0) > 0 ||
+        (dicts?.priceListsBases?.length ?? 0) > 0 ||
+        (dicts?.priceListsTypes?.length ?? 0) > 0 ||
+        (dicts?.stockTakesTypes?.length ?? 0) > 0 ||
+        (dicts?.storagesSpacesTypes?.length ?? 0) > 0 ||
+        (dicts?.storagesTypes?.length ?? 0) > 0 ||
+        (dicts?.writeoffsReasons?.length ?? 0) > 0 ||
+        (dicts?.paymentMethods?.length ?? 0) > 0 ||
+        (dicts?.categories?.length ?? 0) > 0 ||
+        (dicts?.units?.length ?? 0) > 0;
 
       return !hasAny || !last;
     },
@@ -104,7 +101,15 @@ export const preloadDicts = createAsyncThunk<
 const dictsSlice = createSlice({
   name: 'dicts',
   initialState,
-  reducers: {},
+  reducers: {
+    invalidateDicts(state) {
+      state.invalidated = true;
+    },
+
+    clearDicts() {
+      return initialState;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(preloadDicts.pending, (state) => {
@@ -113,6 +118,7 @@ const dictsSlice = createSlice({
       })
       .addCase(preloadDicts.fulfilled, (state, action) => {
         state.status = 'succeeded';
+
         state.couponsDiscountsTypes = action.payload.couponsDiscountsTypes;
         state.movementsTypes = action.payload.movementsTypes;
         state.priceListsBases = action.payload.priceListsBases;
@@ -124,7 +130,9 @@ const dictsSlice = createSlice({
         state.paymentMethods = action.payload.paymentMethods;
         state.categories = action.payload.categories;
         state.units = action.payload.units;
+
         state.lastLoadedAt = Date.now();
+        state.invalidated = false;
       })
       .addCase(preloadDicts.rejected, (state, action) => {
         state.status = 'failed';
@@ -133,4 +141,5 @@ const dictsSlice = createSlice({
   },
 });
 
+export const { invalidateDicts, clearDicts } = dictsSlice.actions;
 export default dictsSlice.reducer;

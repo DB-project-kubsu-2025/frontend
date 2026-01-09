@@ -1,16 +1,23 @@
 import { cookies } from 'next/headers';
 
-const BASE_URL = 'http://backend:8070/api'; //process.env.API_URL;
+const BASE_URL = 'http://backend:8070/api';
 
 interface ApiOptions extends RequestInit {
   headers?: Record<string, string>;
 }
 
+export type ApiResult<T> = {
+  status: number;
+  ok: boolean;
+  data: T | null;
+  text?: string;
+};
+
 export async function apiFetch<T = any>(
   endpoint: string,
   method: string = 'GET',
   options: ApiOptions = {},
-): Promise<T> {
+): Promise<ApiResult<T>> {
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
 
@@ -18,7 +25,9 @@ export async function apiFetch<T = any>(
     ...(options.headers ?? {}),
   };
 
-  const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
+  const isFormData =
+    typeof FormData !== 'undefined' && options.body instanceof FormData;
+
   if (!isFormData && !headers['Content-Type']) {
     headers['Content-Type'] = 'application/json';
   }
@@ -33,17 +42,25 @@ export async function apiFetch<T = any>(
     headers,
   });
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    if(res.status === 400) {
-      return JSON.parse(text) as T;
-    }
-    throw new Error(
-      `Ошибка API ${res.status}: ${res.statusText}${text ? ` — ${text}` : ''}`,
-    );
+  if (res.status === 204) {
+    return { status: res.status, ok: res.ok, data: null };
   }
 
-  if (res.status === 204) return undefined as T;
+  const text = await res.text().catch(() => '');
+  let data: any = null;
 
-  return res.json() as Promise<T>;
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = null;
+    }
+  }
+
+  return {
+    status: res.status,
+    ok: res.ok,
+    data,
+    ...(data === null && text ? { text } : {}),
+  };
 }

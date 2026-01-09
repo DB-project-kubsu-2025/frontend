@@ -39,6 +39,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       } catch {}
     })();
     dispatch(preloadDicts());
+    
+    // dispatch(invalidateDicts());
+    // dispatch(preloadDicts({ force: true }));
+
+    //dispatch(clearDicts());
+
   }, [dispatch]);
 
   useEffect(() => {

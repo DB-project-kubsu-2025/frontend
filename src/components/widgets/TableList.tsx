@@ -34,8 +34,14 @@ export interface UniversalTableProps<T extends object> {
   columns: Array<ColumnDef<T>>;
   pageName: nameSubjects;
   clickableRow?: boolean;
-  onDelete?: (orgId: number) => void;
-  tableListRowButtons?: (args: { row: T }) => React.ReactNode;
+  onDelete?: (args: {
+    id: number;
+    row: T;
+  }) => void | Promise<void>;
+  tableListRowButtons?: (args: {
+    row: T;
+    onDelete: (e: React.MouseEvent, row: T) => void;
+  }) => React.ReactNode;
   rowProps?: (row: T) => Record<string, any>;
 }
 
@@ -44,6 +50,7 @@ export default function UniversalTable<T extends { id: number }>({
   columns,
   pageName,
   clickableRow = true,
+  onDelete,
   tableListRowButtons,
   rowProps,
 }: UniversalTableProps<T>) {
@@ -76,18 +83,29 @@ export default function UniversalTable<T extends { id: number }>({
     return order === 'asc' ? (aStr > bStr ? 1 : -1) : aStr > bStr ? -1 : 1;
   });
 
-  const paginatedData = sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginatedData = sortedData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage,
+  );
 
   const handleClickRow = async (url: string) => {
     if (clickableRow) navigateWithPrev(`${url}`);
   };
 
+  const handleDelete = async (e: React.MouseEvent, row: T) => {
+    e.stopPropagation();
+    await onDelete?.({ id: row.id, row });
+  };
+
   return (
-    <TableContainer component={Paper} sx={{ height: '100%', overflowX: 'hidden' }}>
+    <TableContainer
+      component={Paper}
+      sx={{ height: '100%', overflowX: 'hidden' }}
+    >
       <Table size="small" stickyHeader>
         <TableHead>
           <TableRow>
-            {columns.map(col => (
+            {columns.map((col) => (
               <TableCell key={String(col.id)}>
                 <TableSortLabel
                   active={orderBy === col.id}
@@ -103,25 +121,27 @@ export default function UniversalTable<T extends { id: number }>({
         </TableHead>
 
         <TableBody>
-          {paginatedData.map(row => {
+          {paginatedData.map((row) => {
             // const isFading = fadingIds.has(row.id);
             return (
               <TableRow
                 key={row.id}
                 hover={clickableRow}
                 onClick={() => handleClickRow(`${pathname}/${row.id}`)}
-                sx={{cursor: clickableRow ? 'pointer' : 'default'}}
+                sx={{ cursor: clickableRow ? 'pointer' : 'default' }}
                 {...rowProps?.(row)}
               >
-                {columns.map(col => {
+                {columns.map((col) => {
                   const raw = row[col.id];
-                  const cellContent = col.rowFormat ? col.rowFormat(row) : (raw ?? '');
+                  const cellContent = col.rowFormat
+                    ? col.rowFormat(row)
+                    : (raw ?? '');
 
                   if (col.href && col?.hrefReplaceKeys) {
                     let link = col.href;
                     let hasValidId = true;
 
-                    col.hrefReplaceKeys.forEach(hrefReplaceKey => {
+                    col.hrefReplaceKeys.forEach((hrefReplaceKey) => {
                       const hrefParam = hrefReplaceKey
                         .split('.')
                         .reduce<any>((o, key) => (o ? o[key] : undefined), row);
@@ -138,19 +158,29 @@ export default function UniversalTable<T extends { id: number }>({
                       <TableCell key={String(col.id)}>
                         {hasValidId ? (
                           <span
-                            onClick={prevURLClickHandler(link, { scroll: false })}
+                            onClick={prevURLClickHandler(link, {
+                              scroll: false,
+                            })}
                             className="a"
-                            dangerouslySetInnerHTML={{ __html: String(cellContent) }}
+                            dangerouslySetInnerHTML={{
+                              __html: String(cellContent),
+                            }}
                           />
                         ) : (
-                          <span dangerouslySetInnerHTML={{ __html: String(cellContent) }} />
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: String(cellContent),
+                            }}
+                          />
                         )}
                       </TableCell>
                     );
                   }
 
                   return (
-                    <TableCell key={String(col.id)}>{cellContent as React.ReactNode}</TableCell>
+                    <TableCell key={String(col.id)}>
+                      {cellContent as React.ReactNode}
+                    </TableCell>
                   );
                 })}
 
@@ -161,9 +191,7 @@ export default function UniversalTable<T extends { id: number }>({
                       justifyContent: 'end',
                     }}
                   >
-                    {tableListRowButtons?.({
-                      row,
-                    })}
+                    {tableListRowButtons?.({ row, onDelete: handleDelete })}
                   </Box>
                 </TableCell>
               </TableRow>
@@ -178,13 +206,15 @@ export default function UniversalTable<T extends { id: number }>({
               page={page}
               rowsPerPage={rowsPerPage}
               onPageChange={(event, newPage) => setPage(newPage)}
-              onRowsPerPageChange={event => {
+              onRowsPerPageChange={(event) => {
                 setRowsPerPage(parseInt(event.target.value, 10));
                 setPage(0);
               }}
               rowsPerPageOptions={[25, 50, 100, 200]}
               labelRowsPerPage="Строк на странице:"
-              labelDisplayedRows={({ from, to, count }) => `${from}–${to} из ${count}`}
+              labelDisplayedRows={({ from, to, count }) =>
+                `${from}–${to} из ${count}`
+              }
             />
           </TableRow>
         </TableFooter>

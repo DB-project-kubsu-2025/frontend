@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     );
     console.log('%%%',data);
     
-    const res = NextResponse.json(data, { status: 200 });
+    const res = NextResponse.json(data.data, { status: data.status });
     return res;
   } catch (err: any) {
     console.error('Register route error:', err);
