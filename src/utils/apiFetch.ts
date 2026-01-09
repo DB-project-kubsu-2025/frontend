@@ -18,7 +18,6 @@ export async function apiFetch<T = any>(
     ...(options.headers ?? {}),
   };
 
-  // Content-Type ставим только если не FormData и если его не передали вручную
   const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
   if (!isFormData && !headers['Content-Type']) {
     headers['Content-Type'] = 'application/json';
@@ -29,12 +28,11 @@ export async function apiFetch<T = any>(
   }
 
   const res = await fetch(`${BASE_URL}${endpoint}`, {
-    ...options,          // важно: пробрасываем body, credentials, cache, next, signal и т.д.
+    ...options,
     method,
     headers,
   });
 
-  // попытка красиво достать текст ошибки
   if (!res.ok) {
     const text = await res.text().catch(() => '');
     if(res.status === 400) {
@@ -45,7 +43,6 @@ export async function apiFetch<T = any>(
     );
   }
 
-  // если вдруг 204
   if (res.status === 204) return undefined as T;
 
   return res.json() as Promise<T>;

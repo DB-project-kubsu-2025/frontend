@@ -54,7 +54,7 @@ export async function apiRequest<T = any>(
     };
   } catch (error: any) {
     const status = error?.response?.status ?? 500;
-    const responseData = error?.response?.data; // ✅ вот оно, реальное тело от бэка
+    const responseData = error?.response?.data;
 
     // нормальное сообщение (если есть)
     const message =
@@ -73,7 +73,7 @@ export async function apiRequest<T = any>(
     }
 
     return Promise.reject({
-      response: { status, data: responseData }, // ✅ НЕ затираем, отдаём как есть
+      response: { status, data: responseData },
       message,
     });
   }
