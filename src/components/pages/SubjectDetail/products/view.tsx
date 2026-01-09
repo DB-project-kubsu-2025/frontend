@@ -18,9 +18,11 @@ import { Grid } from '@mui/system';
 import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
-import { MdOutlineEdit } from 'react-icons/md';
+import { MdDeleteOutline, MdOutlineEdit } from 'react-icons/md';
 import ElementViewerDetail from '@/components/pages/SubjectDetail/ElementViewerDetail';
 import { useAppSelector } from '@/store/hooks';
+import { IoClose } from 'react-icons/io5';
+import { useDeleteEntity } from '@/hooks/useDeleteEntity';
 
 interface Props {
   mode: SubjectModes;
@@ -36,6 +38,11 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
   const { enqueueSnackbar } = useSnackbar();
   const [inputsData, setInputsData] = useState<Record<string, any>>(detailData);
   const [fieldsError, setFieldsError] = useState<Record<string, any>>({});
+    const deleteEntity = useDeleteEntity({
+      request,
+      refresh: () => router.refresh(),
+      notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
+    });
 
   async function onSave() {
     try {
@@ -111,6 +118,11 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       return null;
     }
   }
+  
+  const handleDelete = async () => {
+    await deleteEntity({ subject: 'products', id: inputsData?.id, message: 'Товар удалён' });
+    setTimeout(() => router.push(`/${nameSubject}/`), 300);
+  };
 
   return (
     <Box className="modalViewDetail-block">
@@ -126,6 +138,20 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
               }
             >
               <MdOutlineEdit />
+            </IconButton>
+            <IconButton
+              size="medium"
+              color="default"
+              onClick={() => handleDelete()}
+            >
+              <MdDeleteOutline />
+            </IconButton>
+            <IconButton
+              size="medium"
+              color="default"
+              onClick={() => router.push(`/${nameSubject}/`)}
+            >
+              <IoClose />
             </IconButton>
           </Stack>
         ) : mode == 'edit' ? (
@@ -163,7 +189,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
               setInputsData={setInputsData}
               sectionPaths={['unit']}
               selectValues={units}
-              fieldsError={fieldsError?.dashboardData}
+              fieldsError={fieldsError?.unit}
               setFieldsError={setFieldsError}
             />
           </Box>
@@ -180,7 +206,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
               setInputsData={setInputsData}
               sectionPaths={['category']}
               selectValues={categories}
-              fieldsError={fieldsError?.dashboardData}
+              fieldsError={fieldsError?.category}
               setFieldsError={setFieldsError}
             />
           </Box>
@@ -227,7 +253,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
               fieldType="number"
               setInputsData={setInputsData}
               sectionPaths={['expiration_days']}
-              fieldsError={fieldsError?.dashboardData}
+              fieldsError={fieldsError?.expiration_days}
               setFieldsError={setFieldsError}
             />
           </Box>

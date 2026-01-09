@@ -6,6 +6,9 @@ import { TableListRowButtons } from '@/components/widgets/TableListRowButtons';
 import { useAppSelector } from '@/store/hooks';
 import { ProductsListNormalized } from '@/entities/products';
 import { Box, Button } from '@mui/material';
+import { useApiRequest } from '@/hooks/useApiRequest';
+import { enqueueSnackbar } from 'notistack';
+import { useDeleteEntity } from '@/hooks/useDeleteEntity';
 
 const COLUMNS: Array<ColumnDef<ProductsListNormalized>> = [
   { id: 'category_name', label: 'Категория' },
@@ -15,7 +18,13 @@ const COLUMNS: Array<ColumnDef<ProductsListNormalized>> = [
 
 export default function ProductsClient({ initData }: { initData: any }) {
   const router = useRouter();
+  const { request } = useApiRequest();
   const categories = useAppSelector((s) => s.dicts.categories);
+  const deleteEntity = useDeleteEntity({
+    request,
+    refresh: () => router.refresh(),
+    notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
+  });
   console.log(categories);
 
   const categoriesMap = useMemo(() => {
@@ -28,6 +37,10 @@ export default function ProductsClient({ initData }: { initData: any }) {
       category_name: categoriesMap.get(p.category) ?? String(p.category),
     }));
   }, [initData, categoriesMap]);
+
+  const handleDelete = async ({ id }: { id: number }) => {
+    await deleteEntity({ subject: 'products', id, message: 'Товар удалён' });
+  };
 
   return (
     <Box
@@ -79,10 +92,15 @@ export default function ProductsClient({ initData }: { initData: any }) {
         columns={COLUMNS}
         data={data}
         pageName="products"
-        tableListRowButtons={({ row }) => (
+        onDelete={handleDelete}
+        tableListRowButtons={({ row, onDelete }) => (
           <TableListRowButtons
             row={row}
-            onEdit={() => router.push(`/products/${row.id}/edit`)}
+            onEdit={(e) => {
+              e.stopPropagation();
+              router.push(`/products/${row.id}/edit`)
+            }}
+            onDelete={(e) => onDelete(e, row)}
           />
         )}
       />
