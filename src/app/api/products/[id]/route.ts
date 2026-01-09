@@ -1,20 +1,25 @@
 import { apiFetch } from '@/utils/apiFetch';
+import { da } from 'date-fns/locale';
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
+export async function PUT(
+  req: Request,
+  { params }: { params: { id: string } },
+) {
+  const { id } = await params;
+  const idNum = Number(id);
   try {
     const body = await req.json();
 
-    const data: any = await apiFetch(
-      '/auth_service/password/change/',
-      'POST',
-      {
-        body: JSON.stringify(body),
-      },
+    const data: any = await apiFetch(`/shops/products/${idNum}/`, 'PUT', {
+      body: JSON.stringify(body),
+    });
+    console.log('%%%', data);
+
+    const res = NextResponse.json(
+      data.status === 400 ? data.data : { message: 'Товар обновлён' },
+      { status: data.status },
     );
-    console.log('%%%',data);
-    
-    const res = NextResponse.json(data.data, { status: data.status });
     return res;
   } catch (err: any) {
     console.error('Register route error:', err);

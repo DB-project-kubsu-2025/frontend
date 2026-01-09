@@ -12,8 +12,9 @@ export default async function MyVacationsPageEdit({
   const [{ id }, sp] = await Promise.all([params, searchParams]);
   const idNum = Number(id);
 
-  const res: calendarLeavesEdit = await apiFetch(
+  const res = await apiFetch(
     `/vacations/my/${idNum}?year=${String(sp?.year)}`,
   );
-  return <MyVacationsClientEdit id={idNum} initData={res} />;
+  const res1 = res.data as calendarLeavesEdit;
+  return <MyVacationsClientEdit id={idNum} initData={res1} />;
 }

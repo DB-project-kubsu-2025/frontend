@@ -3,6 +3,7 @@ import SickLeavesClient from './client';
 import { LeavesCalendarProps } from '@/types/common';
 
 export default async function SickLeavesPage() {
-  const res: LeavesCalendarProps = await apiFetch('/sickLeaves?year=2025');
-  return <SickLeavesClient {...res} />;
+  const res = await apiFetch('/sickLeaves?year=2025');
+  const res1 = res.data as LeavesCalendarProps;
+  return <SickLeavesClient {...res1} />;
 }

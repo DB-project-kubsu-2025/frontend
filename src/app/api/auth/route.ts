@@ -9,12 +9,12 @@ export async function POST(req: Request) {
       body: JSON.stringify(body),
     });
 
-    const access_token = data?.access_token;
+    const access_token = data.data?.access_token;
     if (!access_token) {
       return NextResponse.json(
         {
           message:
-            data?.message || data?.detail || 'Некорректный ответ сервера',
+            data.data?.message || data.data?.detail || 'Некорректный ответ сервера',
         },
         { status: 502 },
       );

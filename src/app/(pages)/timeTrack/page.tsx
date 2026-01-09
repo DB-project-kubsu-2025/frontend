@@ -3,9 +3,10 @@ import { apiFetch } from '@/utils/apiFetch';
 import TimeTrackClient from './client';
 
 export default async function TimeTrackPage() {
-  const res: { events: CalendarTimeTrack[] } = await apiFetch(
+  const res = await apiFetch(
     '/timeTrack?month=11&year=2025',
   );
   console.log(res);
-  return <TimeTrackClient events={res?.events} />;
+  const res1 = res.data as CalendarTimeTrack[];
+  return <TimeTrackClient events={res1} />;
 }

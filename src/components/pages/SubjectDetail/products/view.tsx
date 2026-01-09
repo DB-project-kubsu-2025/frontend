@@ -59,55 +59,55 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       const normalized = ProductsDetailNormalizedSchema.parse(formParsed.data);
       const isCreate = mode === 'create';
       const endpoint = isCreate
-        ? `/api/${nameSubject}`
-        : `/api/${nameSubject}/${inputsData.id}`;
+        ? `/${nameSubject}`
+        : `/${nameSubject}/${inputsData.id}`;
       const method = isCreate ? 'POST' : 'PUT';
-
       const res = await request(endpoint, { method, data: normalized });
-      const status: number = res.status;
-      const data: any = (res as any).data;
 
-      if (status === 200 || status === 201) {
-        enqueueSnackbar(data?.message, { variant: 'success' });
+      enqueueSnackbar(res?.data?.message ?? 'Сохранено', {
+        variant: 'success',
+      });
 
-        const id = data?.id ?? inputsData?.id;
-        if (!id) {
-          console.log('Нет id для навигации');
-          return data;
-        }
-
-        setTimeout(() => {
-          router.push(`/${nameSubject}s/${id}`);
-        }, 300);
-
-        return data;
+      const id = res?.data?.id ?? inputsData?.id;
+      if (id) {
+        setTimeout(() => router.push(`/${nameSubject}/${id}`), 300);
       }
 
+      return res.data;
+    } catch (err: any) {
+      const status = err?.response?.status;
+      const data = err?.response?.data;
+
       if (status === 400) {
-        const issues = data?.issues;
-        const fieldErrorsRaw = issues?.fieldErrors ?? data?.errorInputs;
+        const payload = data?.data ?? data;
+        const fieldErrorsRaw =
+          payload?.fieldErrors ??
+          payload?.errorInputs ??
+          payload?.issues?.fieldErrors ??
+          payload?.issues?.errorInputs ??
+          (payload && typeof payload === 'object' ? payload : null);
 
         if (fieldErrorsRaw && typeof fieldErrorsRaw === 'object') {
           const fieldErrors = Object.fromEntries(
-            Object.entries(fieldErrorsRaw).map(([k, v]: any) => [
+            Object.entries(fieldErrorsRaw).map(([k, v]) => [
               k,
-              Array.isArray(v) ? v[0] : String(v),
+              Array.isArray(v) ? String(v[0] ?? '') : String(v ?? ''),
             ]),
           );
 
           setFieldsError(fieldErrors);
-          enqueueSnackbar(data?.message, { variant: 'warning' });
+          enqueueSnackbar(data?.message ?? 'Проверьте поля формы', {
+            variant: 'warning',
+          });
           return null;
         }
       }
 
-      enqueueSnackbar(data?.message ?? 'Ошибка сохранения', {
-        variant: 'error',
-      });
-      return null;
-    } catch (err: any) {
       console.error('onSave error:', err);
-      enqueueSnackbar('Внутренняя ошибка сервера', { variant: 'error' });
+      enqueueSnackbar(
+        data?.message ?? err?.message ?? 'Ошибка соединения с сервером',
+        { variant: 'error' },
+      );
       return null;
     }
   }

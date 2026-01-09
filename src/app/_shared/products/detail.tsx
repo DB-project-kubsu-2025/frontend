@@ -32,7 +32,7 @@ export function ProductsDetail({ mode, backHref = '/products' }: FactoryOpts) {
           return 'Нет такого товара';
           throw e;
         }
-        detail = raw;
+        detail = raw.data;
       }
     }
 

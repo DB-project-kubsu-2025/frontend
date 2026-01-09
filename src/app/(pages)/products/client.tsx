@@ -5,7 +5,7 @@ import TableList, { ColumnDef } from '@/components/widgets/TableList';
 import { TableListRowButtons } from '@/components/widgets/TableListRowButtons';
 import { useAppSelector } from '@/store/hooks';
 import { ProductsListNormalized } from '@/entities/products';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 const COLUMNS: Array<ColumnDef<ProductsListNormalized>> = [
   { id: 'category_name', label: 'Категория' },
@@ -16,6 +16,7 @@ const COLUMNS: Array<ColumnDef<ProductsListNormalized>> = [
 export default function ProductsClient({ initData }: { initData: any }) {
   const router = useRouter();
   const categories = useAppSelector((s) => s.dicts.categories);
+  console.log(categories);
 
   const categoriesMap = useMemo(() => {
     return new Map(categories.map((c) => [c.id, c.name] as const));
@@ -27,7 +28,7 @@ export default function ProductsClient({ initData }: { initData: any }) {
       category_name: categoriesMap.get(p.category) ?? String(p.category),
     }));
   }, [initData, categoriesMap]);
-  
+
   return (
     <Box
       sx={{
@@ -65,17 +66,26 @@ export default function ProductsClient({ initData }: { initData: any }) {
         },
       }}
     >
-    <TableList<ProductsListNormalized>
-      columns={COLUMNS}
-      data={data}
-      pageName="products"
-      tableListRowButtons={({ row }) => (
-        <TableListRowButtons
-          row={row}
-          onEdit={() => router.push(`/products/${row.id}/edit`)}
-        />
-      )}
-    />
+      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => router.push('/products/create')}
+        >
+          Создать
+        </Button>
+      </Box>
+      <TableList<ProductsListNormalized>
+        columns={COLUMNS}
+        data={data}
+        pageName="products"
+        tableListRowButtons={({ row }) => (
+          <TableListRowButtons
+            row={row}
+            onEdit={() => router.push(`/products/${row.id}/edit`)}
+          />
+        )}
+      />
     </Box>
   );
 }

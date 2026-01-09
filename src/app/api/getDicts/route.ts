@@ -28,7 +28,7 @@ export async function GET() {
       dictsApi.getCategories(),
       dictsApi.getUnits(),
     ]);
-
+    
     return NextResponse.json({
       couponsDiscountsTypes,
       movementsTypes,

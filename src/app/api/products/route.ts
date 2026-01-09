@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const data: any = await apiFetch(
-      '/auth_service/password/change/',
+      '/shops/products/',
       'POST',
       {
         body: JSON.stringify(body),
