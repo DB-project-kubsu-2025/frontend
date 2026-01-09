@@ -34,6 +34,8 @@ const initialState: DictState = {
   paymentMethods: [],
   categories: [],
   units: [],
+  storages: [],
+  products: [],
   status: 'idle',
   error: null,
   lastLoadedAt: null,

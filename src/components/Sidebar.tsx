@@ -23,6 +23,7 @@ import { IoNewspaperOutline } from 'react-icons/io5';
 import { TbReportSearch } from 'react-icons/tb';
 import { GiArtificialHive } from 'react-icons/gi';
 import { IoIosTimer } from 'react-icons/io';
+import { TbTicket } from 'react-icons/tb';
 
 interface NestedItem {
   name: string;
@@ -82,6 +83,11 @@ const sidebarItems: SidebarSection[] = [
         name: 'Товары',
         iconLeft: <MdOutlineProductionQuantityLimits />,
         link: '/products',
+      },
+      {
+        name: 'Купоны',
+        iconLeft: <TbTicket />,
+        link: '/coupons',
       },
       {
         name: 'Договора',
