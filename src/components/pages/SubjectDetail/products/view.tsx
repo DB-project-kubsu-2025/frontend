@@ -79,6 +79,9 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       if (id) {
         setTimeout(() => router.push(`/${nameSubject}/${id}`), 300);
       }
+      if(isCreate) {
+        setTimeout(() => router.push(`/${nameSubject}/`), 300);
+      }
 
       return res.data;
     } catch (err: any) {

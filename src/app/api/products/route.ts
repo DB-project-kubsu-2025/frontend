@@ -9,7 +9,10 @@ export async function POST(req: Request) {
       body: JSON.stringify(body),
     });
 
-    return NextResponse.json(data.data, { status: data.status });
+    return NextResponse.json(
+      data.status === 400 ? data.data : { message: 'Товар добавлен' },
+      { status: data.status },
+    );
   } catch (err: any) {
     console.error('Products POST error:', err);
 
