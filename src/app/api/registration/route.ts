@@ -13,11 +13,12 @@ export async function POST(req: Request) {
       },
     );
 
+    console.log(data);
     const access_token = data?.access_token;
     if (!access_token) {
       return NextResponse.json(
-        { message: 'Некорректный ответ сервера' },
-        { status: 502 },
+        { message: data },
+        { status: 400 },
       );
     }
 

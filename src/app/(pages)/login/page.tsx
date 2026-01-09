@@ -18,6 +18,7 @@ import { MdOutlineVisibilityOff } from 'react-icons/md';
 import { useApiRequest } from '@/hooks/useApiRequest';
 import Input from '@/components/UI/Input';
 import { safeText } from '@/utils/helper';
+import Link from 'next/link';
 
 interface InputsData {
   username?: string;
@@ -171,6 +172,7 @@ export default function LoginPage() {
                     'Войти'
                   )}
                 </Button>
+                <Link href="/registration" style={{ color: 'rgba(128, 79, 0, 1)', textDecoration: 'none', fontSize: 20, textAlign: 'center' }}>Регистрация</Link>
               </Stack>
             </Box>
           </CardContent>
