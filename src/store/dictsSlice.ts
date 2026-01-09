@@ -15,6 +15,8 @@ type DictState = {
   paymentMethods: DictItem[];
   categories: DictItem[];
   units: DictItem[];
+  storages: DictItem[];
+  products: DictItem[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error?: string | null;
   lastLoadedAt?: number | null;
@@ -32,6 +34,8 @@ const initialState: DictState = {
   paymentMethods: [],
   categories: [],
   units: [],
+  storages: [],
+  products: [],
   status: 'idle',
   error: null,
   lastLoadedAt: null,
@@ -52,6 +56,8 @@ export const preloadDicts = createAsyncThunk<
     paymentMethods: DictItem[];
     categories: DictItem[];
     units: DictItem[];
+    storages: DictItem[];
+    products: DictItem[];
   },
   { force?: boolean } | void,
   { state: any }
@@ -70,6 +76,8 @@ export const preloadDicts = createAsyncThunk<
       paymentMethods: DictItem[];
       categories: DictItem[];
       units: DictItem[];
+      storages: DictItem[];
+      products: DictItem[];
     }>('/getDicts', { method: 'GET' });
     return res.data;
   },
@@ -94,7 +102,10 @@ export const preloadDicts = createAsyncThunk<
         (state.dicts?.writeoffsReasons?.length ?? 0) > 0 ||
         (state.dicts?.paymentMethods?.length ?? 0) > 0 ||
         (state.dicts?.categories?.length ?? 0) > 0 ||
-        (state.dicts?.units?.length ?? 0) > 0;
+        (state.dicts?.units?.length ?? 0) > 0 ||
+        (state.dicts?.storages?.length ?? 0) > 0 ||
+        (state.dicts?.products?.length ?? 0) > 0;
+
 
       return !hasAny || !last;
     },
@@ -124,6 +135,8 @@ const dictsSlice = createSlice({
         state.paymentMethods = action.payload.paymentMethods;
         state.categories = action.payload.categories;
         state.units = action.payload.units;
+        state.storages = action.payload.storages;
+        state.products = action.payload.products;
         state.lastLoadedAt = Date.now();
       })
       .addCase(preloadDicts.rejected, (state, action) => {

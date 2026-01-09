@@ -16,6 +16,8 @@ const dictsApi = {
   getCategories: async () =>
     (await apiFetch('/shops/products/categories')) as DictItem[],
   getUnits: async () => (await apiFetch('/shops/products/units')) as DictItem[],
+  getStorages: async () => (await apiFetch('/shops/storages/')) as DictItem[],
+  getProducts: async () => (await apiFetch('/shops/products/')) as DictItem[],
 };
 
 export default dictsApi;
