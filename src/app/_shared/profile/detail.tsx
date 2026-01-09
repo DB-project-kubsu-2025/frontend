@@ -4,6 +4,7 @@ import {
   ProfileDetailDefault,
 } from '@/entities/profile';
 import { SubjectModes } from '@/types/common';
+import { apiFetch } from '@/utils/apiFetch';
 
 type FactoryOpts = {
   mode: SubjectModes;
@@ -11,36 +12,20 @@ type FactoryOpts = {
 };
 
 export function ProfileEdit({ mode }: FactoryOpts) {
-  return async function ProfilePage({
-    params,
-  }: {
-    params: Promise<{ id?: string }>;
-  }) {
-    const { id } = await params;
-
-    let detail: ProfileNormalized | null = null;
-
-    if (mode === 'create') {
-      detail = ProfileDetailDefault;
-    } else {
-      if (Number.isFinite(Number(id))) {
-        let raw: any;
-        try {
-          raw = {} //await apiFetch(`/auth_service/profile/`);
-        } catch (e: any) {
-          return 'Не удалось получить данные профиля';
-          throw e;
-        }
-        detail = raw;
-      }
+  return async function ProfilePage() {
+    try {
+      const detail = (await apiFetch(`/employees/user-info/`)).data;
+      console.log(detail);
+      return (
+        <FieldsView
+          mode={mode}
+          nameSubject="profile"
+          detailData={detail as ProfileNormalized}
+        />
+      );
+    } catch (e: any) {
+      return 'Не удалось получить данные профиля';
+      throw e;
     }
-
-    return (
-      <FieldsView
-        mode={mode}
-        nameSubject="profile"
-        detailData={detail as ProfileNormalized}
-      />
-    );
   };
 }

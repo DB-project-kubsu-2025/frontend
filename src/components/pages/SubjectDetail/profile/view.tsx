@@ -4,7 +4,7 @@ import { nameSubjects, SubjectModes } from '@/types/common';
 import { Box, Typography, Stack, Button } from '@mui/material';
 import { Grid } from '@mui/system';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ElementViewerDetail from '@/components/pages/SubjectDetail/ElementViewerDetail';
 import {
   ProfileFormSchema,
@@ -26,9 +26,15 @@ const GENDER_OPTIONS = [
 export default function FieldsView({ mode, nameSubject, detailData }: Props) {
   const { request } = useApiRequest();
   const { enqueueSnackbar } = useSnackbar();
-  const [inputsData, setInputsData] = useState<Record<string, any>>(detailData);
+  const [inputsData, setInputsData] = useState<any>(detailData ?? {});
+
   const [fieldsError, setFieldsError] = useState<Record<string, any>>({});
 
+  useEffect(() => {
+    if (detailData) {
+      setInputsData(detailData);
+    }
+  }, [detailData]);
   async function onSave() {
     try {
       setFieldsError({});
@@ -88,7 +94,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       return null;
     }
   }
-  
+
   return (
     <Box className="modalViewDetail-block">
       <Grid className="modalViewDetail-head">
