@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Box,
   Button,
@@ -60,7 +61,6 @@ const GENDER_OPTIONS = [
   { id: 'female', name: 'Женский' },
 ];
 
-
 const PASSPORT_TYPE = [
   { id: 'simple', name: 'Обычный' },
   { id: 'foreign', name: 'Заграничный' },
@@ -68,13 +68,14 @@ const PASSPORT_TYPE = [
 
 export default function LoginPage() {
   const { request } = useApiRequest();
+  const router = useRouter();
   const [inputsData, setInputsData] = useState<InputsData>({});
   const [fieldsError, setFieldsError] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
   const requiredOk = true;
-  const ee = 
+  const ee =
     isNonEmptyString(inputsData.username) &&
     isNonEmptyString(inputsData.last_name) &&
     isNonEmptyString(inputsData.first_name) &&
@@ -118,7 +119,8 @@ export default function LoginPage() {
       });
 
       if (res.status === 200) {
-        location.pathname = '/';
+        router.replace('/');
+        router.refresh();
       }
     } catch (err: any) {
       if (err?.response?.status === 400) {
@@ -404,7 +406,9 @@ export default function LoginPage() {
                   onChange={() => onChange}
                   label="Пароль"
                   shrink={true}
-                  fieldsError={fieldsError?.password ?? fieldsError?.non_field_errors}
+                  fieldsError={
+                    fieldsError?.password ?? fieldsError?.non_field_errors
+                  }
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
