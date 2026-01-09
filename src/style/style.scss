@@ -175,12 +175,16 @@ main{
     mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-    background: #fff;
+    background: transparent;
 
     h4,
     h6 {
         color: #ffffff;
     }
+}
+
+.modalViewDetail-block {
+    background: transparent;
 }
 
 .modalViewDetail__subtitle {
