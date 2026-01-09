@@ -28,7 +28,6 @@ export function ProductsDetail({ mode, backHref = '/products' }: FactoryOpts) {
         let raw: any;
         try {
           raw = await apiFetch(`/shops/products/${id}/`);
-          console.log(raw, '$$$$$$$$$$$$4444');
         } catch (e: any) {
           return 'Нет такого товара';
           throw e;

@@ -1,38 +1,23 @@
+import { apiFetch } from '@/utils/apiFetch';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const r = await fetch(
-      `${process.env.API_URL}/auth_service/employee/register/`,
+
+    const data: any = await apiFetch(
+      '/auth_service/employee/register/',
+      'POST',
       {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
-      }
+      },
     );
-
-    let data: any = null;
-    const text = await r.text();
-    try {
-      data = text ? JSON.parse(text) : null;
-    } catch {
-      data = null;
-    }
-
-    if (!r.ok) {
-      console.log(data);
-      return NextResponse.json(
-        { message: data || {} },
-        { status: r.status }
-      );
-    }
 
     const access_token = data?.access_token;
     if (!access_token) {
       return NextResponse.json(
         { message: 'Некорректный ответ сервера' },
-        { status: 502 }
+        { status: 502 },
       );
     }
 
@@ -45,15 +30,24 @@ export async function POST(req: Request) {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60,
+      maxAge: 24 * 60 * 60,
     });
 
     return res;
-  } catch (err) {
-    console.error('Login route error:', err);
+  } catch (err: any) {
+    console.error('Register route error:', err);
+
+    if (err) {
+      console.log(err.data);
+      return NextResponse.json(
+        { message: err.data || {} },
+        { status: err.status },
+      );
+    }
+
     return NextResponse.json(
       { message: 'Сервер авторизации недоступен' },
-      { status: 503 }
+      { status: 503 },
     );
   }
 }

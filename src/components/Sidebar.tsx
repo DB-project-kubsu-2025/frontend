@@ -12,7 +12,7 @@ import {
   Typography,
   Box,
 } from '@mui/material';
-import { Home } from '@mui/icons-material';
+import { Home, Settings } from '@mui/icons-material';
 import PersonIcon from '@mui/icons-material/Person';
 import { MdOutlineLocalHospital } from 'react-icons/md';
 import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
@@ -139,6 +139,21 @@ const sidebarItems: SidebarSection[] = [
       },
     ],
   },
+  {
+    section: 'Основное',
+    items: [
+      {
+        name: 'Профиль',
+        iconLeft: <PersonIcon />,
+        link: '/profile',
+      },
+      {
+        name: 'Настройки',
+        iconLeft: <Settings />,
+        link: '/settings',
+      },
+    ]
+  }
 ];
 
 interface SidebarProps {
