@@ -12,8 +12,9 @@ export default async function SickLeavesPageEdit({
   const [{ id }, sp] = await Promise.all([params, searchParams]);
   const idNum = Number(id);
 
-  const res: calendarLeavesEdit = await apiFetch(
+  const res = await apiFetch(
     `/sickLeaves/${idNum}?year=${String(sp?.year)}`,
   );
-  return <SickLeavesClientEdit id={idNum} initData={res} />;
+  const res1 = res.data as calendarLeavesEdit;
+  return <SickLeavesClientEdit id={idNum} initData={res1} />;
 }

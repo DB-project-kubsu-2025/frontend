@@ -14,10 +14,10 @@ export async function POST(req: Request) {
     );
 
     console.log(data);
-    const access_token = data?.access_token;
+    const access_token = data.data?.access_token;
     if (!access_token) {
       return NextResponse.json(
-        { message: data },
+        { message: data.data },
         { status: 400 },
       );
     }

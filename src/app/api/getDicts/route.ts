@@ -32,7 +32,7 @@ export async function GET() {
       dictsApi.getStorages(),
       dictsApi.getProducts(),
     ]);
-
+    
     return NextResponse.json({
       couponsDiscountsTypes,
       movementsTypes,

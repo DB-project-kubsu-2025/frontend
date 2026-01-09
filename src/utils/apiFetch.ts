@@ -29,16 +29,24 @@ const BASE_URL = getBaseUrl();
 if (process.env.NODE_ENV === 'development') {
   console.log('[apiFetch] Using BASE_URL:', BASE_URL);
 }
+//const BASE_URL = 'http://backend:8070/api';
 
 interface ApiOptions extends RequestInit {
   headers?: Record<string, string>;
 }
 
+export type ApiResult<T> = {
+  status: number;
+  ok: boolean;
+  data: T | null;
+  text?: string;
+};
+
 export async function apiFetch<T = any>(
   endpoint: string,
   method: string = 'GET',
   options: ApiOptions = {},
-): Promise<T> {
+): Promise<ApiResult<T>> {
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
 
@@ -46,7 +54,9 @@ export async function apiFetch<T = any>(
     ...(options.headers ?? {}),
   };
 
-  const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
+  const isFormData =
+    typeof FormData !== 'undefined' && options.body instanceof FormData;
+
   if (!isFormData && !headers['Content-Type']) {
     headers['Content-Type'] = 'application/json';
   }
@@ -80,48 +90,25 @@ export async function apiFetch<T = any>(
       });
     }
 
-    if (!res.ok) {
-      let errorText = '';
-      try {
-        errorText = await res.text();
-      } catch (e) {
-        // Игнорируем ошибку чтения текста
-      }
-      
-      // Для статуса 400 возвращаем JSON, если возможно
-      if (res.status === 400) {
-        try {
-          return JSON.parse(errorText) as T;
-        } catch (e) {
-          // Если не JSON, продолжаем с ошибкой
-        }
-      }
-      
-      // Создаем объект ошибки с дополнительной информацией
-      const error = new Error(
-        `Ошибка API ${res.status}: ${res.statusText}${errorText ? ` — ${errorText.substring(0, 200)}` : ''}`,
-      ) as Error & { status?: number; response?: any };
-      error.status = res.status;
-      
-      try {
-        error.response = errorText ? JSON.parse(errorText) : null;
-      } catch (e) {
-        error.response = { detail: errorText };
-      }
-      
-      throw error;
-    }
-
-    if (res.status === 204) return undefined as T;
-
-    return res.json() as Promise<T>;
-  } catch (error: any) {
-    // Улучшенная обработка ошибок сети
-    if (error.message?.includes('fetch failed') || error.code === 'ECONNREFUSED') {
-      throw new Error(
-        `Не удалось подключиться к серверу. Убедитесь, что backend запущен на ${BASE_URL}`
-      );
-    }
-    throw error;
+  if (res.status === 204) {
+    return { status: res.status, ok: res.ok, data: null };
   }
+
+  const text = await res.text().catch(() => '');
+  let data: any = null;
+
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = null;
+    }
+  }
+
+  return {
+    status: res.status,
+    ok: res.ok,
+    data,
+    ...(data === null && text ? { text } : {}),
+  };
 }
