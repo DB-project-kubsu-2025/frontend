@@ -9,7 +9,7 @@ export type employeeNames =
 
 export type statusTypes = 'done' | 'planned';
 export type SubjectModes = 'view' | 'edit' | 'create';
-export type nameSubjects = 'products';
+export type nameSubjects = 'products' | 'profile';
 
 export interface ComponentSelectItem {
   id: number | string;
