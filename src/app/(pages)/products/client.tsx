@@ -5,6 +5,7 @@ import TableList, { ColumnDef } from '@/components/widgets/TableList';
 import { TableListRowButtons } from '@/components/widgets/TableListRowButtons';
 import { useAppSelector } from '@/store/hooks';
 import { ProductsListNormalized } from '@/entities/products';
+import { Box } from '@mui/material';
 
 const COLUMNS: Array<ColumnDef<ProductsListNormalized>> = [
   { id: 'category_name', label: 'Категория' },
@@ -28,6 +29,42 @@ export default function ProductsClient({ initData }: { initData: any }) {
   }, [initData, categoriesMap]);
   
   return (
+    <Box
+      sx={{
+        '& .MuiTable-root': {
+          borderCollapse: 'separate',
+          borderSpacing: 0,
+          border: '1px solid rgba(0, 0, 0, 0.12)',
+        },
+        '& .MuiTableCell-root': {
+          borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+          borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+          '&:first-of-type': {
+            borderLeft: 'none',
+          },
+        },
+        '& .MuiTableHead .MuiTableCell-root': {
+          borderTop: 'none',
+          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+          fontWeight: 600,
+          textAlign: 'center',
+          '&:last-of-type': {
+            borderRight: 'none',
+            textAlign: 'right',
+          },
+        },
+        '& .MuiTableBody .MuiTableCell-root': {
+          textAlign: 'left',
+          '&:last-of-type': {
+            borderRight: 'none',
+            textAlign: 'right',
+          },
+        },
+        '& .MuiTableBody .MuiTableRow-root:last-child .MuiTableCell-root': {
+          borderBottom: 'none',
+        },
+      }}
+    >
     <TableList<ProductsListNormalized>
       columns={COLUMNS}
       data={data}
@@ -39,5 +76,6 @@ export default function ProductsClient({ initData }: { initData: any }) {
         />
       )}
     />
+    </Box>
   );
 }
