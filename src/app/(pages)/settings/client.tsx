@@ -66,10 +66,10 @@ export default function SettingsClient() {
     <Box
       onSubmit={(e) => handleChangePassword(e)}
       component="form"
-      sx={{ gap: 2, display: 'flex', flexDirection: 'column' }}
+      sx={{ gap: 2, display: 'flex', flexDirection: 'column', mb: 2, backgroundColor: '#fff', p: 2, borderRadius: 2 }}
     >
       <Typography variant="h4" gutterBottom>
-        Настройки
+        Смена пароля
       </Typography>
 
       <Input

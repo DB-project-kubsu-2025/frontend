@@ -88,7 +88,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       return null;
     }
   }
-  console.log(fieldsError);
+  
   return (
     <Box className="modalViewDetail-block">
       <Grid className="modalViewDetail-head">

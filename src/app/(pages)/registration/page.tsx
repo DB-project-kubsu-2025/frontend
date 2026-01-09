@@ -134,8 +134,6 @@ export default function LoginPage() {
     setFieldsError({});
   };
 
-  console.log(inputsData);
-
   return (
     <>
       <Box

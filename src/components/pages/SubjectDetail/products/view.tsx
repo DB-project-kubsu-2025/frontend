@@ -29,7 +29,6 @@ interface Props {
 }
 
 export default function FieldsView({ mode, nameSubject, detailData }: Props) {
-  console.log(mode);
   const categories = useAppSelector((s) => s.dicts.categories);
   const units = useAppSelector((s) => s.dicts.units);
   const router = useRouter();
@@ -53,7 +52,6 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
         );
 
         setFieldsError(fieldErrors);
-        console.log(fieldErrors);
         enqueueSnackbar('Исправьте ошибки в форме.', { variant: 'warning' });
         return null;
       }

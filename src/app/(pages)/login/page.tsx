@@ -41,7 +41,6 @@ export default function LoginPage() {
   const stateButton = loading || !username || !password;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    console.log('1');
     e.preventDefault();
 
     const errors: ErrorsData = {};
@@ -52,7 +51,6 @@ export default function LoginPage() {
     if (Object.keys(errors).length != 0) {
       return;
     }
-    console.log('3');
 
     setLoading(true);
     try {
@@ -60,7 +58,6 @@ export default function LoginPage() {
         method: 'POST',
         data: { username, password },
       });
-    console.log('4', res);
       
       if(res.status === 200) {
         location.pathname = '/';

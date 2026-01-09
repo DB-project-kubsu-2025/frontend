@@ -26,7 +26,7 @@ export default function ProductsClient({ initData }: { initData: any }) {
       category_name: categoriesMap.get(p.category) ?? String(p.category),
     }));
   }, [initData, categoriesMap]);
-  console.log(data);
+  
   return (
     <TableList<ProductsListNormalized>
       columns={COLUMNS}

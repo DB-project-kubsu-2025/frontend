@@ -4,18 +4,34 @@ import { apiRequest } from '@/shared/api/request';
 export type DictItem = { id: number; name: string };
 
 type DictState = {
-  units: DictItem[];
-  categories: DictItem[];
+  couponsDiscountsTypes: DictItem[];
+  movementsTypes: DictItem[];
+  priceListsBases: DictItem[];
+  priceListsTypes: DictItem[];
+  stockTakesTypes: DictItem[];
+  storagesSpacesTypes: DictItem[];
+  storagesTypes: DictItem[];
+  writeoffsReasons: DictItem[];
   paymentMethods: DictItem[];
+  categories: DictItem[];
+  units: DictItem[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error?: string | null;
   lastLoadedAt?: number | null;
 };
 
 const initialState: DictState = {
-  units: [],
-  categories: [],
+  couponsDiscountsTypes: [],
+  movementsTypes: [],
+  priceListsBases: [],
+  priceListsTypes: [],
+  stockTakesTypes: [],
+  storagesSpacesTypes: [],
+  storagesTypes: [],
+  writeoffsReasons: [],
   paymentMethods: [],
+  categories: [],
+  units: [],
   status: 'idle',
   error: null,
   lastLoadedAt: null,
@@ -24,16 +40,37 @@ const initialState: DictState = {
 const TTL_MS = 10 * 60 * 1000;
 
 export const preloadDicts = createAsyncThunk<
-  { units: DictItem[]; categories: DictItem[]; paymentMethods: DictItem[] },
+  {
+    couponsDiscountsTypes: DictItem[];
+    movementsTypes: DictItem[];
+    priceListsBases: DictItem[];
+    priceListsTypes: DictItem[];
+    stockTakesTypes: DictItem[];
+    storagesSpacesTypes: DictItem[];
+    storagesTypes: DictItem[];
+    writeoffsReasons: DictItem[];
+    paymentMethods: DictItem[];
+    categories: DictItem[];
+    units: DictItem[];
+  },
   { force?: boolean } | void,
   { state: any }
 >(
   'dicts/preload',
   async () => {
-    const res = await apiRequest<{ units: DictItem[]; categories: DictItem[]; paymentMethods: DictItem[] }>(
-      '/getDicts',
-      { method: 'GET' },
-    );
+    const res = await apiRequest<{
+      couponsDiscountsTypes: DictItem[];
+      movementsTypes: DictItem[];
+      priceListsBases: DictItem[];
+      priceListsTypes: DictItem[];
+      stockTakesTypes: DictItem[];
+      storagesSpacesTypes: DictItem[];
+      storagesTypes: DictItem[];
+      writeoffsReasons: DictItem[];
+      paymentMethods: DictItem[];
+      categories: DictItem[];
+      units: DictItem[];
+    }>('/getDicts', { method: 'GET' });
     return res.data;
   },
   {
@@ -47,9 +84,17 @@ export const preloadDicts = createAsyncThunk<
       if (last && Date.now() - last < TTL_MS) return false;
 
       const hasAny =
-        (state.dicts?.units?.length ?? 0) > 0 ||
+        (state.dicts?.couponsDiscountsTypes?.length ?? 0) > 0 ||
+        (state.dicts?.movementsTypes?.length ?? 0) > 0 ||
+        (state.dicts?.priceListsBases?.length ?? 0) > 0 ||
+        (state.dicts?.priceListsTypes?.length ?? 0) > 0 ||
+        (state.dicts?.stockTakesTypes?.length ?? 0) > 0 ||
+        (state.dicts?.storagesSpacesTypes?.length ?? 0) > 0 ||
+        (state.dicts?.storagesTypes?.length ?? 0) > 0 ||
+        (state.dicts?.writeoffsReasons?.length ?? 0) > 0 ||
+        (state.dicts?.paymentMethods?.length ?? 0) > 0 ||
         (state.dicts?.categories?.length ?? 0) > 0 ||
-        (state.dicts?.paymentMethods?.length ?? 0) > 0;
+        (state.dicts?.units?.length ?? 0) > 0;
 
       return !hasAny || !last;
     },
@@ -68,9 +113,17 @@ const dictsSlice = createSlice({
       })
       .addCase(preloadDicts.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.units = action.payload.units;
-        state.categories = action.payload.categories;
+        state.couponsDiscountsTypes = action.payload.couponsDiscountsTypes;
+        state.movementsTypes = action.payload.movementsTypes;
+        state.priceListsBases = action.payload.priceListsBases;
+        state.priceListsTypes = action.payload.priceListsTypes;
+        state.stockTakesTypes = action.payload.stockTakesTypes;
+        state.storagesSpacesTypes = action.payload.storagesSpacesTypes;
+        state.storagesTypes = action.payload.storagesTypes;
+        state.writeoffsReasons = action.payload.writeoffsReasons;
         state.paymentMethods = action.payload.paymentMethods;
+        state.categories = action.payload.categories;
+        state.units = action.payload.units;
         state.lastLoadedAt = Date.now();
       })
       .addCase(preloadDicts.rejected, (state, action) => {
