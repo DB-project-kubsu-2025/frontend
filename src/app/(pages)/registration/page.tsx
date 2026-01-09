@@ -404,7 +404,7 @@ export default function LoginPage() {
                   onChange={() => onChange}
                   label="Пароль"
                   shrink={true}
-                  fieldsError={fieldsError?.password}
+                  fieldsError={fieldsError?.password ?? fieldsError?.non_field_errors}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
