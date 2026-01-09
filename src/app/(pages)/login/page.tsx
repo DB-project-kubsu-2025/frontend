@@ -65,14 +65,10 @@ export default function LoginPage() {
         location.pathname = '/';
       }
     } catch (err: any) {
-      if(err?.response?.status === 401) {
+      // if(err?.response?.status === 401) {
         setFieldsError({ message: 'Неверный логин или пароль' });
         return;
-      }
-
-      const msg =
-        err?.response?.data?.message || err?.message || 'Ошибка входа';
-      setFieldsError({ message: msg });
+      // }
     } finally {
       setLoading(false);
     }

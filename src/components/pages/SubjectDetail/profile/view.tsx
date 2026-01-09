@@ -1,26 +1,16 @@
 'use client';
-import {
-  ProductsDetailFormSchema,
-  ProductsDetailNormalizedSchema,
-} from '@/entities/products';
 import { useApiRequest } from '@/hooks/useApiRequest';
 import { nameSubjects, SubjectModes } from '@/types/common';
-import {
-  Box,
-  Typography,
-  Stack,
-  Button,
-  IconButton,
-  ButtonGroup,
-} from '@mui/material';
+import { Box, Typography, Stack, Button } from '@mui/material';
 import { Grid } from '@mui/system';
-import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
-import { MdOutlineEdit } from 'react-icons/md';
 import ElementViewerDetail from '@/components/pages/SubjectDetail/ElementViewerDetail';
-import { useAppSelector } from '@/store/hooks';
-import { ProfileNormalized } from '@/entities/profile';
+import {
+  ProfileFormSchema,
+  ProfileNormalized,
+  ProfileNormalizedSchema,
+} from '@/entities/profile';
 
 interface Props {
   mode: SubjectModes;
@@ -34,10 +24,6 @@ const GENDER_OPTIONS = [
 ];
 
 export default function FieldsView({ mode, nameSubject, detailData }: Props) {
-  console.log(mode);
-  const categories = useAppSelector((s) => s.dicts.categories);
-  const units = useAppSelector((s) => s.dicts.units);
-  const router = useRouter();
   const { request } = useApiRequest();
   const { enqueueSnackbar } = useSnackbar();
   const [inputsData, setInputsData] = useState<Record<string, any>>(detailData);
@@ -47,7 +33,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
     try {
       setFieldsError({});
 
-      const formParsed = ProductsDetailFormSchema.safeParse(inputsData);
+      const formParsed = ProfileFormSchema.safeParse(inputsData);
       if (!formParsed.success) {
         const flat = formParsed.error.flatten();
         const fieldErrors = Object.fromEntries(
@@ -56,69 +42,53 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
             v?.[0] ?? 'Некорректное значение',
           ]),
         );
-
         setFieldsError(fieldErrors);
-        console.log(fieldErrors);
         enqueueSnackbar('Исправьте ошибки в форме.', { variant: 'warning' });
         return null;
       }
 
-      const normalized = ProductsDetailNormalizedSchema.parse(formParsed.data);
-      const isCreate = mode === 'create';
-      const endpoint = isCreate
-        ? `/api/${nameSubject}`
-        : `/api/${nameSubject}/${inputsData.id}`;
-      const method = isCreate ? 'POST' : 'PUT';
+      const normalized = ProfileNormalizedSchema.parse(formParsed.data);
 
-      const res = await request(endpoint, { method, data: normalized });
-      const status: number = res.status;
-      const data: any = (res as any).data;
+      const res = await request(`/${nameSubject}`, {
+        method: 'PATCH',
+        data: normalized,
+      });
 
-      if (status === 200 || status === 201) {
-        enqueueSnackbar(data?.message, { variant: 'success' });
-
-        const id = data?.id ?? inputsData?.id;
-        if (!id) {
-          console.log('Нет id для навигации');
-          return data;
-        }
-
-        setTimeout(() => {
-          router.push(`/${nameSubject}s/${id}`);
-        }, 300);
-
-        return data;
-      }
+      enqueueSnackbar('Данные сотрудника сохранены', {
+        variant: 'success',
+      });
+      return res.data;
+    } catch (err: any) {
+      const status = err?.response?.status;
+      const data = err?.response?.data;
 
       if (status === 400) {
-        const issues = data?.issues;
-        const fieldErrorsRaw = issues?.fieldErrors ?? data?.errorInputs;
+        const fieldErrorsRaw =
+          data?.fieldErrors ??
+          data?.errorInputs ??
+          (data && typeof data === 'object' ? data : null);
 
         if (fieldErrorsRaw && typeof fieldErrorsRaw === 'object') {
           const fieldErrors = Object.fromEntries(
-            Object.entries(fieldErrorsRaw).map(([k, v]: any) => [
+            Object.entries(fieldErrorsRaw).map(([k, v]) => [
               k,
-              Array.isArray(v) ? v[0] : String(v),
+              Array.isArray(v) ? String(v[0] ?? '') : String(v ?? ''),
             ]),
           );
 
           setFieldsError(fieldErrors);
-          enqueueSnackbar(data?.message, { variant: 'warning' });
+          enqueueSnackbar('Проверьте поля формы', { variant: 'warning' });
           return null;
         }
       }
 
-      enqueueSnackbar(data?.message ?? 'Ошибка сохранения', {
+      enqueueSnackbar(err?.message ?? 'Ошибка соединения с сервером', {
         variant: 'error',
       });
       return null;
-    } catch (err: any) {
-      console.error('onSave error:', err);
-      enqueueSnackbar('Внутренняя ошибка сервера', { variant: 'error' });
-      return null;
     }
   }
-
+  console.log(fieldsError);
   return (
     <Box className="modalViewDetail-block">
       <Grid className="modalViewDetail-head">
@@ -140,7 +110,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
             />
           </Box>
         </Box>
-        
+
         <Box>
           <Typography variant="body2">email</Typography>
           <Box>
@@ -156,7 +126,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
             />
           </Box>
         </Box>
-        
+
         <Box>
           <Typography variant="body2">Фамилия</Typography>
           <Box>
@@ -172,7 +142,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
             />
           </Box>
         </Box>
-        
+
         <Box>
           <Typography variant="body2">Имя</Typography>
           <Box>
@@ -188,7 +158,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
             />
           </Box>
         </Box>
-        
+
         <Box>
           <Typography variant="body2">Отчество</Typography>
           <Box>
@@ -204,7 +174,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
             />
           </Box>
         </Box>
-        
+
         <Box>
           <Typography variant="body2">Пол</Typography>
           <Box>
@@ -221,7 +191,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
             />
           </Box>
         </Box>
-        
+
         <Box>
           <Typography variant="body2">Телефон</Typography>
           <Box>
@@ -237,7 +207,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
             />
           </Box>
         </Box>
-        
+
         <Box>
           <Typography variant="body2">День рождения</Typography>
           <Box>
@@ -253,7 +223,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
             />
           </Box>
         </Box>
-        
+
         <Box>
           <Typography variant="body2">СНИЛС</Typography>
           <Box>
@@ -269,7 +239,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
             />
           </Box>
         </Box>
-        
+
         <Box>
           <Typography variant="body2">ИНН</Typography>
           <Box>
@@ -285,7 +255,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
             />
           </Box>
         </Box>
-        
+
         <Box>
           <Typography variant="body2">Рабочий телефон</Typography>
           <Box>
