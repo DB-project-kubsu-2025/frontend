@@ -1,9 +1,7 @@
 'use client';
-import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import TableList, { ColumnDef } from '@/components/widgets/TableList';
 import { TableListRowButtons } from '@/components/widgets/TableListRowButtons';
-import { useAppSelector } from '@/store/hooks';
 import { PositionsListNormalized } from '@/entities/positions';
 import { Box, Button } from '@mui/material';
 import { useApiRequest } from '@/hooks/useApiRequest';
@@ -23,7 +21,11 @@ export default function PositionsClient({ initData }: { initData: any }) {
     notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
   });
   const handleDelete = async ({ id }: { id: number }) => {
-    await deleteEntity({ subject: 'positions', id, message: 'Должность удалена' });
+    await deleteEntity({
+      subject: 'positions',
+      id,
+      message: 'Должность удалена',
+    });
   };
 
   return (
@@ -82,7 +84,7 @@ export default function PositionsClient({ initData }: { initData: any }) {
             row={row}
             onEdit={(e) => {
               e.stopPropagation();
-              router.push(`/positions/${row.id}/edit`)
+              router.push(`/positions/${row.id}/edit`);
             }}
             onDelete={(e) => onDelete(e, row)}
           />

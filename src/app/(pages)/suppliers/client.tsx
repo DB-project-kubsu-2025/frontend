@@ -1,9 +1,7 @@
 'use client';
-import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import TableList, { ColumnDef } from '@/components/widgets/TableList';
 import { TableListRowButtons } from '@/components/widgets/TableListRowButtons';
-import { useAppSelector } from '@/store/hooks';
 import { SuppliersListNormalized } from '@/entities/suppliers';
 import { Box, Button } from '@mui/material';
 import { useApiRequest } from '@/hooks/useApiRequest';

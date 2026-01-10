@@ -1,18 +1,20 @@
 import { apiFetch } from '@/utils/apiFetch';
 import { NextResponse } from 'next/server';
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+type Ctx = { params: Promise<{ id: string }> };
+export async function PUT(req: Request, { params }: Ctx) {
   const { id } = await params;
   const idNum = Number(id);
   try {
     const body = await req.json();
 
-    const data: any = await apiFetch(`/employees/job-positions/${idNum}/`, 'PUT', {
-      body: JSON.stringify(body),
-    });
+    const data: any = await apiFetch(
+      `/employees/job-positions/${idNum}/`,
+      'PUT',
+      {
+        body: JSON.stringify(body),
+      },
+    );
     console.log('%%%', data);
 
     const res = NextResponse.json(
@@ -38,18 +40,21 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(req: Request, { params }: Ctx) {
   const { id } = await params;
   const idNum = Number(id);
   try {
-    const data: any = await apiFetch(`/employees/job-positions/${idNum}/`, 'DELETE'); //{ status: 204, ok: true, data: null }
+    const data: any = await apiFetch(
+      `/employees/job-positions/${idNum}/`,
+      'DELETE',
+    ); //{ status: 204, ok: true, data: null }
     console.log('%%%', data);
 
     if (data?.status === 204) {
-      return NextResponse.json({ message: 'Должность удалён' }, { status: 200 });
+      return NextResponse.json(
+        { message: 'Должность удалён' },
+        { status: 200 },
+      );
     }
 
     return NextResponse.json(data?.data ?? { message: 'Должность удалён' }, {

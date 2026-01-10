@@ -11,7 +11,7 @@ type FactoryOpts = {
   backHref?: string;
 };
 
-export function CouponsDetail({ mode, backHref = '/coupons' }: FactoryOpts) {
+export function CouponsDetail({ mode }: FactoryOpts) {
   return async function CouponsPage({
     params,
   }: {
@@ -39,7 +39,7 @@ export function CouponsDetail({ mode, backHref = '/coupons' }: FactoryOpts) {
     return (
       <FieldsView
         mode={mode}
-        nameSubject="coupon"
+        nameSubject="coupons"
         detailData={detail as CouponsDetailNormalized}
       />
     );

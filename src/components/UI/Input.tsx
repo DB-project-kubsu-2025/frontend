@@ -61,7 +61,7 @@ const Input: React.FC<InputProps> = ({
   localInputValue,
   setLocalInputValue,
   InputProps: muiInputProps,
-  inputProps: muiInnerInputProps,
+  // inputProps: muiInnerInputProps,
 }) => {
   const [localValue, setLocalValue] = useState<string>(value);
   const inputElement = useRef<HTMLInputElement | null>(null);
@@ -171,6 +171,7 @@ const Input: React.FC<InputProps> = ({
       setFieldsError(prev => {
         if (!prev || !(name in prev)) return prev;
         const { [name]: _, ...rest } = prev;
+        console.log(_);
         return rest;
       });
     }

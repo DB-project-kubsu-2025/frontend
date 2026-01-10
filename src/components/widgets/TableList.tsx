@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useConfirm } from '@/components/ConfirmDialog';
 import {
   Table,
   TableBody,
@@ -48,13 +47,11 @@ export interface UniversalTableProps<T extends object> {
 export default function UniversalTable<T extends { id: number }>({
   data = [],
   columns,
-  pageName,
   clickableRow = true,
   onDelete,
   tableListRowButtons,
   rowProps,
 }: UniversalTableProps<T>) {
-  const confirm = useConfirm();
   const pathname = usePathname();
   const { prevURLClickHandler, navigateWithPrev } = usePrevURL();
   const [order, setOrder] = useState<Order>('asc');

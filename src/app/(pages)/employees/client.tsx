@@ -1,9 +1,7 @@
 'use client';
-import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import TableList, { ColumnDef } from '@/components/widgets/TableList';
 import { TableListRowButtons } from '@/components/widgets/TableListRowButtons';
-import { useAppSelector } from '@/store/hooks';
 import { EmployeesListNormalized } from '@/entities/employees';
 import { Box, Button } from '@mui/material';
 import { useApiRequest } from '@/hooks/useApiRequest';
@@ -26,7 +24,11 @@ export default function EmployeesClient({ initData }: { initData: any }) {
     notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
   });
   const handleDelete = async ({ id }: { id: number }) => {
-    await deleteEntity({ subject: 'employees', id, message: 'Сотрудник удалён' });
+    await deleteEntity({
+      subject: 'employees',
+      id,
+      message: 'Сотрудник удалён',
+    });
   };
 
   return (
@@ -85,7 +87,7 @@ export default function EmployeesClient({ initData }: { initData: any }) {
             row={row}
             onEdit={(e) => {
               e.stopPropagation();
-              router.push(`/employees/${row.id}/edit`)
+              router.push(`/employees/${row.id}/edit`);
             }}
             onDelete={(e) => onDelete(e, row)}
           />

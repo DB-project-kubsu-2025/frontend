@@ -2,17 +2,8 @@
 import Input from '@/components/UI/Input';
 import { useApiRequest } from '@/hooks/useApiRequest';
 import { isNonEmptyString, safeText } from '@/utils/helper';
-import {
-  Box,
-  Typography,
-  Button,
-  IconButton,
-  InputAdornment,
-  CircularProgress,
-} from '@mui/material';
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useState } from 'react';
-import { MdOutlineVisibility, MdOutlineVisibilityOff } from 'react-icons/md';
-import { useSnackbar } from 'notistack';
 import Select from '@/components/UI/Select';
 
 const PREDICTION_OPTIONS = [
@@ -28,11 +19,9 @@ const CATEGORY_OPTIONS = [
 
 export default function ForecastsClient() {
   const { request } = useApiRequest();
-  const { enqueueSnackbar } = useSnackbar();
   const [inputsData, setInputsData] = useState<Record<string, string>>({});
   const [fieldsError, setFieldsError] = useState<any>({});
   const [loading, setLoading] = useState(false);
-  const [showPass, setShowPass] = useState(false);
 
   const stateButton =
     isNonEmptyString(inputsData.forecast_days) &&

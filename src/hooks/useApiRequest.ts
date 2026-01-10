@@ -1,11 +1,12 @@
 'use client';
 
-import { useSnackbar } from 'notistack';
-import { apiRequest, ApiRequestOptions, ApiResponse } from '@/shared/api/request';
+import {
+  apiRequest,
+  ApiRequestOptions,
+  ApiResponse,
+} from '@/shared/api/request';
 
 export function useApiRequest() {
-  const { enqueueSnackbar } = useSnackbar();
-
   async function request<T = any>(
     endpoint: string,
     options: ApiRequestOptions = {},

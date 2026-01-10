@@ -15,7 +15,6 @@ const DEFAULT_DATA: calendarLeavesEdit = {
 export default function MyVacationsAddClient() {
   return (
     <EditCalendarForm
-    sx={{backgroundColor:'rgba(235, 180, 0, 0.25)',}}
       initData={DEFAULT_DATA}
       title="Новый отпуск"
       mode="create"

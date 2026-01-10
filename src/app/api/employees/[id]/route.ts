@@ -1,10 +1,9 @@
 import { apiFetch } from '@/utils/apiFetch';
 import { NextResponse } from 'next/server';
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+type Ctx = { params: Promise<{ id: string }> };
+
+export async function PUT(req: Request, { params }: Ctx) {
   const { id } = await params;
   const idNum = Number(id);
   try {
@@ -38,18 +37,21 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(req: Request, { params }: Ctx) {
   const { id } = await params;
   const idNum = Number(id);
   try {
-    const data: any = await apiFetch(`/employees/employees/${idNum}/`, 'DELETE'); //{ status: 204, ok: true, data: null }
+    const data: any = await apiFetch(
+      `/employees/employees/${idNum}/`,
+      'DELETE',
+    ); //{ status: 204, ok: true, data: null }
     console.log('%%%', data);
 
     if (data?.status === 204) {
-      return NextResponse.json({ message: 'Сотрудник удалён' }, { status: 200 });
+      return NextResponse.json(
+        { message: 'Сотрудник удалён' },
+        { status: 200 },
+      );
     }
 
     return NextResponse.json(data?.data ?? { message: 'Сотрудник удалён' }, {

@@ -11,7 +11,7 @@ type FactoryOpts = {
   backHref?: string;
 };
 
-export function ProductsDetail({ mode, backHref = '/products' }: FactoryOpts) {
+export function ProductsDetail({ mode }: FactoryOpts) {
   return async function ProductsPage({
     params,
   }: {

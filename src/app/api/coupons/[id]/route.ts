@@ -1,41 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { apiFetch } from '@/utils/apiFetch';
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } },
-) {
-  const res = await apiFetch(`/shops/coupons/${params.id}/`);
+type Ctx = { params: Promise<{ id: string }> };
+
+export async function GET(_request: NextRequest, { params }: Ctx) {
+  const { id } = await params;
+  const idNum = Number(id);
+
+  const res = await apiFetch(`/shops/coupons/${idNum}/`);
   return NextResponse.json(res.data ?? null, { status: res.status });
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function PUT(request: NextRequest, { params }: Ctx) {
+  const { id } = await params;
+  const idNum = Number(id);
   const body = await request.json();
 
-  const res = await apiFetch(`/shops/coupons/${params.id}/`, 'PUT', {
+  const res = await apiFetch(`/shops/coupons/${idNum}/`, 'PUT', {
     body: JSON.stringify(body),
   });
 
-  return NextResponse.json(res.data ?? { message: res.text ?? 'Ошибка' }, {
-    status: res.status,
-  });
+  return NextResponse.json(
+    res.data ?? { message: res.text ?? 'Ошибка' },
+    { status: res.status },
+  );
 }
 
-export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: { id: string } },
-) {
-  const res = await apiFetch(`/shops/coupons/${params.id}/`, 'DELETE');
+export async function DELETE(_request: NextRequest, { params }: Ctx) {
+  const { id } = await params;
+  const idNum = Number(id);
+
+  const res = await apiFetch(`/shops/coupons/${idNum}/`, 'DELETE');
 
   // 204 нельзя через NextResponse.json (тело запрещено)
-  if (res.status === 204) {
-    return new NextResponse(null, { status: 204 });
-  }
+  if (res.status === 204) return new NextResponse(null, { status: 204 });
 
-  return NextResponse.json(res.data ?? { message: 'Купон удалён' }, {
-    status: res.status,
-  });
+  return NextResponse.json(
+    res.data ?? { message: 'Купон удалён' },
+    { status: res.status },
+  );
 }

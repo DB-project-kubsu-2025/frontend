@@ -14,6 +14,7 @@ export default async function MyVacationsPageEdit({
 
   const res = await apiFetch(
     `/vacations/my/${idNum}?year=${String(sp?.year)}`,
+    { local: true },
   );
   const res1 = res.data as calendarLeavesEdit;
   return <MyVacationsClientEdit id={idNum} initData={res1} />;

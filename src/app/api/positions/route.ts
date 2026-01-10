@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     console.log(data, '####');
 
     return NextResponse.json(
-      data.status === 400 ? data.data : { message: 'Товар добавлен' },
+      data.status === 400 ? data.data : { message: 'Должность добавлена' },
       { status: data.status },
     );
   } catch (err: any) {

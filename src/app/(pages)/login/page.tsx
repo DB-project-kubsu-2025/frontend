@@ -67,6 +67,7 @@ export default function LoginPage() {
       }
     } catch (err: any) {
       // if(err?.response?.status === 401) {
+      console.log(err);
       setFieldsError({ message: 'Неверный логин или пароль' });
       return;
       // }

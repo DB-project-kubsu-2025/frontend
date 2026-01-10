@@ -1,10 +1,9 @@
 import { apiFetch } from '@/utils/apiFetch';
 import { NextResponse } from 'next/server';
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+type Ctx = { params: Promise<{ id: string }> };
+
+export async function PUT(req: Request, { params }: Ctx) {
   const { id } = await params;
   const idNum = Number(id);
   try {
@@ -38,10 +37,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(req: Request, { params }: Ctx) {
   const { id } = await params;
   const idNum = Number(id);
   try {
@@ -49,7 +45,10 @@ export async function DELETE(
     console.log('%%%', data);
 
     if (data?.status === 204) {
-      return NextResponse.json({ message: 'Поставщик удалён' }, { status: 200 });
+      return NextResponse.json(
+        { message: 'Поставщик удалён' },
+        { status: 200 },
+      );
     }
 
     return NextResponse.json(data?.data ?? { message: 'Поставщик удалён' }, {

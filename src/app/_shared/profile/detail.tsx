@@ -1,8 +1,5 @@
 import FieldsView from '@/components/pages/SubjectDetail/profile/view';
-import {
-  ProfileNormalized,
-  ProfileDetailDefault,
-} from '@/entities/profile';
+import { ProfileNormalized } from '@/entities/profile';
 import { SubjectModes } from '@/types/common';
 import { apiFetch } from '@/utils/apiFetch';
 

@@ -38,7 +38,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
   const { request } = useApiRequest();
   const { enqueueSnackbar } = useSnackbar();
   
-  // Преобразуем null product в 0 для отображения "Все продукты"
+  console.log(nameSubject);
   const initialData = {
     ...detailData,
     product: detailData?.product || 0,

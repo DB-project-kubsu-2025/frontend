@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+type Ctx = { params: Promise<{ id: string }> };
+
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: Ctx,
 ) {
   try {
     const { searchParams } = new URL(req.url);
     const year = searchParams.get('year');
+    console.log(year);
     const { id } = await params;
 
     const vacations = {
@@ -17,7 +20,6 @@ export async function GET(
         end_date: '2025-07-14',
         status: 'planned',
       },
-
     };
 
     return NextResponse.json(vacations, { status: 200 });
@@ -25,7 +27,6 @@ export async function GET(
     console.error('Ошибка при обработке запроса:', error);
     return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });
   }
-
 }
 
 export async function PUT(req: NextRequest) {
@@ -37,7 +38,7 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } },
+  { params }: Ctx,
 ) {
   const aa = await params;
   console.log(aa);

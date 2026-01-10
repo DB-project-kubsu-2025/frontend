@@ -5,6 +5,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const month = searchParams.get('month');
     const year = searchParams.get('year');
+    console.log(month, year);
 
     const events = [
       {

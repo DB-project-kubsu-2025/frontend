@@ -11,13 +11,6 @@ interface DynamicFieldProps extends ComponentDetailFields {
   onChange?: (e: ChangeEvent<HTMLInputElement> | string) => void;
 }
 
-const validNames = ['organization', 'driver', 'auto'] as const;
-export type shortNameSubjectsArr = (typeof validNames)[number];
-
-function isNameFinder(x: unknown): x is shortNameSubjectsArr {
-  return typeof x === 'string' && (validNames as readonly string[]).includes(x);
-}
-
 const DynamicField: React.FC<DynamicFieldProps> = ({
   mode,
   fieldType,
@@ -30,18 +23,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   setInputsData,
   fieldsError,
   setFieldsError,
-  label,
   placeholder,
-  type,
-  onFocus,
-  onBlur,
-  showDropdown,
-  onSelect,
   onChange,
-  inputsData,
-  inputRef,
-  nextInputRef,
-  mask,
 }) => {
   const flatPath = !Array.isArray(sectionPaths?.[0]) ? (sectionPaths as string[]) : [];
 
