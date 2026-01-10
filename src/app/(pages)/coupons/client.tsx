@@ -20,85 +20,28 @@ export default function CouponsClient({ initData }: { initData: any }) {
   const router = useRouter();
 
   const data = useMemo(() => {
-    if (!initData || !Array.isArray(initData)) {
-      return [];
-    }
-    
+    if (!Array.isArray(initData)) return [];
     return initData.map((c: any) => ({
       ...c,
-      storage_name: c.storage_name || `Хранилище ${c.storage}` || '—',
-      product_name: c.product_name || (c.product ? `Продукт ${c.product}` : 'Все продукты'),
-      discount_type_name: c.discount_type_name || `Тип ${c.discount_type}` || '—',
+      storage_name: c.storage_name ?? (c.storage ? `Хранилище ${c.storage}` : '—'),
+      product_name: c.product_name ?? (c.product ? `Продукт ${c.product}` : 'Все продукты'),
+      discount_type_name: c.discount_type_name ?? (c.discount_type ? `Тип ${c.discount_type}` : '—'),
       is_active: c.is_active ? 'Да' : 'Нет',
     }));
   }, [initData]);
-  
+
   return (
-    <Box
-      sx={{
-        '& .MuiTable-root': {
-          borderCollapse: 'separate',
-          borderSpacing: 0,
-          border: '1px solid rgba(0, 0, 0, 0.12)',
-        },
-        '& .MuiTableCell-root': {
-          borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-          borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-          '&:first-of-type': {
-            borderLeft: 'none',
-          },
-        },
-        '& .MuiTableHead .MuiTableCell-root': {
-          borderTop: 'none',
-          backgroundColor: 'rgba(0, 0, 0, 0.04)',
-          fontWeight: 600,
-          textAlign: 'center',
-          '&:last-of-type': {
-            borderRight: 'none',
-            textAlign: 'right',
-          },
-        },
-        '& .MuiTableBody .MuiTableCell-root': {
-          textAlign: 'left',
-          '&:last-of-type': {
-            borderRight: 'none',
-            textAlign: 'right',
-          },
-        },
-        '& .MuiTableBody .MuiTableRow-root:last-child .MuiTableCell-root': {
-          borderBottom: 'none',
-        },
-      }}
-    >
+    <Box>
       <Stack direction="row" spacing={2} sx={{ mb: 2, justifyContent: 'flex-end' }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => router.push('/coupons/create')}
-        >
+        <Button variant="contained" onClick={() => router.push('/coupons/create')}>
           Создать купон
         </Button>
       </Stack>
-      
+
       {data.length === 0 ? (
-        <Box sx={{ 
-          padding: '40px', 
-          textAlign: 'center',
-          border: '1px solid rgba(0, 0, 0, 0.12)',
-          borderRadius: '4px',
-          backgroundColor: '#f5f5f5'
-        }}>
-          <Typography variant="h6" sx={{ mb: 1 }}>
-            Купоны не найдены
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Создайте первый купон, нажав кнопку "Создать купон"
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => router.push('/coupons/create')}
-          >
+        <Box sx={{ p: 4, textAlign: 'center', border: '1px solid rgba(0,0,0,0.12)' }}>
+          <Typography variant="h6" sx={{ mb: 1 }}>Купоны не найдены</Typography>
+          <Button variant="contained" onClick={() => router.push('/coupons/create')}>
             Создать купон
           </Button>
         </Box>
@@ -107,10 +50,11 @@ export default function CouponsClient({ initData }: { initData: any }) {
           columns={COLUMNS}
           data={data}
           pageName="coupons"
-          tableListRowButtons={({ row }) => (
+          tableListRowButtons={({ row, onDelete }) => (
             <TableListRowButtons
               row={row}
               onEdit={() => router.push(`/coupons/${row.id}/edit`)}
+              onDelete={(e) => onDelete(e, row)}
             />
           )}
         />

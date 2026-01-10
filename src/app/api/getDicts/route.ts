@@ -15,8 +15,6 @@ export async function GET() {
       paymentMethods,
       categories,
       units,
-      storages,
-      products,
     ] = await Promise.all([
       dictsApi.getCouponsDiscountsTypes(),
       dictsApi.getMovementsTypes(),
@@ -29,8 +27,6 @@ export async function GET() {
       dictsApi.getPaymentMethods(),
       dictsApi.getCategories(),
       dictsApi.getUnits(),
-      dictsApi.getStorages(),
-      dictsApi.getProducts(),
     ]);
     
     return NextResponse.json({
@@ -45,8 +41,6 @@ export async function GET() {
       paymentMethods,
       categories,
       units,
-      storages,
-      products,
     });
   } catch (e: any) {
     return NextResponse.json(

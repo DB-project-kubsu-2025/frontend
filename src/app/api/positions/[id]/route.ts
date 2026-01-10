@@ -49,10 +49,10 @@ export async function DELETE(
     console.log('%%%', data);
 
     if (data?.status === 204) {
-      return NextResponse.json({ message: 'Должность удалена' }, { status: 200 });
+      return NextResponse.json({ message: 'Должность удалён' }, { status: 200 });
     }
 
-    return NextResponse.json(data?.data ?? { message: 'Должность удалена' }, {
+    return NextResponse.json(data?.data ?? { message: 'Должность удалён' }, {
       status: data?.status ?? 200,
     });
   } catch (err: any) {

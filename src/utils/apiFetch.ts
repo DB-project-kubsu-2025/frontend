@@ -1,35 +1,10 @@
 import { cookies } from 'next/headers';
 
-// Для серверных компонентов используем внутренний URL Docker или localhost
-// NEXT_PUBLIC_API_URL используется для клиентских компонентов
-// Для сервера нужно использовать другой подход
-const getBaseUrl = () => {
-  // Если есть переменная окружения для сервера (приоритет)
-  if (process.env.API_URL) {
-    return process.env.API_URL;
-  }
-  
-  // В Docker контейнере frontend может обращаться к backend по имени сервиса
-  // Проверяем, запущено ли в Docker (по наличию переменной окружения DOCKER_ENV)
-  const isDocker = process.env.DOCKER_ENV === 'true';
-  
-  if (isDocker) {
-    // В Docker используем имя сервиса backend из docker-compose
-    // Это работает для Server Components, которые выполняются на сервере
-    return 'http://backend:8070/api';
-  }
-  
-  // По умолчанию localhost для локальной разработки (без Docker)
-  return 'http://localhost:8070/api';
-};
-
-const BASE_URL = getBaseUrl();
-
-// Логирование для отладки (только в development)
-if (process.env.NODE_ENV === 'development') {
-  console.log('[apiFetch] Using BASE_URL:', BASE_URL);
-}
-//const BASE_URL = 'http://backend:8070/api';
+const BASE_URL =
+  process.env.API_URL ||
+  (process.env.DOCKER_ENV === 'true'
+    ? 'http://backend:8070/api'
+    : 'http://localhost:8070/api');
 
 interface ApiOptions extends RequestInit {
   headers?: Record<string, string>;
@@ -40,6 +15,12 @@ export type ApiResult<T> = {
   ok: boolean;
   data: T | null;
   text?: string;
+};
+
+const joinUrl = (base: string, endpoint: string) => {
+  const b = base.replace(/\/+$/, '');
+  const e = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  return `${b}${e}`;
 };
 
 export async function apiFetch<T = any>(
@@ -57,58 +38,45 @@ export async function apiFetch<T = any>(
   const isFormData =
     typeof FormData !== 'undefined' && options.body instanceof FormData;
 
+  // Content-Type по умолчанию ставим только если не FormData и если не задан вручную
   if (!isFormData && !headers['Content-Type']) {
     headers['Content-Type'] = 'application/json';
   }
 
-  if (token) {
+  if (token && !headers['Authorization']) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  try {
-    const url = `${BASE_URL}${endpoint}`;
-    
-    // Логирование для отладки (только в development)
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[apiFetch] ${method} ${url}`, {
-        hasToken: !!token,
-        headers: Object.keys(headers),
-      });
-    }
-    
-    const res = await fetch(url, {
-      ...options,
-      method,
-      headers,
-    });
-    
-    // Логирование ответа для отладки
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[apiFetch] Response: ${res.status} ${res.statusText}`, {
-        url,
-        ok: res.ok,
-      });
-    }
+  const url = joinUrl(BASE_URL, endpoint);
 
-  if (res.status === 204) {
+  const res = await fetch(url, {
+    ...options,
+    method,
+    headers,
+  });
+
+  // 204/205: тело отсутствует
+  if (res.status === 204 || res.status === 205) {
     return { status: res.status, ok: res.ok, data: null };
   }
 
-  const text = await res.text().catch(() => '');
-  let data: any = null;
+  const contentType = res.headers.get('content-type') ?? '';
+  const rawText = await res.text().catch(() => '');
 
-  if (text) {
+  // Если пусто — просто null
+  if (!rawText) {
+    return { status: res.status, ok: res.ok, data: null };
+  }
+
+  // Если похоже на JSON — парсим, иначе возвращаем text
+  if (contentType.includes('application/json')) {
     try {
-      data = JSON.parse(text);
+      return { status: res.status, ok: res.ok, data: JSON.parse(rawText) as T };
     } catch {
-      data = null;
+      return { status: res.status, ok: res.ok, data: null, text: rawText };
     }
   }
 
-  return {
-    status: res.status,
-    ok: res.ok,
-    data,
-    ...(data === null && text ? { text } : {}),
-  };
+  // не JSON
+  return { status: res.status, ok: res.ok, data: null, text: rawText };
 }
