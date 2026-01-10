@@ -4,19 +4,20 @@ import { useRouter } from 'next/navigation';
 import TableList, { ColumnDef } from '@/components/widgets/TableList';
 import { TableListRowButtons } from '@/components/widgets/TableListRowButtons';
 import { useAppSelector } from '@/store/hooks';
-import { SuppliersListNormalized } from '@/entities/suppliers';
+import { EmployeesListNormalized } from '@/entities/employees';
 import { Box, Button } from '@mui/material';
 import { useApiRequest } from '@/hooks/useApiRequest';
 import { enqueueSnackbar } from 'notistack';
 import { useDeleteEntity } from '@/hooks/useDeleteEntity';
 
-const COLUMNS: Array<ColumnDef<SuppliersListNormalized>> = [
-  { id: 'name', label: 'Название' },
-  { id: 'ogrn', label: 'ОГРН' },
-  { id: 'address', label: 'Адрес' },
+const COLUMNS: Array<ColumnDef<EmployeesListNormalized>> = [
+  { id: 'first_name', label: 'Имя' },
+  { id: 'last_name', label: 'Фамилия' },
+  { id: 'second_name', label: 'Отчество' },
+  { id: 'email', label: 'email' },
 ];
 
-export default function SuppliersClient({ initData }: { initData: any }) {
+export default function EmployeesClient({ initData }: { initData: any }) {
   const router = useRouter();
   const { request } = useApiRequest();
   const deleteEntity = useDeleteEntity({
@@ -25,7 +26,7 @@ export default function SuppliersClient({ initData }: { initData: any }) {
     notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
   });
   const handleDelete = async ({ id }: { id: number }) => {
-    await deleteEntity({ subject: 'suppliers', id, message: 'Поставщик удалён' });
+    await deleteEntity({ subject: 'employees', id, message: 'Сотрудник удалён' });
   };
 
   return (
@@ -69,22 +70,22 @@ export default function SuppliersClient({ initData }: { initData: any }) {
         <Button
           variant="contained"
           color="success"
-          onClick={() => router.push('/suppliers/create')}
+          onClick={() => router.push('/employees/create')}
         >
           Создать
         </Button>
       </Box>
-      <TableList<SuppliersListNormalized>
+      <TableList<EmployeesListNormalized>
         columns={COLUMNS}
         data={initData}
-        pageName="suppliers"
+        pageName="employees"
         onDelete={handleDelete}
         tableListRowButtons={({ row, onDelete }) => (
           <TableListRowButtons
             row={row}
             onEdit={(e) => {
               e.stopPropagation();
-              router.push(`/suppliers/${row.id}/edit`)
+              router.push(`/employees/${row.id}/edit`)
             }}
             onDelete={(e) => onDelete(e, row)}
           />

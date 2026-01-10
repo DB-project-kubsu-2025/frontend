@@ -23,7 +23,7 @@ export default function PositionsClient({ initData }: { initData: any }) {
     notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
   });
   const handleDelete = async ({ id }: { id: number }) => {
-    await deleteEntity({ subject: 'positions', id, message: 'Товар удалён' });
+    await deleteEntity({ subject: 'positions', id, message: 'Должность удалена' });
   };
 
   return (
