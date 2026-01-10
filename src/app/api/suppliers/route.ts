@@ -5,13 +5,12 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const data: any = await apiFetch('/employees/job-positions/', 'POST', {
+    const data: any = await apiFetch('/supplies/suppliers/', 'POST', {
       body: JSON.stringify(body),
     });
-    console.log(data, '####');
 
     return NextResponse.json(
-      data.status === 400 ? data.data : { message: 'Товар добавлен' },
+      data.status === 400 ? data.data : { message: 'Поставщик добавлен' },
       { status: data.status },
     );
   } catch (err: any) {

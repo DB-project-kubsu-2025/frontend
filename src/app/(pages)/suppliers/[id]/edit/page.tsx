@@ -1,2 +1,2 @@
-import { PositionsDetail } from '@/app/_shared/positions/detail';
-export default PositionsDetail({ mode: 'edit' });
+import { SuppliersDetail } from '@/app/_shared/suppliers/detail';
+export default SuppliersDetail({ mode: 'edit' });

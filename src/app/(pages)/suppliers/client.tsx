@@ -4,17 +4,19 @@ import { useRouter } from 'next/navigation';
 import TableList, { ColumnDef } from '@/components/widgets/TableList';
 import { TableListRowButtons } from '@/components/widgets/TableListRowButtons';
 import { useAppSelector } from '@/store/hooks';
-import { PositionsListNormalized } from '@/entities/positions';
+import { SuppliersListNormalized } from '@/entities/suppliers';
 import { Box, Button } from '@mui/material';
 import { useApiRequest } from '@/hooks/useApiRequest';
 import { enqueueSnackbar } from 'notistack';
 import { useDeleteEntity } from '@/hooks/useDeleteEntity';
 
-const COLUMNS: Array<ColumnDef<PositionsListNormalized>> = [
+const COLUMNS: Array<ColumnDef<SuppliersListNormalized>> = [
   { id: 'name', label: 'Название' },
+  { id: 'ogrn', label: 'ОГРН' },
+  { id: 'address', label: 'Адрес' },
 ];
 
-export default function PositionsClient({ initData }: { initData: any }) {
+export default function SuppliersClient({ initData }: { initData: any }) {
   const router = useRouter();
   const { request } = useApiRequest();
   const deleteEntity = useDeleteEntity({
@@ -23,7 +25,7 @@ export default function PositionsClient({ initData }: { initData: any }) {
     notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
   });
   const handleDelete = async ({ id }: { id: number }) => {
-    await deleteEntity({ subject: 'positions', id, message: 'Товар удалён' });
+    await deleteEntity({ subject: 'suppliers', id, message: 'Товар удалён' });
   };
 
   return (
@@ -67,22 +69,22 @@ export default function PositionsClient({ initData }: { initData: any }) {
         <Button
           variant="contained"
           color="success"
-          onClick={() => router.push('/positions/create')}
+          onClick={() => router.push('/suppliers/create')}
         >
           Создать
         </Button>
       </Box>
-      <TableList<PositionsListNormalized>
+      <TableList<SuppliersListNormalized>
         columns={COLUMNS}
         data={initData}
-        pageName="positions"
+        pageName="suppliers"
         onDelete={handleDelete}
         tableListRowButtons={({ row, onDelete }) => (
           <TableListRowButtons
             row={row}
             onEdit={(e) => {
               e.stopPropagation();
-              router.push(`/positions/${row.id}/edit`)
+              router.push(`/suppliers/${row.id}/edit`)
             }}
             onDelete={(e) => onDelete(e, row)}
           />

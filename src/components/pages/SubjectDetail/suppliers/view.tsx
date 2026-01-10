@@ -1,9 +1,9 @@
 'use client';
 import {
-  ProductsDetailFormSchema,
-  ProductsDetailNormalized,
-  ProductsDetailNormalizedSchema,
-} from '@/entities/products';
+  SuppliersDetailFormSchema,
+  SuppliersDetailNormalized,
+  SuppliersDetailNormalizedSchema,
+} from '@/entities/suppliers';
 import { useApiRequest } from '@/hooks/useApiRequest';
 import { nameSubjects, SubjectModes } from '@/types/common';
 import {
@@ -17,26 +17,23 @@ import {
 import { Grid } from '@mui/system';
 import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MdDeleteOutline, MdOutlineEdit } from 'react-icons/md';
 import ElementViewerDetail from '@/components/pages/SubjectDetail/ElementViewerDetail';
-import { useAppSelector } from '@/store/hooks';
 import { IoClose } from 'react-icons/io5';
 import { useDeleteEntity } from '@/hooks/useDeleteEntity';
 
 interface Props {
   mode: SubjectModes;
   nameSubject: nameSubjects;
-  detailData: ProductsDetailNormalized;
+  detailData: SuppliersDetailNormalized;
 }
 
 export default function FieldsView({ mode, nameSubject, detailData }: Props) {
-  const categories = useAppSelector((s) => s.dicts.categories);
-  const units = useAppSelector((s) => s.dicts.units);
   const router = useRouter();
   const { request } = useApiRequest();
   const { enqueueSnackbar } = useSnackbar();
-  const [inputsData, setInputsData] = useState<any>(detailData ?? {});
+  const [inputsData, setInputsData] = useState<Record<string, any>>(detailData);
   const [fieldsError, setFieldsError] = useState<Record<string, any>>({});
   const deleteEntity = useDeleteEntity({
     request,
@@ -44,17 +41,11 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
     notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
   });
 
-  useEffect(() => {
-    if (detailData) {
-      setInputsData(detailData);
-    }
-  }, [detailData]);
-
   async function onSave() {
     try {
       setFieldsError({});
 
-      const formParsed = ProductsDetailFormSchema.safeParse(inputsData);
+      const formParsed = SuppliersDetailFormSchema.safeParse(inputsData);
       if (!formParsed.success) {
         const flat = formParsed.error.flatten();
         const fieldErrors = Object.fromEntries(
@@ -69,7 +60,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
         return null;
       }
 
-      const normalized = ProductsDetailNormalizedSchema.parse(formParsed.data);
+      const normalized = SuppliersDetailNormalizedSchema.parse(formParsed.data);
       const isCreate = mode === 'create';
       const endpoint = isCreate
         ? `/${nameSubject}`
@@ -130,9 +121,9 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
 
   const handleDelete = async () => {
     await deleteEntity({
-      subject: 'products',
+      subject: 'suppliers',
       id: inputsData?.id,
-      message: 'Товар удалён',
+      message: 'Поставщик удалён',
     });
     setTimeout(() => router.push(`/${nameSubject}/`), 300);
   };
@@ -140,7 +131,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
   return (
     <Box className="modalViewDetail-block">
       <Grid className="modalViewDetail-head">
-        <Typography variant="h4">Товар</Typography>
+        <Typography variant="h4">Поставщик</Typography>
         {mode == 'view' ? (
           <Stack direction="row" spacing={1}>
             <IconButton
@@ -192,40 +183,6 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       </Grid>
       <Stack spacing={2} className="modalViewDetail-content">
         <Box>
-          <Typography variant="body2">Единица измерения</Typography>
-          <Box>
-            <ElementViewerDetail
-              mode={mode}
-              name="unit"
-              value={inputsData?.unit}
-              fieldType="select"
-              setInputsData={setInputsData}
-              sectionPaths={['unit']}
-              selectValues={units}
-              fieldsError={fieldsError?.unit}
-              setFieldsError={setFieldsError}
-            />
-          </Box>
-        </Box>
-
-        <Box>
-          <Typography variant="body2">Категория</Typography>
-          <Box>
-            <ElementViewerDetail
-              mode={mode}
-              name="category"
-              value={inputsData?.category}
-              fieldType="select"
-              setInputsData={setInputsData}
-              sectionPaths={['category']}
-              selectValues={categories}
-              fieldsError={fieldsError?.category}
-              setFieldsError={setFieldsError}
-            />
-          </Box>
-        </Box>
-
-        <Box>
           <Typography variant="body2">Название</Typography>
           <Box>
             <ElementViewerDetail
@@ -242,95 +199,160 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
         </Box>
 
         <Box>
-          <Typography variant="body2">Описание</Typography>
+          <Typography variant="body2">Адрес</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
-              name="description"
-              value={inputsData?.description}
+              name="address"
+              value={inputsData?.address}
               fieldType="text"
               setInputsData={setInputsData}
-              sectionPaths={['description']}
-              fieldsError={fieldsError?.description}
+              sectionPaths={['address']}
+              fieldsError={fieldsError?.address}
               setFieldsError={setFieldsError}
             />
           </Box>
         </Box>
 
         <Box>
-          <Typography variant="body2">Срок годности</Typography>
+          <Typography variant="body2">ОГРН</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
-              value={inputsData?.expiration_days}
-              fieldType="number"
+              name="ogrn"
+              value={inputsData?.ogrn}
+              fieldType="text"
               setInputsData={setInputsData}
-              sectionPaths={['expiration_days']}
-              fieldsError={fieldsError?.expiration_days}
+              sectionPaths={['ogrn']}
+              fieldsError={fieldsError?.ogrn}
               setFieldsError={setFieldsError}
             />
           </Box>
         </Box>
 
         <Box>
-          <Typography variant="body2">Производитель</Typography>
+          <Typography variant="body2">ИНН</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
-              name="producer_name"
-              value={inputsData?.producer_name}
+              name="inn"
+              value={inputsData?.inn}
               fieldType="text"
               setInputsData={setInputsData}
-              sectionPaths={['producer_name']}
-              fieldsError={fieldsError?.producer_name}
+              sectionPaths={['inn']}
+              fieldsError={fieldsError?.inn}
               setFieldsError={setFieldsError}
             />
           </Box>
         </Box>
 
         <Box>
-          <Typography variant="body2">Код производителя</Typography>
+          <Typography variant="body2">КПП</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
-              name="producer_code"
-              value={inputsData?.producer_code}
+              name="kpp"
+              value={inputsData?.kpp}
               fieldType="text"
               setInputsData={setInputsData}
-              sectionPaths={['producer_code']}
-              fieldsError={fieldsError?.producer_code}
+              sectionPaths={['kpp']}
+              fieldsError={fieldsError?.kpp}
               setFieldsError={setFieldsError}
             />
           </Box>
         </Box>
 
         <Box>
-          <Typography variant="body2">Страна происхождения</Typography>
+          <Typography variant="body2">Наименование банка</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
-              name="country_name"
-              value={inputsData?.country_name}
+              name="bank_name"
+              value={inputsData?.bank_name}
               fieldType="text"
               setInputsData={setInputsData}
-              sectionPaths={['country_name']}
-              fieldsError={fieldsError?.country_name}
+              sectionPaths={['bank_name']}
+              fieldsError={fieldsError?.bank_name}
               setFieldsError={setFieldsError}
             />
           </Box>
         </Box>
 
         <Box>
-          <Typography variant="body2">Дополнительная информация</Typography>
+          <Typography variant="body2">БИК</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
-              name="additional_info"
-              value={inputsData?.additional_info}
+              name="bik"
+              value={inputsData?.bik}
               fieldType="text"
               setInputsData={setInputsData}
-              sectionPaths={['additional_info']}
-              fieldsError={fieldsError?.additional_info}
+              sectionPaths={['bik']}
+              fieldsError={fieldsError?.bik}
+              setFieldsError={setFieldsError}
+            />
+          </Box>
+        </Box>
+
+        <Box>
+          <Typography variant="body2">Корреспондентский счет</Typography>
+          <Box>
+            <ElementViewerDetail
+              mode={mode}
+              name="corr_account"
+              value={inputsData?.corr_account}
+              fieldType="text"
+              setInputsData={setInputsData}
+              sectionPaths={['corr_account']}
+              fieldsError={fieldsError?.corr_account}
+              setFieldsError={setFieldsError}
+            />
+          </Box>
+        </Box>
+
+        <Box>
+          <Typography variant="body2">Расчетный счет</Typography>
+          <Box>
+            <ElementViewerDetail
+              mode={mode}
+              name="checking_account"
+              value={inputsData?.checking_account}
+              fieldType="text"
+              setInputsData={setInputsData}
+              sectionPaths={['checking_account']}
+              fieldsError={fieldsError?.checking_account}
+              setFieldsError={setFieldsError}
+            />
+          </Box>
+        </Box>
+
+        <Box>
+          <Typography variant="body2">SWIFT</Typography>
+          <Box>
+            <ElementViewerDetail
+              mode={mode}
+              name="swift"
+              value={inputsData?.swift}
+              fieldType="text"
+              setInputsData={setInputsData}
+              sectionPaths={['swift']}
+              fieldsError={fieldsError?.swift}
+              setFieldsError={setFieldsError}
+            />
+          </Box>
+        </Box>
+
+        <Box>
+          <Typography variant="body2">IBAN</Typography>
+          <Box>
+            <ElementViewerDetail
+              mode={mode}
+              name="iban"
+              value={inputsData?.iban}
+              fieldType="text"
+              setInputsData={setInputsData}
+              sectionPaths={['iban']}
+              fieldsError={fieldsError?.iban}
               setFieldsError={setFieldsError}
             />
           </Box>

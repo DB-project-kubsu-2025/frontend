@@ -35,6 +35,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       setInputsData(detailData);
     }
   }, [detailData]);
+  
   async function onSave() {
     try {
       setFieldsError({});

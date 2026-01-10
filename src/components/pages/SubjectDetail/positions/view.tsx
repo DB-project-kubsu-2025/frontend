@@ -17,10 +17,9 @@ import {
 import { Grid } from '@mui/system';
 import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdDeleteOutline, MdOutlineEdit } from 'react-icons/md';
 import ElementViewerDetail from '@/components/pages/SubjectDetail/ElementViewerDetail';
-import { useAppSelector } from '@/store/hooks';
 import { IoClose } from 'react-icons/io5';
 import { useDeleteEntity } from '@/hooks/useDeleteEntity';
 
@@ -31,18 +30,22 @@ interface Props {
 }
 
 export default function FieldsView({ mode, nameSubject, detailData }: Props) {
-  const categories = useAppSelector((s) => s.dicts.categories);
-  const units = useAppSelector((s) => s.dicts.units);
   const router = useRouter();
   const { request } = useApiRequest();
   const { enqueueSnackbar } = useSnackbar();
-  const [inputsData, setInputsData] = useState<Record<string, any>>(detailData);
+  const [inputsData, setInputsData] = useState<any>(detailData ?? {});
   const [fieldsError, setFieldsError] = useState<Record<string, any>>({});
-    const deleteEntity = useDeleteEntity({
-      request,
-      refresh: () => router.refresh(),
-      notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
-    });
+  const deleteEntity = useDeleteEntity({
+    request,
+    refresh: () => router.refresh(),
+    notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
+  });
+
+  useEffect(() => {
+    if (detailData) {
+      setInputsData(detailData);
+    }
+  }, [detailData]);
 
   async function onSave() {
     try {
@@ -79,7 +82,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       if (id) {
         setTimeout(() => router.push(`/${nameSubject}/${id}`), 300);
       }
-      if(isCreate) {
+      if (isCreate) {
         setTimeout(() => router.push(`/${nameSubject}/`), 300);
       }
 
@@ -121,9 +124,13 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       return null;
     }
   }
-  
+
   const handleDelete = async () => {
-    await deleteEntity({ subject: 'positions', id: inputsData?.id, message: 'Должность удалена' });
+    await deleteEntity({
+      subject: 'positions',
+      id: inputsData?.id,
+      message: 'Должность удалена',
+    });
     setTimeout(() => router.push(`/${nameSubject}/`), 300);
   };
 
