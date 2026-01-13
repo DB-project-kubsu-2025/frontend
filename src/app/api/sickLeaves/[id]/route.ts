@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+type Ctx = { params: Promise<{ id: string }> };
+
+export async function GET(req: NextRequest, { params }: Ctx) {
   try {
     const { searchParams } = new URL(req.url);
     const year = searchParams.get('year');
+    console.log(year);
     const { id } = await params;
 
     const vacations = {
@@ -33,10 +33,7 @@ export async function PUT(req: NextRequest) {
   return NextResponse.json({ message: 'Больничный обновлен' }, { status: 200 });
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(req: Request, { params }: Ctx) {
   const aa = await params;
   console.log(aa);
   return NextResponse.json({ message: 'Больничный удалён' }, { status: 200 });

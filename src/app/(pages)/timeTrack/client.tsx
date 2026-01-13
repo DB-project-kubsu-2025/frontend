@@ -3,9 +3,13 @@ import CalendarWidget from '@/components/widgets/fullCalendar/CalendarWidget';
 import { CalendarTimeTrack } from '@/types/common';
 import { EventContentArg } from '@fullcalendar/core/index.js';
 
+type TimeTrackPayload = {
+  events: CalendarTimeTrack[];
+  employees: { id: number; name: string }[];
+};
+
 function getColorTime(work_time: number, all_time: number) {
   const diff = work_time - all_time;
-
   if (diff >= 0) return 'green';
   if (diff >= -60 && diff <= -30) return 'orange';
   return 'red';
@@ -17,20 +21,16 @@ function minutesToHours(minutes: number) {
   return `${hours}${_minutes !== 0 ? ':' + String(_minutes).padStart(2, '0') : ''}`;
 }
 
-export default function TimeTrackClient({
-  events,
-}: {
-  events: CalendarTimeTrack[];
-}) {
-  const filterEventsRes = events.map((ev) => ({
+export default function TimeTrackClient({ data }: { data: TimeTrackPayload }) {
+  const filterEventsRes = (data?.events ?? []).map((ev) => ({
     ...ev,
     backgroundColor: 'transparent',
     borderColor: 'transparent',
   }));
 
   const eventContent = (arg: EventContentArg) => {
-    const { employee_name, work_time, all_time } =
-      arg.event.extendedProps;
+    const { employee_name, work_time, all_time } = arg.event
+      .extendedProps as any;
     const time_color = getColorTime(work_time, all_time);
 
     return {
@@ -49,14 +49,8 @@ export default function TimeTrackClient({
           grid-template-rows: auto auto;
           align-items: center;
         ">
-          <div style="font-weight: 600;">
-            ${employee_name}
-          </div>
-
-          <div style="
-            font-weight: 700; 
-            color: ${time_color}
-          ">
+          <div style="font-weight: 600;">${employee_name}</div>
+          <div style="font-weight: 700; color: ${time_color}">
             ${minutesToHours(work_time)}/${minutesToHours(all_time)}
           </div>
         </div>
@@ -65,11 +59,6 @@ export default function TimeTrackClient({
   };
 
   return (
-    <CalendarWidget
-      events={filterEventsRes}
-      overrides={{
-        eventContent,
-      }}
-    />
+    <CalendarWidget events={filterEventsRes} overrides={{ eventContent }} />
   );
 }

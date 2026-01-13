@@ -35,6 +35,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       setInputsData(detailData);
     }
   }, [detailData]);
+  
   async function onSave() {
     try {
       setFieldsError({});
@@ -96,13 +97,83 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
   }
 
   return (
-    <Box className="modalViewDetail-block">
+    <Box 
+      className="modalViewDetail-block"
+      sx={{
+        backgroundColor: 'transparent',
+        '& .modalViewDetail-content': {
+          background: 'transparent !important',
+          backgroundColor: 'transparent !important',
+        },
+        '& .MuiTextField-root': {
+          '& .MuiInputBase-root': {
+            padding: '4px 8px',
+            fontSize: '0.75rem',
+            height: '28px',
+          },
+          '& .MuiInputLabel-root': {
+            fontSize: '0.75rem',
+            transform: 'translate(8px, 8px) scale(1)',
+            '&.MuiInputLabel-shrink': {
+              transform: 'translate(8px, -9px) scale(0.75)',
+            },
+          },
+        },
+        '& .MuiInputBase-root': {
+          padding: '4px 8px',
+          fontSize: '0.75rem',
+          minHeight: '28px',
+        },
+        '& .MuiSelect-root': {
+          padding: '4px 8px',
+          fontSize: '0.75rem',
+          minHeight: '28px',
+        },
+        '& .MuiOutlinedInput-root': {
+          padding: '4px 8px',
+          '& input': {
+            padding: '4px 8px',
+            fontSize: '0.75rem',
+            height: '20px',
+          },
+        },
+        '& .MuiDatePicker-root .MuiTextField-root': {
+          '& .MuiInputBase-root': {
+            padding: '4px 8px !important',
+            fontSize: '0.75rem',
+            minHeight: '28px !important',
+            height: '28px !important',
+          },
+          '& .MuiInputBase-input': {
+            padding: '4px 8px !important',
+            fontSize: '0.75rem',
+            height: '20px !important',
+            minHeight: '20px !important',
+          },
+        },
+        '& .input-box': {
+          '& .MuiTextField-root': {
+            '& .MuiInputBase-root': {
+              padding: '4px 8px !important',
+              fontSize: '0.75rem',
+              minHeight: '28px !important',
+              height: '28px !important',
+            },
+            '& .MuiInputBase-input': {
+              padding: '4px 8px !important',
+              fontSize: '0.75rem',
+              height: '20px !important',
+            },
+          },
+        },
+      }}
+    >
       <Grid className="modalViewDetail-head">
         <Typography variant="h4">Профиль</Typography>
       </Grid>
       <Stack spacing={2} className="modalViewDetail-content">
-        <Box>
-          <Typography variant="body2">Логин</Typography>
+        <Box sx={{ maxWidth: '50%' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Логин</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -117,8 +188,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box>
-          <Typography variant="body2">email</Typography>
+        <Box sx={{ maxWidth: '50%' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Почта</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -133,8 +204,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box>
-          <Typography variant="body2">Фамилия</Typography>
+        <Box sx={{ maxWidth: '50%' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Фамилия</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -149,8 +220,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box>
-          <Typography variant="body2">Имя</Typography>
+        <Box sx={{ maxWidth: '50%' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Имя</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -165,8 +236,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box>
-          <Typography variant="body2">Отчество</Typography>
+        <Box sx={{ maxWidth: '50%' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Отчество</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -181,8 +252,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box>
-          <Typography variant="body2">Пол</Typography>
+        <Box sx={{ maxWidth: '50%' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Пол</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -198,8 +269,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box>
-          <Typography variant="body2">Телефон</Typography>
+        <Box sx={{ maxWidth: '50%' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Телефон</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -214,8 +285,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box>
-          <Typography variant="body2">День рождения</Typography>
+        <Box sx={{ maxWidth: '50%' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Дата рождения</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -230,8 +301,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box>
-          <Typography variant="body2">СНИЛС</Typography>
+        <Box sx={{ maxWidth: '50%' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>СНИЛС</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -246,8 +317,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box>
-          <Typography variant="body2">ИНН</Typography>
+        <Box sx={{ maxWidth: '50%' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>ИНН</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -262,8 +333,8 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           </Box>
         </Box>
 
-        <Box>
-          <Typography variant="body2">Рабочий телефон</Typography>
+        <Box sx={{ maxWidth: '50%' }}>
+          <Typography variant="body2" sx={{ fontSize: '0.93rem', fontWeight: 500 }}>Рабочий телефон</Typography>
           <Box>
             <ElementViewerDetail
               mode={mode}
@@ -283,9 +354,16 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
           <Box sx={{ display: 'flex', justifyContent: 'end' }}>
             <Button
               variant="contained"
-              color="success"
               size="large"
               onClick={() => onSave()}
+              sx={{
+                backgroundColor: 'rgb(110, 68, 0)',
+                color: '#fff',
+                '&:hover': {
+                  backgroundColor: 'rgb(138, 85, 0)',
+                  filter: 'brightness(120%)',
+                },
+              }}
             >
               {mode === 'create' ? 'Создать' : 'Сохранить'}
             </Button>

@@ -20,9 +20,9 @@ import { useApiRequest } from '@/hooks/useApiRequest';
 import Input from '@/components/UI/Input';
 import {
   formatDate,
-  isNonEmptyString,
-  isValidDate,
-  isValidNumberString,
+  // isNonEmptyString,
+  // isValidDate,
+  // isValidNumberString,
   safeText,
 } from '@/utils/helper';
 import Select from '@/components/UI/Select';
@@ -75,27 +75,27 @@ export default function LoginPage() {
   const [showPass, setShowPass] = useState(false);
 
   const requiredOk = true;
-  const ee =
-    isNonEmptyString(inputsData.username) &&
-    isNonEmptyString(inputsData.last_name) &&
-    isNonEmptyString(inputsData.first_name) &&
-    isNonEmptyString(inputsData.second_name) &&
-    (inputsData.gender === 'male' || inputsData.gender === 'female') &&
-    isValidNumberString(inputsData.phone, 11, 11) &&
-    isValidDate(inputsData.birth_date) &&
-    isValidNumberString(inputsData.snils, 11, 11) &&
-    isValidNumberString(inputsData.inn, 10, 12) &&
-    isValidNumberString(inputsData.work_phone, 11, 11) &&
-    isValidNumberString(inputsData.series, 4, 4) &&
-    isValidNumberString(inputsData.number, 6, 6) &&
-    isValidDate(inputsData.issue_date) &&
-    isNonEmptyString(inputsData.issued_by) &&
-    isValidNumberString(inputsData.authority_code, 6, 6) &&
-    isNonEmptyString(inputsData.registration_address) &&
-    isNonEmptyString(inputsData.residential_address) &&
-    isNonEmptyString(inputsData.password) &&
-    isNonEmptyString(inputsData.password2) &&
-    inputsData.password?.trim() === inputsData.password2?.trim();
+  // const ee =
+  //   isNonEmptyString(inputsData.username) &&
+  //   isNonEmptyString(inputsData.last_name) &&
+  //   isNonEmptyString(inputsData.first_name) &&
+  //   isNonEmptyString(inputsData.second_name) &&
+  //   (inputsData.gender === 'male' || inputsData.gender === 'female') &&
+  //   isValidNumberString(inputsData.phone, 11, 11) &&
+  //   isValidDate(inputsData.birth_date) &&
+  //   isValidNumberString(inputsData.snils, 11, 11) &&
+  //   isValidNumberString(inputsData.inn, 10, 12) &&
+  //   isValidNumberString(inputsData.work_phone, 11, 11) &&
+  //   isValidNumberString(inputsData.series, 4, 4) &&
+  //   isValidNumberString(inputsData.number, 6, 6) &&
+  //   isValidDate(inputsData.issue_date) &&
+  //   isNonEmptyString(inputsData.issued_by) &&
+  //   isValidNumberString(inputsData.authority_code, 6, 6) &&
+  //   isNonEmptyString(inputsData.registration_address) &&
+  //   isNonEmptyString(inputsData.residential_address) &&
+  //   isNonEmptyString(inputsData.password) &&
+  //   isNonEmptyString(inputsData.password2) &&
+  //   inputsData.password?.trim() === inputsData.password2?.trim();
 
   const stateButton = loading || !requiredOk;
 

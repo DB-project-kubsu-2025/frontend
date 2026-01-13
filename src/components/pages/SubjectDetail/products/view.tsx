@@ -17,7 +17,7 @@ import {
 import { Grid } from '@mui/system';
 import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdDeleteOutline, MdOutlineEdit } from 'react-icons/md';
 import ElementViewerDetail from '@/components/pages/SubjectDetail/ElementViewerDetail';
 import { useAppSelector } from '@/store/hooks';
@@ -36,13 +36,19 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
   const router = useRouter();
   const { request } = useApiRequest();
   const { enqueueSnackbar } = useSnackbar();
-  const [inputsData, setInputsData] = useState<Record<string, any>>(detailData);
+  const [inputsData, setInputsData] = useState<any>(detailData ?? {});
   const [fieldsError, setFieldsError] = useState<Record<string, any>>({});
-    const deleteEntity = useDeleteEntity({
-      request,
-      refresh: () => router.refresh(),
-      notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
-    });
+  const deleteEntity = useDeleteEntity({
+    request,
+    refresh: () => router.refresh(),
+    notify: (msg, variant) => enqueueSnackbar(msg, { variant }),
+  });
+
+  useEffect(() => {
+    if (detailData) {
+      setInputsData(detailData);
+    }
+  }, [detailData]);
 
   async function onSave() {
     try {
@@ -79,7 +85,7 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       if (id) {
         setTimeout(() => router.push(`/${nameSubject}/${id}`), 300);
       }
-      if(isCreate) {
+      if (isCreate) {
         setTimeout(() => router.push(`/${nameSubject}/`), 300);
       }
 
@@ -121,9 +127,13 @@ export default function FieldsView({ mode, nameSubject, detailData }: Props) {
       return null;
     }
   }
-  
+
   const handleDelete = async () => {
-    await deleteEntity({ subject: 'products', id: inputsData?.id, message: 'Товар удалён' });
+    await deleteEntity({
+      subject: 'products',
+      id: inputsData?.id,
+      message: 'Товар удалён',
+    });
     setTimeout(() => router.push(`/${nameSubject}/`), 300);
   };
 

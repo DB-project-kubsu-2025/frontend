@@ -16,13 +16,14 @@ import { Home, Settings } from '@mui/icons-material';
 import PersonIcon from '@mui/icons-material/Person';
 import { MdOutlineLocalHospital } from 'react-icons/md';
 import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
-import { IoLocationSharp } from 'react-icons/io5';
-import { IoDocumentSharp } from 'react-icons/io5';
-import { RiTruckLine } from 'react-icons/ri';
-import { IoNewspaperOutline } from 'react-icons/io5';
-import { TbReportSearch } from 'react-icons/tb';
+// import { IoLocationSharp } from 'react-icons/io5';
+// import { IoDocumentSharp } from 'react-icons/io5';
+// import { RiTruckLine } from 'react-icons/ri';
+// import { IoNewspaperOutline } from 'react-icons/io5';
+// import { TbReportSearch } from 'react-icons/tb';
 import { GiArtificialHive } from 'react-icons/gi';
 import { IoIosTimer } from 'react-icons/io';
+import { TbTicket } from 'react-icons/tb';
 
 interface NestedItem {
   name: string;
@@ -65,51 +66,56 @@ const sidebarItems: SidebarSection[] = [
         name: 'Поставщики',
         iconLeft: <PersonIcon />,
         link: '/suppliers',
-        nested: [
-          {
-            name: 'Контрагенты',
-            iconLeft: <PersonIcon />,
-            link: '/counterparties',
-          },
-        ],
+        // nested: [
+        //   {
+        //     name: 'Контрагенты',
+        //     iconLeft: <PersonIcon />,
+        //     link: '/counterparties',
+        //   },
+        // ],
       },
-      {
-        name: 'Места хранения',
-        iconLeft: <IoLocationSharp />,
-        link: '/storageLocations',
-      },
+      // {
+      //   name: 'Места хранения',
+      //   iconLeft: <IoLocationSharp />,
+      //   link: '/storageLocations',
+      // },
       {
         name: 'Товары',
         iconLeft: <MdOutlineProductionQuantityLimits />,
         link: '/products',
       },
       {
-        name: 'Договора',
-        iconLeft: <IoDocumentSharp />,
-        link: '/documents',
-        nested: [
-          {
-            name: 'Товары',
-            iconLeft: <IoDocumentSharp />,
-            link: '/productsInDocument',
-          },
-        ],
+        name: 'Купоны',
+        iconLeft: <TbTicket />,
+        link: '/coupons',
       },
-      {
-        name: 'Грузовые компании',
-        iconLeft: <RiTruckLine />,
-        link: '/truckCompenies',
-      },
-      {
-        name: 'Заявки',
-        iconLeft: <IoNewspaperOutline />,
-        link: '/applications',
-      },
-      {
-        name: 'Отчёты',
-        iconLeft: <TbReportSearch />,
-        link: '/reports',
-      },
+      // {
+      //   name: 'Договора',
+      //   iconLeft: <IoDocumentSharp />,
+      //   link: '/documents',
+      //   nested: [
+      //     {
+      //       name: 'Товары',
+      //       iconLeft: <IoDocumentSharp />,
+      //       link: '/productsInDocument',
+      //     },
+      //   ],
+      // },
+      // {
+      //   name: 'Грузовые компании',
+      //   iconLeft: <RiTruckLine />,
+      //   link: '/truckCompenies',
+      // },
+      // {
+      //   name: 'Заявки',
+      //   iconLeft: <IoNewspaperOutline />,
+      //   link: '/applications',
+      // },
+      // {
+      //   name: 'Отчёты',
+      //   iconLeft: <TbReportSearch />,
+      //   link: '/reports',
+      // },
       {
         name: 'Учёт времени',
         iconLeft: <IoIosTimer />,

@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { toggleSidebar, setSidebar } from '@/store/sidebarOpenSlice';
-import { login as loginAction } from '@/store/userSlice';
 import { preloadDicts } from '@/store/dictsSlice';
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
@@ -21,10 +20,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const sidebarOpen = useAppSelector((s) => s.sidebarOpen.isOpen);
   const ToggleDrawer = () => dispatch(toggleSidebar());
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const noLayoutPaths = ['/login', '/registration'];
   const hideLayout = useMemo(
     () => noLayoutPaths.some((p) => pathname.startsWith(p)),
-    [pathname],
+    [noLayoutPaths, pathname],
   );
 
   useEffect(() => {

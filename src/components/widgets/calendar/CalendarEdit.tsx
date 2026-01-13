@@ -25,7 +25,6 @@ type Props = {
 };
 
 export default function EditCalendarForm({
-  id,
   initData,
   title,
   confirmText,
@@ -44,9 +43,7 @@ export default function EditCalendarForm({
     years,
     setYear,
     data,
-    setData,
     modeCalendar,
-    setModeCalendar,
     handleClearCalendar,
     handleSelectDate,
     isSelectCalendar,

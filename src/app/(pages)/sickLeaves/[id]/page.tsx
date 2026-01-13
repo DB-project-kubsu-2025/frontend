@@ -13,7 +13,7 @@ export default async function SickLeavesPageEdit({
   const idNum = Number(id);
 
   const res = await apiFetch(
-    `/sickLeaves/${idNum}?year=${String(sp?.year)}`,
+    `/sickLeaves/${idNum}?year=${String(sp?.year)}`, { local: true },
   );
   const res1 = res.data as calendarLeavesEdit;
   return <SickLeavesClientEdit id={idNum} initData={res1} />;

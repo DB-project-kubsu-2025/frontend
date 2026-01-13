@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { digits, emptyOrDigits, emptyOrDigitsRange, toInt } from '@/utils/validation';
+import { toInt } from '@/utils/validation';
 
 export const ProductsListFormSchema = z.object({
   id: z.number().int().positive(),
